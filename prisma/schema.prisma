@@ -1,0 +1,466 @@
+// Twoje Zdrowie — E-commerce
+// Prices stored as Int PLN grosz (4990 = 49.90 PLN) — never Float for money
+// Multi-language: Polish primary (Pl), English (En), Ukrainian (Uk)
+// BaseLinker is the integration hub for Allegro + InPost + DHL/DPD
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL") // required for Neon/Supabase connection pooling (PgBouncer)
+}
+
+// ─── ENUMS ────────────────────────────────────────────────────────────────────
+
+// Tag types for product labeling (dietary, allergen-free, certifications)
+enum TagType {
+  DIETARY_CLAIM  // Bio, Vegan, Raw, Organic
+  ALLERGEN_FREE  // Gluten-Free, Lactose-Free, Nut-Free
+  CERTIFICATION  // EU-Organic, Non-GMO, Halal, Kosher
+  OTHER
+}
+
+enum ProductStatus {
+  DRAFT
+  ACTIVE
+  ARCHIVED
+}
+
+enum CustomerType {
+  B2C
+  B2B // requires NIP + company name for Faktura VAT
+}
+
+enum OrderStatus {
+  PENDING           // cart / not yet submitted
+  PAYMENT_PENDING   // awaiting payment confirmation
+  PAID              // payment captured
+  PROCESSING        // being picked/packed
+  SHIPPED           // handed to carrier
+  DELIVERED         // confirmed delivery
+  CANCELLED
+  REFUNDED
+}
+
+enum ShippingMethod {
+  INPOST_PACZKOMAT  // requires inpostMachineId
+  DHL
+  DPD
+  COURIER           // generic courier
+  PICKUP            // in-store pickup
+}
+
+enum PaymentMethod {
+  BLIK
+  PRZELEWY24        // generic Przelewy24 (bank transfer)
+  APPLE_PAY
+  GOOGLE_PAY
+  BANK_TRANSFER     // traditional wire transfer
+  CASH_ON_DELIVERY
+}
+
+enum PaymentStatus {
+  PENDING
+  AUTHORIZED
+  CAPTURED
+  FAILED
+  REFUNDED
+}
+
+enum CouponType {
+  PERCENTAGE    // value = 0–100 (percent)
+  FIXED_AMOUNT  // value = grosz (e.g. 1000 = 10.00 PLN off)
+}
+
+// ─── TAXONOMY ─────────────────────────────────────────────────────────────────
+
+model Category {
+  id            String     @id @default(cuid())
+  slug          String     @unique
+  namePl        String
+  nameEn        String?
+  nameUk        String?
+  descriptionPl String?
+  image         String?
+  sortOrder     Int        @default(0)
+  parentId      String?
+  parent        Category?  @relation("CategoryTree", fields: [parentId], references: [id])
+  children      Category[] @relation("CategoryTree")
+  products      Product[]
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  @@index([parentId])
+  @@index([slug])
+}
+
+model Brand {
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  name        String
+  description String?
+  logo        String?
+  website     String?
+  countryCode String?   // ISO 3166-1 alpha-2, e.g. "PL", "DE"
+  products    Product[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([slug])
+}
+
+// Dietary claims, allergen-free labels, certifications (Bio, Vegan, Gluten-Free, etc.)
+model Tag {
+  id        String       @id @default(cuid())
+  slug      String       @unique
+  namePl    String
+  nameEn    String?
+  iconUrl   String?
+  type      TagType
+  sortOrder Int          @default(0)
+  products  ProductTag[]
+
+  @@index([type])
+}
+
+// ─── PRODUCTS ─────────────────────────────────────────────────────────────────
+
+model Product {
+  id     String        @id @default(cuid())
+  slug   String        @unique
+  status ProductStatus @default(DRAFT)
+
+  // Multilingual content
+  namePl        String
+  nameEn        String?
+  nameUk        String?
+  shortDescPl   String?
+  shortDescEn   String?
+  descriptionPl String?   @db.Text
+  descriptionEn String?   @db.Text
+
+  // Taxonomy
+  categoryId String?
+  category   Category? @relation(fields: [categoryId], references: [id])
+  brandId    String?
+  brand      Brand?    @relation(fields: [brandId], references: [id])
+
+  // Homepage / listing flags
+  isFeatured   Boolean @default(false)
+  isNewArrival Boolean @default(false)
+
+  // Supplement-specific product-level data
+  netWeight            String? // "120 g", "500 ml", "60 kaps."
+  servingSize          String? // "2 kapsułki dziennie"
+  servingsPerContainer Int?
+  storageInfo          String? // "Przechowywać w suchym miejscu..."
+  countryOfOrigin      String? // ISO 3166-1 alpha-2
+
+  // Composition — stored as JSON for flexibility
+  // ingredients: { pl: "Witamina C...", en: "Vitamin C..." }
+  ingredients  Json?
+  // nutritionFacts: structured per EU Regulation 1169/2011 label
+  nutritionFacts Json?
+  // allergenInfo: { contains: ["gluten"], mayContain: ["nuts"] }
+  allergenInfo Json?
+
+  // Regulatory (Sanepid / GIS compliance)
+  // healthWarnings: string[] — required regulatory disclaimers
+  // e.g. ["Suplement diety nie zastępuje zrównoważonej diety"]
+  healthWarnings Json?
+  ageRestriction Int?  // minimum age in years; null = no restriction
+
+  // SEO
+  metaTitlePl String?
+  metaTitleEn String?
+  metaDescPl  String?
+  metaDescEn  String?
+
+  // BaseLinker product sync
+  baselinkerProductId String? @unique
+
+  variants ProductVariant[]
+  images   ProductImage[]
+  tags     ProductTag[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([slug])
+  @@index([status])
+  @@index([categoryId])
+  @@index([brandId])
+  @@index([isFeatured])
+}
+
+// Each ProductVariant is a distinct physical SKU
+// Example: "Witamina C 1000mg" → variants: "60 kaps." and "120 kaps."
+model ProductVariant {
+  id        String  @id @default(cuid())
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  sku String  @unique
+  ean String? @unique // EAN-13 barcode
+
+  // What distinguishes this variant from siblings
+  optionLabel String? // e.g. "Pojemność"
+  optionValue String? // e.g. "60 kaps."
+
+  // Pricing (Int PLN grosz: 4990 = 49.90 PLN)
+  pricePln        Int
+  comparePricePln Int?    // strikethrough "was" price
+  costPricePln    Int?    // purchase cost (not shown to customers)
+  // vatRate: tax rate in percent (Decimal for display)
+  // 5.00 = 5% (food supplements), 23.00 = 23% (cosmetics), 8.00 = 8%
+  vatRate         Decimal @default(5.00) @db.Decimal(5, 2)
+
+  // Inventory
+  stock             Int     @default(0)
+  lowStockThreshold Int     @default(5)
+  trackStock        Boolean @default(true)
+
+  // Physical attributes (for carrier calculation)
+  weightGrams Int?
+
+  // BaseLinker variant sync
+  baselinkerVariantId String? @unique
+
+  isDefault Boolean @default(false)
+  isActive  Boolean @default(true)
+
+  images     ProductImage[]
+  orderItems OrderItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([productId])
+  @@index([sku])
+  @@index([isActive])
+}
+
+model ProductImage {
+  id        String          @id @default(cuid())
+  productId String
+  variantId String? // null = applies to all variants
+  url       String
+  altPl     String?
+  altEn     String?
+  sortOrder Int             @default(0)
+  isMain    Boolean         @default(false)
+  product   Product         @relation(fields: [productId], references: [id], onDelete: Cascade)
+  variant   ProductVariant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
+
+  @@index([productId, sortOrder])
+}
+
+model ProductTag {
+  productId String
+  tagId     String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  tag       Tag     @relation(fields: [tagId], references: [id])
+
+  @@id([productId, tagId])
+  @@index([tagId])
+}
+
+// ─── CUSTOMERS ────────────────────────────────────────────────────────────────
+
+model Customer {
+  id        String       @id @default(cuid())
+  email     String       @unique
+  phone     String?
+  firstName String?
+  lastName  String?
+  type      CustomerType @default(B2C)
+
+  // B2B — required for Faktura VAT
+  companyName String?
+  nip         String? // Polish NIP (Numer Identyfikacji Podatkowej)
+
+  // Link to auth provider (NextAuth / Supabase Auth user ID)
+  authUserId String? @unique
+
+  addresses Address[]
+  orders    Order[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([email])
+  @@index([authUserId])
+}
+
+model Address {
+  id         String   @id @default(cuid())
+  customerId String
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  type      String  @default("shipping") // "shipping" | "billing"
+  isDefault Boolean @default(false)
+
+  firstName   String
+  lastName    String
+  company     String?
+  street      String
+  apartment   String?
+  city        String
+  postalCode  String  // Polish format: "XX-XXX"
+  countryCode String  @default("PL")
+  phone       String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([customerId])
+}
+
+// ─── DISCOUNTS ────────────────────────────────────────────────────────────────
+
+model Coupon {
+  id           String     @id @default(cuid())
+  code         String     @unique
+  type         CouponType
+  // PERCENTAGE: 0–100 (percent off)
+  // FIXED_AMOUNT: grosz off (e.g. 1000 = 10.00 PLN off)
+  value        Int
+  minOrderPln  Int?       // minimum order total in grosz to apply coupon
+  maxUsages    Int?       // null = unlimited
+  usageCount   Int        @default(0)
+  validFrom    DateTime?
+  validUntil   DateTime?
+  isActive     Boolean    @default(true)
+  orders       Order[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([code])
+  @@index([isActive, validUntil])
+}
+
+// ─── ORDERS ───────────────────────────────────────────────────────────────────
+
+model Order {
+  id          String      @id @default(cuid())
+  // "TZ-2024-00001" — generated in app layer before insert
+  // Use a DB sequence or atomic counter; never derive from count()
+  orderNumber String      @unique
+  status      OrderStatus @default(PENDING)
+
+  // Customer link (null = guest checkout)
+  customerId String?
+  customer   Customer? @relation(fields: [customerId], references: [id])
+
+  // Contact snapshot — denormalized, immutable after placement
+  customerEmail String
+  customerPhone String?
+  customerName  String
+
+  // ── SHIPPING ──
+  shippingMethod  ShippingMethod
+  shippingCostPln Int // in grosz
+
+  // InPost Paczkomat — required when shippingMethod = INPOST_PACZKOMAT
+  inpostMachineId   String? // e.g. "WAW123M" — paczkomat machine ID from Geowidget
+  inpostMachineName String? // display name, e.g. "Warszawa Centrum 1"
+
+  // Delivery address snapshot (copied at placement, never changes)
+  shipFirstName  String
+  shipLastName   String
+  shipCompany    String?
+  shipStreet     String
+  shipApartment  String?
+  shipCity       String
+  shipPostalCode String
+  shipCountry    String @default("PL")
+  shipPhone      String?
+
+  // ── BILLING / FAKTURA VAT ──
+  // All bill* fields required when wantsFaktura = true
+  wantsFaktura   Boolean @default(false)
+  billCompany    String? // company name
+  billNip        String? // Polish NIP (tax ID)
+  billStreet     String?
+  billCity       String?
+  billPostalCode String?
+  billCountry    String?
+
+  // ── PAYMENT ──
+  paymentMethod PaymentMethod
+  paymentStatus PaymentStatus @default(PENDING)
+  paymentRef    String?       // external transaction ID from Przelewy24
+
+  // ── TOTALS (all in PLN grosz) ──
+  subtotalPln  Int // sum of items before discounts
+  discountPln  Int @default(0)
+  shippingPln  Int
+  taxPln       Int
+  totalPln     Int // final amount charged
+
+  // Coupon applied
+  couponId    String?
+  coupon      Coupon? @relation(fields: [couponId], references: [id])
+  couponCode  String? // snapshot (coupon record may change later)
+
+  // Notes
+  noteCustomer String? @db.Text
+  noteAdmin    String? @db.Text
+
+  // ── BASELINKER SYNC ──
+  // Pushed to BaseLinker after payment captured
+  // BaseLinker handles: Allegro sync, InPost label generation, DHL/DPD labels
+  baselinkerOrderId String? @unique
+  baselinkerStatus  String? // status string from BaseLinker
+
+  // ── ALLEGRO (marketplace origin) ──
+  allegroOrderId String? @unique // non-null when order originated from Allegro
+
+  // ── SHIPPING TRACKING ──
+  trackingNumber String?
+  trackingUrl    String?
+
+  items OrderItem[]
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  paidAt      DateTime?
+  shippedAt   DateTime?
+  deliveredAt DateTime?
+
+  @@index([orderNumber])
+  @@index([customerId])
+  @@index([status])
+  @@index([paymentStatus])
+  @@index([createdAt])
+  @@index([baselinkerOrderId])
+  @@index([allegroOrderId])
+}
+
+model OrderItem {
+  id      String @id @default(cuid())
+  orderId String
+  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  variantId String
+  variant   ProductVariant @relation(fields: [variantId], references: [id])
+
+  // Snapshot at order time — product data may change after placement
+  productName String
+  variantOpt  String? // e.g. "120 kaps."
+  sku         String
+
+  quantity     Int
+  unitPricePln Int     // grosz, price at time of purchase
+  vatRate      Decimal @db.Decimal(5, 2)
+  totalPln     Int     // unitPricePln * quantity
+
+  createdAt DateTime @default(now())
+
+  @@index([orderId])
+  @@index([variantId])
+}
