@@ -1,6 +1,12 @@
 # Dependencies
 node_modules/
-.pnpm-store/
+.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
 
 # Next.js
 .next/
@@ -8,20 +14,21 @@ out/
 build/
 
 # Environment — NEVER commit
-.env
-.env.local
-.env.*.local
-.env.production
-
-# Database
-*.db
-*.sqlite
+.env*
 
 # Prisma
 prisma/migrations/dev/
 
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Testing
+/coverage
+
 # OS
 .DS_Store
+*.pem
 Thumbs.db
 
 # Editor
@@ -31,9 +38,10 @@ Thumbs.db
 *.swo
 
 # Logs
-*.log
 npm-debug.log*
-pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
 
 # Misc
 .vercel
