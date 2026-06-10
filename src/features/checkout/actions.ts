@@ -167,6 +167,10 @@ export const placeOrder = actionClient
     const cookieStore = await cookies();
     cookieStore.delete(CART_COOKIE_NAME);
 
+    if (process.env.P24_SANDBOX_BYPASS === "true") {
+      return { orderNumber: order.orderNumber, redirectUrl: null };
+    }
+
     // Register Przelewy24 transaction
     const headersList = await headers();
     const host = headersList.get("host") ?? "";
