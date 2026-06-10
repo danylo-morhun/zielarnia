@@ -2,12 +2,29 @@
 
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
+import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { actionClient } from "@/lib/safe-action";
 import { CART_COOKIE_NAME, CART_TTL_DAYS, createGuestCart } from "./lib/session";
 import { addToCartSchema, removeFromCartSchema, updateQuantitySchema } from "./schema";
 
 async function ensureCartId(): Promise<string> {
+  // Logged-in users: use/create their customer cart
+  const session = await auth();
+  if (session?.user?.id) {
+    const existing = await prisma.cart.findUnique({
+      where: { customerId: session.user.id },
+      select: { id: true },
+    });
+    if (existing) return existing.id;
+    const created = await prisma.cart.create({
+      data: { customerId: session.user.id },
+      select: { id: true },
+    });
+    return created.id;
+  }
+
+  // Guest users: use cart_id cookie
   const cookieStore = await cookies();
   const cartId = cookieStore.get(CART_COOKIE_NAME)?.value;
 
