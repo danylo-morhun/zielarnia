@@ -5,16 +5,25 @@ import Link from "next/link";
 import { CartList } from "@/features/cart/components/CartList";
 import { CartSummary } from "@/features/cart/components/CartSummary";
 import { ShippingProgress } from "@/features/cart/components/ShippingProgress";
-import { CART_COOKIE_NAME, getCart } from "@/features/cart/lib/session";
+import { auth } from "@/lib/auth";
+import { CART_COOKIE_NAME, getCart, getCartByCustomerId } from "@/features/cart/lib/session";
 
 export const metadata: Metadata = {
   title: "Koszyk — Twoje Zdrowie",
 };
 
 export default async function KoszykPage() {
-  const cookieStore = await cookies();
-  const cartId = cookieStore.get(CART_COOKIE_NAME)?.value;
-  const cart = cartId ? await getCart(cartId) : null;
+  const session = await auth();
+  let cart = null;
+
+  if (session?.user?.id) {
+    cart = await getCartByCustomerId(session.user.id);
+  } else {
+    const cookieStore = await cookies();
+    const cartId = cookieStore.get(CART_COOKIE_NAME)?.value;
+    cart = cartId ? await getCart(cartId) : null;
+  }
+
   const items = cart?.items ?? [];
 
   if (items.length === 0) {
