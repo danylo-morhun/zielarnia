@@ -1,7 +1,8 @@
 "use server";
 
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { CART_COOKIE_NAME } from "@/features/cart/lib/session";
+import { paymentUrl, registerTransaction } from "@/features/przelewy24/lib/client";
 import { formatPrice } from "@/lib/format";
 import { prisma } from "@/lib/prisma";
 import { actionClient } from "@/lib/safe-action";
@@ -160,11 +161,29 @@ export const placeOrder = actionClient
 
       await tx.cartItem.deleteMany({ where: { cartId: cart.id } });
 
-      return newOrder;
+      return { orderNumber: newOrder.orderNumber, totalPln };
     });
 
     const cookieStore = await cookies();
     cookieStore.delete(CART_COOKIE_NAME);
 
-    return { orderNumber: order.orderNumber };
+    // Register Przelewy24 transaction
+    const headersList = await headers();
+    const host = headersList.get("host") ?? "";
+    const proto = headersList.get("x-forwarded-proto") ?? "https";
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? `${proto}://${host}`;
+
+    const token = await registerTransaction({
+      sessionId: order.orderNumber,
+      amount: order.totalPln,
+      description: `Zamówienie ${order.orderNumber}`,
+      email: input.email,
+      urlReturn: `${appUrl}/zamowienie/potwierdzenie/${order.orderNumber}`,
+      urlStatus: `${appUrl}/api/p24/notify`,
+    });
+
+    return {
+      orderNumber: order.orderNumber,
+      redirectUrl: paymentUrl(token),
+    };
   });

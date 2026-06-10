@@ -1,4 +1,4 @@
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, Clock } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -20,6 +20,7 @@ export default async function PotwierdzeniePage({ params }: Props) {
     select: {
       orderNumber: true,
       status: true,
+      paymentStatus: true,
       customerEmail: true,
       customerName: true,
       shippingMethod: true,
@@ -63,8 +64,14 @@ export default async function PotwierdzeniePage({ params }: Props) {
   return (
     <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6 lg:px-8">
       <div className="mb-8 flex flex-col items-center gap-3 text-center">
-        <CheckCircle className="size-12 text-green-500" />
-        <h1 className="text-2xl font-bold">Zamówienie złożone!</h1>
+        {order.paymentStatus === "CAPTURED" ? (
+          <CheckCircle className="size-12 text-green-500" />
+        ) : (
+          <Clock className="size-12 text-amber-500" />
+        )}
+        <h1 className="text-2xl font-bold">
+          {order.paymentStatus === "CAPTURED" ? "Zamówienie opłacone!" : "Zamówienie złożone!"}
+        </h1>
         <p className="text-muted-foreground">
           Numer zamówienia:{" "}
           <span className="font-semibold text-foreground">{order.orderNumber}</span>
@@ -75,11 +82,13 @@ export default async function PotwierdzeniePage({ params }: Props) {
         </p>
       </div>
 
-      <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800 mb-6">
-        Czekamy na potwierdzenie płatności (
-        {paymentLabel[order.paymentMethod] ?? order.paymentMethod}). Po zaksięgowaniu rozpoczniemy
-        realizację zamówienia.
-      </div>
+      {order.paymentStatus !== "CAPTURED" && (
+        <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+          Czekamy na potwierdzenie płatności (
+          {paymentLabel[order.paymentMethod] ?? order.paymentMethod}). Po zaksięgowaniu rozpoczniemy
+          realizację zamówienia.
+        </div>
+      )}
 
       <div className="space-y-4 rounded-lg border border-border p-6">
         <h2 className="font-semibold">Szczegóły zamówienia</h2>

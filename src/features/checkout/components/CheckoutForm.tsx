@@ -69,7 +69,9 @@ export function CheckoutForm({ cartId, items, subtotal }: Props) {
 
   const { execute, isPending } = useAction(placeOrder, {
     onSuccess: ({ data }) => {
-      if (data?.orderNumber) {
+      if (data?.redirectUrl) {
+        window.location.href = data.redirectUrl;
+      } else if (data?.orderNumber) {
         router.push(`/zamowienie/potwierdzenie/${data.orderNumber}`);
       }
     },
