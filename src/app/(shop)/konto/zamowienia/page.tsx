@@ -55,7 +55,10 @@ export default async function ZamowieniaPage() {
                 {order.createdAt.toLocaleDateString("pl-PL")}
               </p>
               <p className="mt-0.5 text-xs text-muted-foreground">
-                {order.items.slice(0, 3).map((i) => i.productName).join(", ")}
+                {order.items
+                  .slice(0, 3)
+                  .map((i) => i.productName)
+                  .join(", ")}
                 {order.items.length > 3 ? "…" : ""}
               </p>
             </div>
