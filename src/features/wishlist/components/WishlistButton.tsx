@@ -19,13 +19,13 @@ export function WishlistButton({ productId, initialInWishlist }: Props) {
   const { execute, isExecuting } = useAction(toggleWishlist, {
     onSuccess: ({ data }) => {
       if (data) {
-        setInWishlist(data.added);
         if (data.added) toast.success("Dodano do ulubionych");
         else toast("Usunięto z ulubionych");
       }
       router.refresh();
     },
     onError: () => {
+      setInWishlist((prev) => !prev); // revert optimistic update
       toast.error("Błąd", { description: "Nie udało się zaktualizować ulubionych" });
     },
   });
@@ -34,7 +34,10 @@ export function WishlistButton({ productId, initialInWishlist }: Props) {
     <button
       type="button"
       disabled={isExecuting}
-      onClick={() => execute({ productId })}
+      onClick={() => {
+        setInWishlist((prev) => !prev); // optimistic
+        execute({ productId });
+      }}
       aria-label={inWishlist ? "Usuń z ulubionych" : "Dodaj do ulubionych"}
       className={`flex size-10 items-center justify-center rounded-full border transition-colors disabled:opacity-50 ${
         inWishlist
