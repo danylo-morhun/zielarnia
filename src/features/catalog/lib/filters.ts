@@ -1,0 +1,106 @@
+import type { Prisma } from "@prisma/client";
+
+export type SortOption = "newest" | "name_asc" | "name_desc";
+
+export type CatalogFilters = {
+  category?: string;
+  brand?: string;
+  tags?: string[];
+  priceMin?: number; // grosz
+  priceMax?: number; // grosz
+  search?: string;
+  page: number;
+  perPage: number;
+  sort: SortOption;
+};
+
+export const ITEMS_PER_PAGE = 24;
+
+const VALID_SORTS: SortOption[] = ["newest", "name_asc", "name_desc"];
+
+export function parseCatalogFilters(
+  params: Record<string, string | string[] | undefined>,
+): CatalogFilters {
+  const page = Math.max(1, Number(params.strona) || 1);
+  const sortRaw = params.sortuj;
+  const sort: SortOption =
+    typeof sortRaw === "string" && VALID_SORTS.includes(sortRaw as SortOption)
+      ? (sortRaw as SortOption)
+      : "newest";
+
+  return {
+    category: typeof params.kategoria === "string" ? params.kategoria : undefined,
+    brand: typeof params.marka === "string" ? params.marka : undefined,
+    tags: typeof params.tagi === "string" ? params.tagi.split(",").filter(Boolean) : undefined,
+    priceMin:
+      typeof params.cenaMin === "string" && params.cenaMin !== ""
+        ? Math.round(Number(params.cenaMin) * 100)
+        : undefined,
+    priceMax:
+      typeof params.cenaMax === "string" && params.cenaMax !== ""
+        ? Math.round(Number(params.cenaMax) * 100)
+        : undefined,
+    search: typeof params.szukaj === "string" ? params.szukaj : undefined,
+    page,
+    perPage: ITEMS_PER_PAGE,
+    sort,
+  };
+}
+
+export function buildProductWhere(filters: CatalogFilters): Prisma.ProductWhereInput {
+  const where: Prisma.ProductWhereInput = { status: "ACTIVE" };
+
+  if (filters.category) {
+    where.category = { slug: filters.category };
+  }
+  if (filters.brand) {
+    where.brand = { slug: filters.brand };
+  }
+  if (filters.tags?.length) {
+    where.tags = { some: { tag: { slug: { in: filters.tags } } } };
+  }
+  if (filters.priceMin !== undefined || filters.priceMax !== undefined) {
+    where.variants = {
+      some: {
+        isActive: true,
+        isDefault: true,
+        ...(filters.priceMin !== undefined && { pricePln: { gte: filters.priceMin } }),
+        ...(filters.priceMax !== undefined && { pricePln: { lte: filters.priceMax } }),
+      },
+    };
+  }
+  if (filters.search) {
+    where.OR = [
+      { namePl: { contains: filters.search, mode: "insensitive" } },
+      { shortDescPl: { contains: filters.search, mode: "insensitive" } },
+      { brand: { name: { contains: filters.search, mode: "insensitive" } } },
+    ];
+  }
+
+  return where;
+}
+
+export function buildProductOrderBy(sort: SortOption): Prisma.ProductOrderByWithRelationInput {
+  switch (sort) {
+    case "name_asc":
+      return { namePl: "asc" };
+    case "name_desc":
+      return { namePl: "desc" };
+    default:
+      return { createdAt: "desc" };
+  }
+}
+
+export function buildCatalogUrl(base: string, overrides: Partial<CatalogFilters>): string {
+  const params = new URLSearchParams();
+  if (overrides.category) params.set("kategoria", overrides.category);
+  if (overrides.brand) params.set("marka", overrides.brand);
+  if (overrides.tags?.length) params.set("tagi", overrides.tags.join(","));
+  if (overrides.priceMin) params.set("cenaMin", String(overrides.priceMin / 100));
+  if (overrides.priceMax) params.set("cenaMax", String(overrides.priceMax / 100));
+  if (overrides.search) params.set("szukaj", overrides.search);
+  if (overrides.sort && overrides.sort !== "newest") params.set("sortuj", overrides.sort);
+  if (overrides.page && overrides.page > 1) params.set("strona", String(overrides.page));
+  const qs = params.toString();
+  return qs ? `${base}?${qs}` : base;
+}
