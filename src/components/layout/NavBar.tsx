@@ -1,7 +1,11 @@
-import { Heart, Search, ShoppingBag, User } from "lucide-react";
+import { Search, ShoppingBag, User } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 import { CartIcon } from "@/features/cart/components/CartIcon";
+import {
+  WishlistIcon,
+  WishlistIconFallback,
+} from "@/features/wishlist/components/WishlistIcon";
 
 export function NavBar() {
   return (
@@ -40,13 +44,9 @@ export function NavBar() {
           >
             <Search className="size-5" />
           </Link>
-          <Link
-            href="/ulubione"
-            aria-label="Ulubione"
-            className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-          >
-            <Heart className="size-5" />
-          </Link>
+          <Suspense fallback={<WishlistIconFallback />}>
+            <WishlistIcon />
+          </Suspense>
           <Suspense
             fallback={
               <span className="rounded-md p-2 text-muted-foreground">
