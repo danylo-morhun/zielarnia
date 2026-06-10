@@ -21,7 +21,11 @@ export async function blCall<T = Record<string, unknown>>(
     throw new Error(`BaseLinker HTTP ${res.status}`);
   }
 
-  const json = (await res.json()) as { status: string; error_code?: number; error_message?: string } & T;
+  const json = (await res.json()) as {
+    status: string;
+    error_code?: number;
+    error_message?: string;
+  } & T;
 
   if (json.status !== "SUCCESS") {
     throw new Error(`BaseLinker error ${json.error_code}: ${json.error_message}`);

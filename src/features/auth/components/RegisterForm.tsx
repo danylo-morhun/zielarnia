@@ -50,8 +50,8 @@ export function RegisterForm() {
             onChange={update("firstName")}
             className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
           />
-          {fieldErrors?.firstName && (
-            <p className="mt-1 text-xs text-destructive">{fieldErrors.firstName}</p>
+          {fieldErrors?.firstName?._errors?.[0] && (
+            <p className="mt-1 text-xs text-destructive">{fieldErrors.firstName._errors[0]}</p>
           )}
         </div>
         <div>
@@ -83,8 +83,8 @@ export function RegisterForm() {
           onChange={update("email")}
           className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
         />
-        {fieldErrors?.email && (
-          <p className="mt-1 text-xs text-destructive">{fieldErrors.email}</p>
+        {fieldErrors?.email?._errors?.[0] && (
+          <p className="mt-1 text-xs text-destructive">{fieldErrors.email._errors[0]}</p>
         )}
       </div>
 
@@ -101,8 +101,8 @@ export function RegisterForm() {
           onChange={update("password")}
           className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
         />
-        {fieldErrors?.password && (
-          <p className="mt-1 text-xs text-destructive">{fieldErrors.password}</p>
+        {fieldErrors?.password?._errors?.[0] && (
+          <p className="mt-1 text-xs text-destructive">{fieldErrors.password._errors[0]}</p>
         )}
       </div>
 
@@ -119,8 +119,8 @@ export function RegisterForm() {
           onChange={update("confirmPassword")}
           className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
         />
-        {fieldErrors?.confirmPassword && (
-          <p className="mt-1 text-xs text-destructive">{fieldErrors.confirmPassword}</p>
+        {fieldErrors?.confirmPassword?._errors?.[0] && (
+          <p className="mt-1 text-xs text-destructive">{fieldErrors.confirmPassword._errors[0]}</p>
         )}
       </div>
 

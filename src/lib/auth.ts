@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
-import NextAuth, { type DefaultSession } from "next-auth";
 import type { NextAuthConfig } from "next-auth";
+import NextAuth, { type DefaultSession } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { prisma } from "./prisma";
 
@@ -30,10 +30,7 @@ const config: NextAuthConfig = {
           select: { id: true, email: true, firstName: true, passwordHash: true },
         });
         if (!customer?.passwordHash) return null;
-        const valid = await bcrypt.compare(
-          String(credentials.password),
-          customer.passwordHash,
-        );
+        const valid = await bcrypt.compare(String(credentials.password), customer.passwordHash);
         if (!valid) return null;
         return {
           id: customer.id,

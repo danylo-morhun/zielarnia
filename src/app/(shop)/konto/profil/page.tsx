@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
+import { ProfileForm } from "@/features/account/components/ProfileForm";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { ProfileForm } from "@/features/account/components/ProfileForm";
 
 export const metadata = { title: "Profil — Twoje Zdrowie" };
 

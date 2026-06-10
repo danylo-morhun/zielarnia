@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
 import { formatPrice } from "@/lib/format";
+import { prisma } from "@/lib/prisma";
 
 export const metadata = { title: "Zamówienia — Twoje Zdrowie" };
 

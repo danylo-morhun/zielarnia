@@ -32,7 +32,10 @@ export function AddressCard({ address, onEdit }: Props) {
         {address.firstName} {address.lastName}
       </p>
       {address.company && <p className="text-muted-foreground">{address.company}</p>}
-      <p className="text-muted-foreground">{address.street}{address.apartment ? ` / ${address.apartment}` : ""}</p>
+      <p className="text-muted-foreground">
+        {address.street}
+        {address.apartment ? ` / ${address.apartment}` : ""}
+      </p>
       <p className="text-muted-foreground">
         {address.postalCode} {address.city}
       </p>

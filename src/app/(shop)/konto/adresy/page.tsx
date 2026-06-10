@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
+import { AddressesClient } from "@/features/account/components/AddressesClient";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { AddressesClient } from "@/features/account/components/AddressesClient";
 
 export const metadata = { title: "Adresy — Twoje Zdrowie" };
 

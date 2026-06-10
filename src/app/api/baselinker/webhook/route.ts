@@ -2,8 +2,9 @@
 // Optional env: BASELINKER_STATUS_PROCESSING, BASELINKER_STATUS_SHIPPED,
 //               BASELINKER_STATUS_DELIVERED, BASELINKER_STATUS_CANCELLED
 // Configure BL outgoing webhook to POST to: /api/baselinker/webhook?token=<secret>
-import { type NextRequest, NextResponse } from "next/server";
+
 import type { OrderStatus } from "@prisma/client";
+import { type NextRequest, NextResponse } from "next/server";
 import { blCall } from "@/lib/baselinker/client";
 import { prisma } from "@/lib/prisma";
 
@@ -16,7 +17,8 @@ type BlOrder = {
 
 function trackingUrl(module: string, nr: string): string {
   if (module.startsWith("inpost")) return `https://inpost.pl/sledzenie-paczek?number=${nr}`;
-  if (module.startsWith("dhl")) return `https://www.dhl.com/pl-pl/home/tracking.html?tracking-id=${nr}`;
+  if (module.startsWith("dhl"))
+    return `https://www.dhl.com/pl-pl/home/tracking.html?tracking-id=${nr}`;
   if (module.startsWith("dpd")) return `https://tracktrace.dpd.com.pl/parcelDetails?typ=1&p1=${nr}`;
   return "";
 }

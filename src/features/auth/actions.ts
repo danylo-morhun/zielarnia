@@ -1,13 +1,13 @@
 "use server";
 
 import bcrypt from "bcryptjs";
-import { AuthError } from "next-auth";
 import { cookies } from "next/headers";
+import { AuthError } from "next-auth";
+import { CART_COOKIE_NAME, mergeGuestCart } from "@/features/cart/lib/session";
+import { mergeGuestWishlist, WISHLIST_COOKIE_NAME } from "@/features/wishlist/lib/session";
 import { signIn } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { actionClient } from "@/lib/safe-action";
-import { CART_COOKIE_NAME, mergeGuestCart } from "@/features/cart/lib/session";
-import { WISHLIST_COOKIE_NAME, mergeGuestWishlist } from "@/features/wishlist/lib/session";
 import { loginSchema, registerSchema } from "./schema";
 
 export const loginCustomer = actionClient

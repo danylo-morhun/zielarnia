@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import type { AddressInput } from "../schema";
 import { AddressCard } from "./AddressCard";
 import { AddressForm } from "./AddressForm";
-import type { AddressInput } from "../schema";
 
 type Address = {
   id: string;
@@ -38,9 +38,7 @@ export function AddressesClient({ addresses }: Props) {
         )}
       </div>
 
-      {editing && (
-        <AddressForm initial={editing} onDone={() => setEditing(null)} />
-      )}
+      {editing && <AddressForm initial={editing} onDone={() => setEditing(null)} />}
 
       {addresses.length === 0 && !editing && (
         <p className="text-sm text-muted-foreground">Brak zapisanych adresów.</p>

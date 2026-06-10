@@ -1,7 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
 import { formatPrice } from "@/lib/format";
+import { prisma } from "@/lib/prisma";
 
 export const metadata = { title: "Szczegóły zamówienia — Twoje Zdrowie" };
 
@@ -122,11 +122,15 @@ export default async function OrderDetailPage({
             <div key={item.id} className="flex items-center justify-between px-4 py-3 text-sm">
               <div>
                 <p className="font-medium">{item.productName}</p>
-                {item.variantOpt && <p className="text-xs text-muted-foreground">{item.variantOpt}</p>}
+                {item.variantOpt && (
+                  <p className="text-xs text-muted-foreground">{item.variantOpt}</p>
+                )}
                 <p className="text-xs text-muted-foreground">SKU: {item.sku}</p>
               </div>
               <div className="text-right">
-                <p>{formatPrice(item.unitPricePln)} × {item.quantity}</p>
+                <p>
+                  {formatPrice(item.unitPricePln)} × {item.quantity}
+                </p>
                 <p className="font-medium">{formatPrice(item.totalPln)}</p>
               </div>
             </div>
@@ -148,7 +152,8 @@ export default async function OrderDetailPage({
             {order.shipFirstName} {order.shipLastName}
           </p>
           <p className="text-sm text-muted-foreground">
-            {order.shipStreet}{order.shipApartment ? ` / ${order.shipApartment}` : ""}
+            {order.shipStreet}
+            {order.shipApartment ? ` / ${order.shipApartment}` : ""}
           </p>
           <p className="text-sm text-muted-foreground">
             {order.shipPostalCode} {order.shipCity}
