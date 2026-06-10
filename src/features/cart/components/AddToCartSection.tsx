@@ -1,14 +1,14 @@
 "use client";
 
-import { ShoppingCart } from "lucide-react";
+import { Minus, Plus, ShoppingCart } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useAction } from "next-safe-action/hooks";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { formatPrice } from "@/lib/format";
 import { addToCart } from "../actions";
 
-type Variant = {
+export type Variant = {
   id: string;
   optionLabel: string | null;
   optionValue: string | null;
@@ -26,6 +26,7 @@ export function AddToCartSection({ variants }: Props) {
   const router = useRouter();
   const defaultVariant = variants.find((v) => v.isDefault) ?? variants[0];
   const [selectedId, setSelectedId] = useState(defaultVariant?.id ?? "");
+  const [quantity, setQuantity] = useState(1);
 
   const { execute, isExecuting } = useAction(addToCart, {
     onSuccess: () => {
@@ -41,6 +42,12 @@ export function AddToCartSection({ variants }: Props) {
   });
 
   const selected = variants.find((v) => v.id === selectedId) ?? defaultVariant;
+
+  useEffect(() => {
+    if (selected && quantity > selected.stock) {
+      setQuantity(Math.max(1, selected.stock));
+    }
+  }, [selected, quantity]);
   if (!selected) return null;
 
   const hasOptions = variants.some((v) => v.optionValue);
@@ -100,10 +107,35 @@ export function AddToCartSection({ variants }: Props) {
           : "Niedostępny"}
       </p>
 
+      <div className="flex items-center gap-3">
+        <span className="text-sm font-medium">Ilość:</span>
+        <div className="flex items-center rounded-md border">
+          <button
+            type="button"
+            onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+            disabled={quantity <= 1}
+            aria-label="Zmniejsz ilość"
+            className="flex size-9 items-center justify-center hover:bg-muted disabled:opacity-40"
+          >
+            <Minus className="size-4" />
+          </button>
+          <span className="w-8 text-center text-sm font-semibold">{quantity}</span>
+          <button
+            type="button"
+            onClick={() => setQuantity((q) => Math.min(selected.stock, q + 1))}
+            disabled={quantity >= selected.stock}
+            aria-label="Zwiększ ilość"
+            className="flex size-9 items-center justify-center hover:bg-muted disabled:opacity-40"
+          >
+            <Plus className="size-4" />
+          </button>
+        </div>
+      </div>
+
       <button
         type="button"
         disabled={isExecuting || selected.stock <= 0}
-        onClick={() => execute({ variantId: selected.id, quantity: 1 })}
+        onClick={() => execute({ variantId: selected.id, quantity })}
         className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/80 disabled:cursor-not-allowed disabled:opacity-50"
       >
         <ShoppingCart className="size-4" />

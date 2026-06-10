@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import type { TouchEvent } from "react";
 
 type GalleryImage = {
   id: string;
@@ -21,6 +22,18 @@ export function ProductGallery({ images, productName }: Props) {
   const fallback = visibleImages.length > 0 ? visibleImages : images;
   const mainIndex = fallback.findIndex((img) => img.isMain);
   const [active, setActive] = useState(mainIndex >= 0 ? mainIndex : 0);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+
+  const handleTouchStart = (e: TouchEvent<HTMLDivElement>) => setTouchStart(e.targetTouches[0].clientX);
+  const handleTouchEnd = (e: TouchEvent<HTMLDivElement>) => {
+    if (touchStart === null) return;
+    const delta = touchStart - e.changedTouches[0].clientX;
+    if (Math.abs(delta) > 50) {
+      if (delta > 0) setActive((i) => Math.min(i + 1, fallback.length - 1));
+      else setActive((i) => Math.max(i - 1, 0));
+    }
+    setTouchStart(null);
+  };
 
   if (fallback.length === 0) {
     return (
@@ -34,7 +47,11 @@ export function ProductGallery({ images, productName }: Props) {
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="relative aspect-square overflow-hidden rounded-xl bg-muted">
+      <div
+        className="relative aspect-square overflow-hidden rounded-xl bg-muted"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
         <Image
           src={current.url}
           alt={current.altPl ?? productName}
@@ -44,6 +61,20 @@ export function ProductGallery({ images, productName }: Props) {
           priority
         />
       </div>
+
+      {fallback.length > 1 && (
+        <div className="mt-2 flex justify-center gap-1 lg:hidden">
+          {fallback.map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={() => setActive(i)}
+              aria-label={`Zdjęcie ${i + 1}`}
+              className={`size-2 rounded-full transition-colors ${i === active ? "bg-primary" : "bg-muted"}`}
+            />
+          ))}
+        </div>
+      )}
 
       {fallback.length > 1 && (
         <div className="flex gap-2 overflow-x-auto pb-1">

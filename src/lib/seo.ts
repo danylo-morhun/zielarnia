@@ -26,6 +26,7 @@ export function buildProductJsonLd(product: {
 }) {
   const prices = product.variants.map((v) => v.pricePln);
   const inStock = product.variants.some((v) => v.stock > 0);
+  if (prices.length === 0) return null;
   const lowPrice = Math.min(...prices) / 100;
   const highPrice = Math.max(...prices) / 100;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://twojezdrowie.pl";

@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
-import { AddToCartSection } from "@/features/cart/components/AddToCartSection";
+import { ProductActionsClient } from "@/features/catalog/components/ProductActionsClient";
+import { ProductCard } from "@/features/catalog/components/ProductCard";
 import { Breadcrumbs } from "@/features/catalog/components/Breadcrumbs";
 import { ProductGallery } from "@/features/catalog/components/ProductGallery";
 import { WishlistButton } from "@/features/wishlist/components/WishlistButton";
 import { getWishlist, WISHLIST_COOKIE_NAME } from "@/features/wishlist/lib/session";
 import { buildProductJsonLd } from "@/lib/seo";
+import { prisma } from "@/lib/prisma";
 import { getProduct } from "../../../../features/catalog/actions";
 
 type Props = {
@@ -38,7 +40,44 @@ export default async function ProduktPage({ params }: Props) {
   const product = await getProduct(slug);
   if (!product) notFound();
 
-  const cookieStore = await cookies();
+  const [cookieStore, related] = await Promise.all([
+    cookies(),
+    product.category?.id
+      ? prisma.product.findMany({
+          where: { status: "ACTIVE", categoryId: product.category.id, id: { not: product.id } },
+          take: 4,
+          orderBy: { updatedAt: "desc" },
+          select: {
+            id: true,
+            slug: true,
+            namePl: true,
+            shortDescPl: true,
+            isNewArrival: true,
+            isFeatured: true,
+            brand: { select: { name: true, slug: true } },
+            category: { select: { namePl: true, slug: true } },
+            images: {
+              where: { isMain: true },
+              select: { url: true, altPl: true },
+              orderBy: { sortOrder: "asc" },
+              take: 1,
+            },
+            variants: {
+              where: { isActive: true },
+              select: { pricePln: true, comparePricePln: true, stock: true, isDefault: true },
+              orderBy: { isDefault: "desc" },
+              take: 1,
+            },
+            tags: {
+              select: {
+                tag: { select: { namePl: true, slug: true, iconUrl: true, type: true } },
+              },
+            },
+          },
+        })
+      : Promise.resolve([]),
+  ]);
+
   const wishlistId = cookieStore.get(WISHLIST_COOKIE_NAME)?.value;
   const wishlist = wishlistId ? await getWishlist(wishlistId) : null;
   const initialInWishlist = wishlist?.items.some((item) => item.productId === product.id) ?? false;
@@ -82,10 +121,12 @@ export default async function ProduktPage({ params }: Props) {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      {jsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      )}
 
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <Breadcrumbs items={breadcrumbs} />
@@ -122,7 +163,7 @@ export default async function ProduktPage({ params }: Props) {
 
             <div className="flex gap-3">
               <div className="flex-1">
-                <AddToCartSection variants={product.variants} />
+                <ProductActionsClient variants={product.variants} productName={product.namePl} />
               </div>
               <div className="flex items-end pb-0.5">
                 <WishlistButton productId={product.id} initialInWishlist={initialInWishlist} />
@@ -188,6 +229,17 @@ export default async function ProduktPage({ params }: Props) {
             </section>
           )}
         </div>
+
+        {related.length > 0 && (
+          <section className="mt-16">
+            <h2 className="mb-6 font-heading text-2xl font-semibold">Podobne produkty</h2>
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+              {related.map((p) => (
+                <ProductCard key={p.id} product={p} />
+              ))}
+            </div>
+          </section>
+        )}
       </div>
     </>
   );
