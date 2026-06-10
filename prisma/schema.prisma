@@ -284,6 +284,9 @@ model Customer {
   companyName String?
   nip         String? // Polish NIP (Numer Identyfikacji Podatkowej)
 
+  // Hashed password for Credentials auth (bcryptjs)
+  passwordHash String?
+
   // Link to auth provider (NextAuth / Supabase Auth user ID)
   authUserId String? @unique
 
