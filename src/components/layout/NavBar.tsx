@@ -2,10 +2,7 @@ import { Search, ShoppingBag, User } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 import { CartIcon } from "@/features/cart/components/CartIcon";
-import {
-  WishlistIcon,
-  WishlistIconFallback,
-} from "@/features/wishlist/components/WishlistIcon";
+import { WishlistIcon, WishlistIconFallback } from "@/features/wishlist/components/WishlistIcon";
 
 export function NavBar() {
   return (

@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { AddToCartSection } from "@/features/cart/components/AddToCartSection";
 import { Breadcrumbs } from "@/features/catalog/components/Breadcrumbs";
 import { ProductGallery } from "@/features/catalog/components/ProductGallery";
+import { WishlistButton } from "@/features/wishlist/components/WishlistButton";
+import { getWishlist, WISHLIST_COOKIE_NAME } from "@/features/wishlist/lib/session";
 import { buildProductJsonLd } from "@/lib/seo";
 import { getProduct } from "../../../../features/catalog/actions";
 
@@ -34,6 +37,11 @@ export default async function ProduktPage({ params }: Props) {
   const { slug } = await params;
   const product = await getProduct(slug);
   if (!product) notFound();
+
+  const cookieStore = await cookies();
+  const wishlistId = cookieStore.get(WISHLIST_COOKIE_NAME)?.value;
+  const wishlist = wishlistId ? await getWishlist(wishlistId) : null;
+  const initialInWishlist = wishlist?.items.some((item) => item.productId === product.id) ?? false;
 
   const jsonLd = buildProductJsonLd({
     name: product.namePl,
@@ -112,7 +120,14 @@ export default async function ProduktPage({ params }: Props) {
               </div>
             )}
 
-            <AddToCartSection variants={product.variants} />
+            <div className="flex gap-3">
+              <div className="flex-1">
+                <AddToCartSection variants={product.variants} />
+              </div>
+              <div className="flex items-end pb-0.5">
+                <WishlistButton productId={product.id} initialInWishlist={initialInWishlist} />
+              </div>
+            </div>
 
             {product.netWeight && (
               <dl className="grid grid-cols-2 gap-2 text-sm">

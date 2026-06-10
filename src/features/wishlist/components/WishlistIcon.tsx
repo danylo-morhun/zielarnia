@@ -1,6 +1,6 @@
 import { Heart } from "lucide-react";
 import { cookies } from "next/headers";
-import { WISHLIST_COOKIE_NAME, getWishlist } from "../lib/session";
+import { getWishlist, WISHLIST_COOKIE_NAME } from "../lib/session";
 import { WishlistIconClient } from "./WishlistIconClient";
 
 export async function WishlistIcon() {

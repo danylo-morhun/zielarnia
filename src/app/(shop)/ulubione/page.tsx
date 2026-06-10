@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import Link from "next/link";
 import { WishlistItemCard } from "@/features/wishlist/components/WishlistItemCard";
-import { WISHLIST_COOKIE_NAME, getWishlist } from "@/features/wishlist/lib/session";
+import { getWishlist, WISHLIST_COOKIE_NAME } from "@/features/wishlist/lib/session";
 
 export const metadata: Metadata = {
   title: "Ulubione — Twoje Zdrowie",

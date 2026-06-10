@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { prisma } from "@/lib/prisma";
 import { actionClient } from "@/lib/safe-action";
-import { WISHLIST_COOKIE_NAME, WISHLIST_TTL_DAYS, createGuestWishlist } from "./lib/session";
+import { createGuestWishlist, WISHLIST_COOKIE_NAME, WISHLIST_TTL_DAYS } from "./lib/session";
 import { removeFromWishlistSchema, toggleWishlistSchema } from "./schema";
 
 async function ensureWishlistId(): Promise<string> {

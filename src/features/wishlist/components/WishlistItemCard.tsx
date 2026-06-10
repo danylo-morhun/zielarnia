@@ -49,10 +49,10 @@ export function WishlistItemCard({ item }: Props) {
         >
           {item.product.namePl}
         </Link>
-        {variant && (
-          <p className="text-sm font-semibold">{formatPrice(variant.pricePln)}</p>
-        )}
-        <p className={`text-xs ${variant && variant.stock > 0 ? "text-green-600" : "text-muted-foreground"}`}>
+        {variant && <p className="text-sm font-semibold">{formatPrice(variant.pricePln)}</p>}
+        <p
+          className={`text-xs ${variant && variant.stock > 0 ? "text-green-600" : "text-muted-foreground"}`}
+        >
           {variant && variant.stock > 0 ? "Dostępny" : "Niedostępny"}
         </p>
         <button

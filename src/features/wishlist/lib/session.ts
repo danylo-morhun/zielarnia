@@ -82,7 +82,9 @@ export async function mergeGuestWishlist(
 
   for (const item of guestWishlist.items) {
     await prisma.wishlistItem.upsert({
-      where: { wishlistId_productId: { wishlistId: customerWishlist.id, productId: item.productId } },
+      where: {
+        wishlistId_productId: { wishlistId: customerWishlist.id, productId: item.productId },
+      },
       update: {},
       create: { wishlistId: customerWishlist.id, productId: item.productId },
     });
