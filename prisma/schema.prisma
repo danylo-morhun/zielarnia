@@ -60,6 +60,7 @@ enum PaymentMethod {
   GOOGLE_PAY
   BANK_TRANSFER     // traditional wire transfer
   CASH_ON_DELIVERY
+  ALLEGRO_PAY       // Allegro marketplace orders
 }
 
 enum PaymentStatus {
@@ -516,8 +517,8 @@ model OrderItem {
   orderId String
   order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
-  variantId String
-  variant   ProductVariant @relation(fields: [variantId], references: [id])
+  variantId String?
+  variant   ProductVariant? @relation(fields: [variantId], references: [id])
 
   // Snapshot at order time — product data may change after placement
   productName String
