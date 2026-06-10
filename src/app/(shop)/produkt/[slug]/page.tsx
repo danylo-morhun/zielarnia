@@ -8,6 +8,7 @@ import { ProductGallery } from "@/features/catalog/components/ProductGallery";
 import { WishlistButton } from "@/features/wishlist/components/WishlistButton";
 import { getWishlist, WISHLIST_COOKIE_NAME } from "@/features/wishlist/lib/session";
 import { buildProductJsonLd } from "@/lib/seo";
+import { sanitizeRichText } from "@/lib/sanitize";
 import { prisma } from "@/lib/prisma";
 import { getProduct } from "../../../../features/catalog/actions";
 
@@ -197,7 +198,7 @@ export default async function ProduktPage({ params }: Props) {
               <h2 className="text-lg font-semibold text-foreground">Opis</h2>
               <div
                 className="prose prose-sm mt-3 max-w-none text-muted-foreground"
-                dangerouslySetInnerHTML={{ __html: product.descriptionPl }}
+                dangerouslySetInnerHTML={{ __html: sanitizeRichText(product.descriptionPl) }}
               />
             </section>
           )}
