@@ -6,6 +6,9 @@ import { CldUploadWidget } from "next-cloudinary";
 import { useAction } from "next-safe-action/hooks";
 import { addProductImage, deleteProductImage } from "../actions";
 
+const CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+const UPLOAD_PRESET = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET;
+
 interface Props {
   productId: string;
   images: ProductImage[];
@@ -19,30 +22,35 @@ export function ImagesSection({ productId, images }: Props) {
     <section className="rounded-lg border p-4">
       <div className="mb-4 flex items-center justify-between">
         <h2 className="font-semibold">Zdjęcia</h2>
-        {/* Requires NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME + NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET in .env.local */}
-        <CldUploadWidget
-          uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET ?? "ml_default"}
-          onSuccess={(result) => {
-            const info = result.info as { secure_url: string; public_id: string } | undefined;
-            if (!info?.secure_url) return;
-            execAdd({
-              productId,
-              url: info.secure_url,
-              isMain: images.length === 0,
-              sortOrder: images.length,
-            });
-          }}
-        >
-          {({ open }) => (
-            <button
-              type="button"
-              onClick={() => open()}
-              className="rounded bg-foreground px-3 py-1 text-xs font-medium text-background"
-            >
-              + Dodaj zdjęcie
-            </button>
-          )}
-        </CldUploadWidget>
+        {CLOUD_NAME && UPLOAD_PRESET ? (
+          <CldUploadWidget
+            uploadPreset={UPLOAD_PRESET}
+            onSuccess={(result) => {
+              const info = result.info as { secure_url: string } | undefined;
+              if (!info?.secure_url) return;
+              execAdd({
+                productId,
+                url: info.secure_url,
+                isMain: images.length === 0,
+                sortOrder: images.length,
+              });
+            }}
+          >
+            {({ open }) => (
+              <button
+                type="button"
+                onClick={() => open()}
+                className="rounded bg-foreground px-3 py-1 text-xs font-medium text-background"
+              >
+                + Dodaj zdjęcie
+              </button>
+            )}
+          </CldUploadWidget>
+        ) : (
+          <span className="rounded border border-dashed px-2 py-1 text-xs text-muted-foreground">
+            Cloudinary nie skonfigurowany — użyj URL poniżej
+          </span>
+        )}
       </div>
       <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
         {images.map((img) => (
@@ -77,8 +85,7 @@ export function ImagesSection({ productId, images }: Props) {
           <p className="col-span-4 py-4 text-center text-sm text-muted-foreground">Brak zdjęć</p>
         )}
       </div>
-      {/* URL input fallback */}
-      <details className="mt-4">
+      <details className="mt-4" open={!CLOUD_NAME}>
         <summary className="cursor-pointer text-xs text-muted-foreground">Dodaj przez URL</summary>
         <form
           onSubmit={(e) => {
