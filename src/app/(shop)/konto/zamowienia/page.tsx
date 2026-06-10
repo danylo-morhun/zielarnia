@@ -30,7 +30,7 @@ export default async function ZamowieniaPage() {
       status: true,
       totalPln: true,
       createdAt: true,
-      items: { select: { productName: true }, take: 3 },
+      items: { select: { productName: true }, take: 4 },
     },
   });
 
@@ -55,8 +55,8 @@ export default async function ZamowieniaPage() {
                 {order.createdAt.toLocaleDateString("pl-PL")}
               </p>
               <p className="mt-0.5 text-xs text-muted-foreground">
-                {order.items.map((i) => i.productName).join(", ")}
-                {order.items.length === 3 ? "…" : ""}
+                {order.items.slice(0, 3).map((i) => i.productName).join(", ")}
+                {order.items.length > 3 ? "…" : ""}
               </p>
             </div>
             <div className="flex items-center gap-4 text-sm">
