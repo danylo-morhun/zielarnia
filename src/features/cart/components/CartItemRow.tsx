@@ -11,14 +11,15 @@ import type { CartItem } from "../lib/session";
 
 type Props = {
   item: CartItem;
+  onRemove?: () => void;
 };
 
-export function CartItemRow({ item }: Props) {
+export function CartItemRow({ item, onRemove }: Props) {
   const router = useRouter();
   const { execute: doRemove, isExecuting: removing } = useAction(removeFromCart, {
     onSuccess: () => {
       router.refresh();
-      toast.success("Usunięto z koszyka");
+      if (!onRemove) toast.success("Usunięto z koszyka");
     },
     onError: () => {
       toast.error("Błąd", { description: "Nie udało się usunąć produktu" });
@@ -64,26 +65,33 @@ export function CartItemRow({ item }: Props) {
             type="button"
             disabled={pending || item.quantity <= 1}
             onClick={() => doUpdate({ cartItemId: item.id, quantity: item.quantity - 1 })}
-            className="flex size-7 items-center justify-center rounded border border-border hover:bg-muted disabled:opacity-40"
+            className="flex size-10 items-center justify-center rounded border border-border hover:bg-muted disabled:opacity-40"
             aria-label="Zmniejsz ilość"
           >
-            <Minus className="size-3" />
+            <Minus className="size-4" />
           </button>
           <span className="w-6 text-center text-sm">{item.quantity}</span>
           <button
             type="button"
             disabled={pending || item.quantity >= item.variant.stock}
             onClick={() => doUpdate({ cartItemId: item.id, quantity: item.quantity + 1 })}
-            className="flex size-7 items-center justify-center rounded border border-border hover:bg-muted disabled:opacity-40"
+            className="flex size-10 items-center justify-center rounded border border-border hover:bg-muted disabled:opacity-40"
             aria-label="Zwiększ ilość"
           >
-            <Plus className="size-3" />
+            <Plus className="size-4" />
           </button>
           <button
             type="button"
             disabled={pending}
-            onClick={() => doRemove({ cartItemId: item.id })}
-            className="ml-auto flex size-7 items-center justify-center rounded text-muted-foreground hover:text-destructive disabled:opacity-40"
+            onClick={() => {
+              if (onRemove) {
+                onRemove();
+                doRemove({ cartItemId: item.id });
+              } else {
+                doRemove({ cartItemId: item.id });
+              }
+            }}
+            className="ml-auto flex size-10 items-center justify-center rounded text-muted-foreground hover:text-destructive disabled:opacity-40"
             aria-label="Usuń z koszyka"
           >
             <Trash2 className="size-4" />

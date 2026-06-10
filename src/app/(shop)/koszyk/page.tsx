@@ -2,9 +2,10 @@ import { ShoppingBag } from "lucide-react";
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import Link from "next/link";
-import { CartItemRow } from "@/features/cart/components/CartItemRow";
+import { CartList } from "@/features/cart/components/CartList";
+import { CartSummary } from "@/features/cart/components/CartSummary";
+import { ShippingProgress } from "@/features/cart/components/ShippingProgress";
 import { CART_COOKIE_NAME, getCart } from "@/features/cart/lib/session";
-import { formatPrice } from "@/lib/format";
 
 export const metadata: Metadata = {
   title: "Koszyk — Twoje Zdrowie",
@@ -38,39 +39,24 @@ export default async function KoszykPage() {
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
-      <h1 className="mb-8 text-2xl font-bold">Koszyk</h1>
+      <div className="mb-8 flex items-center justify-between">
+        <h1 className="text-2xl font-bold">Koszyk</h1>
+        <Link
+          href="/katalog"
+          className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary"
+        >
+          ← Kontynuuj zakupy
+        </Link>
+      </div>
 
       <div className="grid gap-8 lg:grid-cols-3">
-        <div className="lg:col-span-2">
-          <div className="divide-y divide-border">
-            {items.map((item) => (
-              <CartItemRow key={item.id} item={item} />
-            ))}
-          </div>
+        <div className="lg:col-span-2 space-y-6">
+          <CartList items={items} />
+          <ShippingProgress subtotal={subtotal} />
         </div>
 
         <div className="lg:col-span-1">
-          <div className="space-y-4 rounded-lg border border-border p-6">
-            <h2 className="font-semibold">Podsumowanie</h2>
-            <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Wartość produktów</span>
-              <span>{formatPrice(subtotal)}</span>
-            </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Dostawa</span>
-              <span className="text-muted-foreground">Wkrótce</span>
-            </div>
-            <div className="flex justify-between border-t border-border pt-4 font-semibold">
-              <span>Razem</span>
-              <span>{formatPrice(subtotal)}</span>
-            </div>
-            <Link
-              href="/zamowienie"
-              className="block w-full rounded-lg bg-primary px-4 py-3 text-center text-sm font-medium text-primary-foreground hover:bg-primary/80"
-            >
-              Przejdź do kasy
-            </Link>
-          </div>
+          <CartSummary subtotal={subtotal} />
         </div>
       </div>
     </div>
