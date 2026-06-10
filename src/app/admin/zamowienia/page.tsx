@@ -55,11 +55,11 @@ export default async function AdminOrdersPage() {
                 </td>
                 <td className="px-4 py-3">
                   {order.allegroOrderId ? (
-                    <span className="rounded-full bg-orange-100 px-2 py-0.5 text-xs font-medium text-orange-700">
+                    <span className="rounded-full bg-warning/20 px-2 py-0.5 text-xs font-medium text-warning-foreground">
                       Allegro
                     </span>
                   ) : (
-                    <span className="rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-700">
+                    <span className="rounded-full bg-info/15 px-2 py-0.5 text-xs font-medium text-info">
                       Sklep
                     </span>
                   )}

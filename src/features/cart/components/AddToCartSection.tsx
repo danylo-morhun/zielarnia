@@ -87,7 +87,7 @@ export function AddToCartSection({ variants }: Props) {
         )}
       </div>
 
-      <p className={`text-sm ${selected.stock > 0 ? "text-green-600" : "text-muted-foreground"}`}>
+      <p className={`text-sm ${selected.stock > 0 ? "text-success" : "text-muted-foreground"}`}>
         {selected.stock > 0
           ? selected.stock <= 5
             ? `Ostatnie ${selected.stock} szt.`
