@@ -5,9 +5,11 @@ import { useAction } from "next-safe-action/hooks";
 import { useState } from "react";
 import { deleteVariant, saveVariant } from "../actions";
 
+type SerializedVariant = Omit<ProductVariant, "vatRate"> & { vatRate: number };
+
 interface Props {
   productId: string;
-  variants: ProductVariant[];
+  variants: SerializedVariant[];
 }
 
 const EMPTY_FORM = {
@@ -22,7 +24,7 @@ const EMPTY_FORM = {
 };
 
 export function VariantsTable({ productId, variants }: Props) {
-  const [editing, setEditing] = useState<ProductVariant | null>(null);
+  const [editing, setEditing] = useState<SerializedVariant | null>(null);
   const [showNew, setShowNew] = useState(false);
 
   const { execute: execSave, isPending: saving } = useAction(saveVariant, {
@@ -50,7 +52,7 @@ export function VariantsTable({ productId, variants }: Props) {
     });
   }
 
-  const variantForm = (item?: ProductVariant) => (
+  const variantForm = (item?: SerializedVariant) => (
     <form onSubmit={handleSubmit} className="mt-2 grid gap-2 rounded border bg-muted/20 p-3">
       {item && <input type="hidden" name="id" value={item.id} />}
       <div className="grid grid-cols-3 gap-2">

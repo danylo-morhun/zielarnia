@@ -31,7 +31,10 @@ export default async function AdminEditProductPage({
     <div className="space-y-8">
       <h1 className="text-2xl font-bold">{product.namePl}</h1>
       <ProductForm product={product} categories={categories} brands={brands} tags={tags} />
-      <VariantsTable productId={product.id} variants={product.variants} />
+      <VariantsTable
+        productId={product.id}
+        variants={product.variants.map((v) => ({ ...v, vatRate: Number(v.vatRate) }))}
+      />
       <ImagesSection productId={product.id} images={product.images} />
     </div>
   );
