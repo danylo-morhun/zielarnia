@@ -1,8 +1,11 @@
 "use client";
 
+import { useState } from "react";
+import { useAction } from "next-safe-action/hooks";
 import type { CartItem } from "@/features/cart/lib/session";
 import { formatPrice } from "@/lib/format";
 import { SHIPPING_COSTS, SHIPPING_LABELS } from "../lib/shipping";
+import { verifyCoupon } from "../actions";
 import type { CheckoutFormData } from "./CheckoutForm";
 
 type Props = {
@@ -36,8 +39,30 @@ export function StepPayment({
   const shippingCost = SHIPPING_COSTS[data.shippingMethod as keyof typeof SHIPPING_COSTS] ?? 1999;
   const shippingLabel =
     SHIPPING_LABELS[data.shippingMethod as keyof typeof SHIPPING_LABELS] ?? data.shippingMethod;
-  const total = subtotal + shippingCost;
-  const hasCoupon = data.couponCode.trim().length > 0;
+
+  const [couponResult, setCouponResult] = useState<{
+    valid: boolean;
+    discountPln: number;
+    message: string | null;
+  } | null>(null);
+  const [verifying, setVerifying] = useState(false);
+
+  const { execute: executeVerify } = useAction(verifyCoupon, {
+    onSuccess: ({ data: result }) => {
+      setCouponResult(result ?? null);
+      setVerifying(false);
+    },
+    onError: () => setVerifying(false),
+  });
+
+  const handleVerifyCoupon = () => {
+    if (!data.couponCode.trim()) return;
+    setVerifying(true);
+    executeVerify({ code: data.couponCode, subtotal });
+  };
+
+  const discount = couponResult?.valid ? couponResult.discountPln : 0;
+  const total = subtotal + shippingCost - discount;
 
   return (
     <div className="space-y-6">
@@ -51,7 +76,8 @@ export function StepPayment({
             <li key={item.id} className="flex justify-between py-2 text-sm">
               <span className="text-muted-foreground">
                 {item.variant.product.namePl}
-                {item.variant.optionValue ? ` (${item.variant.optionValue})` : ""} × {item.quantity}
+                {item.variant.optionValue ? ` (${item.variant.optionValue})` : ""} ×{" "}
+                {item.quantity}
               </span>
               <span>{formatPrice(item.variant.pricePln * item.quantity)}</span>
             </li>
@@ -67,32 +93,49 @@ export function StepPayment({
             <span>Dostawa ({shippingLabel})</span>
             <span>{formatPrice(shippingCost)}</span>
           </div>
-          {hasCoupon && (
-            <div className="flex justify-between text-green-600">
+          {discount > 0 && (
+            <div className="flex justify-between text-success">
               <span>Rabat ({data.couponCode})</span>
-              <span>zostanie naliczony</span>
+              <span>-{formatPrice(discount)}</span>
             </div>
           )}
           <div className="flex justify-between border-t border-border pt-2 font-semibold">
-            <span>Łącznie{hasCoupon ? " (przed rabatem)" : ""}</span>
+            <span>Łącznie</span>
             <span>{formatPrice(total)}</span>
           </div>
         </div>
       </div>
 
       {/* Coupon */}
-      <div>
-        <label className="mb-1 block text-sm font-medium" htmlFor="couponCode">
-          Kod rabatowy (opcjonalnie)
-        </label>
-        <input
-          id="couponCode"
-          type="text"
-          value={data.couponCode}
-          onChange={(e) => onChange({ couponCode: e.target.value.toUpperCase() })}
-          placeholder="RABAT10"
-          className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-        />
+      <div className="space-y-2">
+        <label className="mb-1 block text-sm font-medium">Kod rabatowy (opcjonalnie)</label>
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={data.couponCode}
+            onChange={(e) => {
+              onChange({ couponCode: e.target.value.toUpperCase() });
+              setCouponResult(null);
+            }}
+            placeholder="KOD RABATOWY"
+            className="flex-1 rounded-lg border border-border px-3 py-2 text-sm uppercase focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+          <button
+            type="button"
+            onClick={handleVerifyCoupon}
+            disabled={verifying || !data.couponCode.trim()}
+            className="rounded-lg border border-border bg-secondary px-4 py-2 text-sm font-medium hover:bg-accent disabled:opacity-50"
+          >
+            {verifying ? "…" : "Zastosuj"}
+          </button>
+        </div>
+        {couponResult && (
+          <p className={`text-sm ${couponResult.valid ? "text-success" : "text-destructive"}`}>
+            {couponResult.valid
+              ? `✓ Rabat: -${formatPrice(couponResult.discountPln)}`
+              : couponResult.message}
+          </p>
+        )}
       </div>
 
       {/* Payment method */}

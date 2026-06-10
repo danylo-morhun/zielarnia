@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { formatPrice } from "@/lib/format";
 import { SHIPPING_COSTS, SHIPPING_LABELS } from "../lib/shipping";
 import type { CheckoutFormData } from "./CheckoutForm";
@@ -15,9 +16,24 @@ const SHIPPING_OPTIONS = (Object.keys(SHIPPING_COSTS) as Array<keyof typeof SHIP
   (key) => ({ value: key, label: SHIPPING_LABELS[key], cost: SHIPPING_COSTS[key] }),
 );
 
+function validateNip(nip: string): boolean {
+  const digits = nip.replace(/\D/g, "");
+  if (digits.length !== 10) return false;
+  const weights = [6, 5, 7, 2, 3, 4, 5, 6, 7];
+  const sum = weights.reduce((acc, w, i) => acc + w * parseInt(digits[i], 10), 0);
+  return sum % 11 === parseInt(digits[9], 10);
+}
+
 export function StepShipping({ data, onChange, onBack, onNext }: Props) {
+  const [nipError, setNipError] = useState<string | null>(null);
+
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (data.wantsFaktura && !validateNip(data.billNip)) {
+      setNipError("Nieprawidłowy NIP");
+      return;
+    }
+    setNipError(null);
     onNext();
   }
 
@@ -107,11 +123,14 @@ export function StepShipping({ data, onChange, onBack, onNext }: Props) {
               type="text"
               required
               maxLength={10}
-              pattern="\d{10}"
               value={data.billNip}
-              onChange={(e) => onChange({ billNip: e.target.value.replace(/\D/g, "") })}
+              onChange={(e) => {
+                onChange({ billNip: e.target.value.replace(/\D/g, "") });
+                setNipError(null);
+              }}
               className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
             />
+            {nipError && <p className="mt-1 text-xs text-destructive">{nipError}</p>}
           </div>
 
           <div>

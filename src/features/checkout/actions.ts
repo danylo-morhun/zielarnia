@@ -1,6 +1,7 @@
 "use server";
 
 import { cookies, headers } from "next/headers";
+import { z } from "zod";
 import { CART_COOKIE_NAME } from "@/features/cart/lib/session";
 import { paymentUrl, registerTransaction } from "@/features/przelewy24/lib/client";
 import { formatPrice } from "@/lib/format";
@@ -9,6 +10,43 @@ import { actionClient } from "@/lib/safe-action";
 import { getCartForCheckout } from "./lib/cart";
 import { SHIPPING_COSTS } from "./lib/shipping";
 import { checkoutSchema } from "./schema";
+
+export const verifyCoupon = actionClient
+  .schema(z.object({ code: z.string().min(1), subtotal: z.number().int() }))
+  .action(async ({ parsedInput: { code, subtotal } }) => {
+    const coupon = await prisma.coupon.findFirst({
+      where: {
+        code: code.toUpperCase().trim(),
+        isActive: true,
+        AND: [
+          { OR: [{ validFrom: null }, { validFrom: { lte: new Date() } }] },
+          { OR: [{ validUntil: null }, { validUntil: { gte: new Date() } }] },
+        ],
+      },
+      select: { id: true, type: true, value: true, minOrderPln: true, maxUsages: true, usageCount: true },
+    });
+
+    if (!coupon) {
+      return { valid: false as const, discountPln: 0, message: "Nieprawidłowy lub wygasły kod" };
+    }
+    if (coupon.maxUsages !== null && coupon.usageCount >= coupon.maxUsages) {
+      return { valid: false as const, discountPln: 0, message: "Kod rabatowy jest już wyczerpany" };
+    }
+    if (coupon.minOrderPln !== null && subtotal < coupon.minOrderPln) {
+      return {
+        valid: false as const,
+        discountPln: 0,
+        message: `Minimalna wartość zamówienia: ${formatPrice(coupon.minOrderPln)}`,
+      };
+    }
+
+    const discountPln =
+      coupon.type === "PERCENTAGE"
+        ? Math.round((subtotal * coupon.value) / 100)
+        : Math.min(coupon.value, subtotal);
+
+    return { valid: true as const, discountPln, message: null };
+  });
 
 export const placeOrder = actionClient
   .schema(checkoutSchema)

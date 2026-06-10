@@ -67,10 +67,12 @@ export function CheckoutForm({ cartId, items, subtotal }: Props) {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<CheckoutFormData>(INITIAL_DATA);
   const [error, setError] = useState<string | null>(null);
+  const [redirecting, setRedirecting] = useState(false);
 
   const { execute, isPending } = useAction(placeOrder, {
     onSuccess: ({ data }) => {
       if (data?.redirectUrl) {
+        setRedirecting(true);
         window.location.href = data.redirectUrl;
       } else if (data?.orderNumber) {
         router.push(`/zamowienie/potwierdzenie/${data.orderNumber}`);
@@ -116,7 +118,7 @@ export function CheckoutForm({ cartId, items, subtotal }: Props) {
   }
 
   return (
-    <div>
+    <div className="relative">
       {/* Step indicator */}
       <div className="mb-8 flex items-center justify-center gap-2">
         {STEP_LABELS.map((label, i) => {
@@ -162,9 +164,18 @@ export function CheckoutForm({ cartId, items, subtotal }: Props) {
           onSubmit={handlePlaceOrder}
           items={items}
           subtotal={subtotal}
-          pending={isPending}
+          pending={isPending || redirecting}
           error={error}
         />
+      )}
+
+      {redirecting && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
+          <div className="flex flex-col items-center gap-4">
+            <div className="size-10 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+            <p className="text-sm font-medium">Przekierowuję do płatności…</p>
+          </div>
+        </div>
       )}
     </div>
   );

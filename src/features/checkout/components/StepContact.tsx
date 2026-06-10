@@ -1,6 +1,22 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import type { CheckoutFormData } from "./CheckoutForm";
+
+const schema = z.object({
+  firstName: z.string().min(2, "Min. 2 znaki"),
+  lastName: z.string().min(2, "Min. 2 znaki"),
+  email: z.string().email("Nieprawidłowy adres e-mail"),
+  phone: z.string().regex(/^[+\d\s-]{9,15}$/, "Nieprawidłowy numer telefonu"),
+  street: z.string().min(3, "Podaj ulicę i numer"),
+  apartment: z.string().optional(),
+  postalCode: z.string().regex(/^\d{2}-\d{3}$/, "Format: 12-345"),
+  city: z.string().min(2, "Podaj miasto"),
+});
+
+type FormValues = z.infer<typeof schema>;
 
 type Props = {
   data: CheckoutFormData;
@@ -9,127 +25,124 @@ type Props = {
 };
 
 export function StepContact({ data, onChange, onNext }: Props) {
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<FormValues>({
+    resolver: zodResolver(schema),
+    mode: "onBlur",
+    defaultValues: {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email,
+      phone: data.phone,
+      street: data.street,
+      apartment: data.apartment,
+      postalCode: data.postalCode,
+      city: data.city,
+    },
+  });
+
+  const onSubmit = (values: FormValues) => {
+    onChange(values);
     onNext();
-  }
+  };
+
+  const handlePostalCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value.replace(/\D/g, "").slice(0, 5);
+    if (value.length > 2) value = value.slice(0, 2) + "-" + value.slice(2);
+    setValue("postalCode", value, { shouldValidate: true });
+  };
+
+  const inputClass =
+    "w-full rounded-lg border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary";
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <h2 className="text-lg font-semibold">Dane kontaktowe i adres dostawy</h2>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="mb-1 block text-sm font-medium" htmlFor="firstName">
-            Imię
-          </label>
-          <input
-            id="firstName"
-            type="text"
-            required
-            value={data.firstName}
-            onChange={(e) => onChange({ firstName: e.target.value })}
-            className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-          />
+          <label className="mb-1 block text-sm font-medium">Imię *</label>
+          <input {...register("firstName")} autoComplete="given-name" className={inputClass} />
+          {errors.firstName && (
+            <p className="mt-1 text-xs text-destructive">{errors.firstName.message}</p>
+          )}
         </div>
         <div>
-          <label className="mb-1 block text-sm font-medium" htmlFor="lastName">
-            Nazwisko
-          </label>
-          <input
-            id="lastName"
-            type="text"
-            required
-            value={data.lastName}
-            onChange={(e) => onChange({ lastName: e.target.value })}
-            className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-          />
+          <label className="mb-1 block text-sm font-medium">Nazwisko *</label>
+          <input {...register("lastName")} autoComplete="family-name" className={inputClass} />
+          {errors.lastName && (
+            <p className="mt-1 text-xs text-destructive">{errors.lastName.message}</p>
+          )}
         </div>
       </div>
 
       <div>
-        <label className="mb-1 block text-sm font-medium" htmlFor="email">
-          E-mail
-        </label>
+        <label className="mb-1 block text-sm font-medium">Adres e-mail *</label>
         <input
-          id="email"
+          {...register("email")}
           type="email"
-          required
-          value={data.email}
-          onChange={(e) => onChange({ email: e.target.value })}
-          className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+          autoComplete="email"
+          className={inputClass}
         />
+        {errors.email && <p className="mt-1 text-xs text-destructive">{errors.email.message}</p>}
       </div>
 
       <div>
-        <label className="mb-1 block text-sm font-medium" htmlFor="phone">
-          Telefon
-        </label>
-        <input
-          id="phone"
-          type="tel"
-          required
-          value={data.phone}
-          onChange={(e) => onChange({ phone: e.target.value })}
-          className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-        />
+        <label className="mb-1 block text-sm font-medium">Telefon *</label>
+        <input {...register("phone")} type="tel" autoComplete="tel" className={inputClass} />
+        {errors.phone && <p className="mt-1 text-xs text-destructive">{errors.phone.message}</p>}
       </div>
 
       <div>
-        <label className="mb-1 block text-sm font-medium" htmlFor="street">
-          Ulica i numer
-        </label>
+        <label className="mb-1 block text-sm font-medium">Ulica i numer *</label>
         <input
-          id="street"
-          type="text"
-          required
-          value={data.street}
-          onChange={(e) => onChange({ street: e.target.value })}
-          className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+          {...register("street")}
+          autoComplete="address-line1"
+          className={inputClass}
         />
+        {errors.street && (
+          <p className="mt-1 text-xs text-destructive">{errors.street.message}</p>
+        )}
       </div>
 
       <div>
-        <label className="mb-1 block text-sm font-medium" htmlFor="apartment">
-          Numer lokalu (opcjonalnie)
-        </label>
+        <label className="mb-1 block text-sm font-medium">Numer lokalu</label>
         <input
-          id="apartment"
-          type="text"
-          value={data.apartment}
-          onChange={(e) => onChange({ apartment: e.target.value })}
-          className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+          {...register("apartment")}
+          autoComplete="address-line2"
+          placeholder="Opcjonalnie"
+          className={inputClass}
         />
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="mb-1 block text-sm font-medium" htmlFor="postalCode">
-            Kod pocztowy
-          </label>
+          <label className="mb-1 block text-sm font-medium">Kod pocztowy *</label>
           <input
-            id="postalCode"
-            type="text"
-            required
+            {...register("postalCode")}
+            onChange={handlePostalCodeChange}
             placeholder="00-000"
-            pattern="\d{2}-\d{3}"
-            value={data.postalCode}
-            onChange={(e) => onChange({ postalCode: e.target.value })}
-            className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            maxLength={6}
+            className={inputClass}
           />
+          {errors.postalCode && (
+            <p className="mt-1 text-xs text-destructive">{errors.postalCode.message}</p>
+          )}
         </div>
         <div>
-          <label className="mb-1 block text-sm font-medium" htmlFor="city">
-            Miasto
-          </label>
+          <label className="mb-1 block text-sm font-medium">Miasto *</label>
           <input
-            id="city"
-            type="text"
-            required
-            value={data.city}
-            onChange={(e) => onChange({ city: e.target.value })}
-            className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            {...register("city")}
+            autoComplete="address-level2"
+            className={inputClass}
           />
+          {errors.city && (
+            <p className="mt-1 text-xs text-destructive">{errors.city.message}</p>
+          )}
         </div>
       </div>
 
@@ -137,7 +150,7 @@ export function StepContact({ data, onChange, onNext }: Props) {
         type="submit"
         className="mt-2 w-full rounded-lg bg-primary px-4 py-3 text-sm font-medium text-primary-foreground hover:bg-primary/80"
       >
-        Dalej: Dostawa
+        Dalej: Dostawa →
       </button>
     </form>
   );
