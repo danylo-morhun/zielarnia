@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { Breadcrumbs } from "@/features/catalog/components/Breadcrumbs";
 import { FilterSidebar } from "@/features/catalog/components/FilterSidebar";
+import { FilterDrawerButton } from "@/features/catalog/components/FilterDrawerButton";
+import { ActiveFilterChips } from "@/features/catalog/components/ActiveFilterChips";
 import { Pagination } from "@/features/catalog/components/Pagination";
 import { ProductGrid } from "@/features/catalog/components/ProductGrid";
 import { parseCatalogFilters } from "@/features/catalog/lib/filters";
@@ -50,6 +52,17 @@ export default async function KatalogPage({ searchParams }: Props) {
         </div>
 
         <div className="min-w-0 flex-1 space-y-6">
+          <div className="lg:hidden">
+            <div className="mb-3 flex items-center gap-3">
+              <Suspense>
+                <FilterDrawerButton categories={categories} brands={brands} tags={tags} />
+              </Suspense>
+            </div>
+            <Suspense>
+              <ActiveFilterChips categories={categories} brands={brands} tags={tags} />
+            </Suspense>
+          </div>
+
           <ProductGrid products={items} />
           <Pagination filters={filters} total={total} />
         </div>

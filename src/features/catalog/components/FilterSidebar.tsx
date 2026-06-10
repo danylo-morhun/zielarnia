@@ -9,9 +9,10 @@ type Props = {
   brands: BrandItem[];
   tags: TagItem[];
   basePath?: string;
+  onFilterChange?: () => void;
 };
 
-export function FilterSidebar({ categories, brands, tags, basePath = "/katalog" }: Props) {
+export function FilterSidebar({ categories, brands, tags, basePath = "/katalog", onFilterChange }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -32,8 +33,9 @@ export function FilterSidebar({ categories, brands, tags, basePath = "/katalog" 
       }
       params.delete("strona");
       router.push(`${basePath}?${params.toString()}`);
+      onFilterChange?.();
     },
-    [router, searchParams, basePath],
+    [router, searchParams, basePath, onFilterChange],
   );
 
   const toggleTag = useCallback(
@@ -47,7 +49,8 @@ export function FilterSidebar({ categories, brands, tags, basePath = "/katalog" 
 
   const clearAll = useCallback(() => {
     router.push(basePath);
-  }, [router, basePath]);
+    onFilterChange?.();
+  }, [router, basePath, onFilterChange]);
 
   const hasActiveFilters = active.category || active.brand || active.tags.length > 0;
 
