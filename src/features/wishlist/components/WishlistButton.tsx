@@ -4,6 +4,7 @@ import { Heart } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useAction } from "next-safe-action/hooks";
 import { useState } from "react";
+import { toast } from "sonner";
 import { toggleWishlist } from "../actions";
 
 type Props = {
@@ -17,8 +18,15 @@ export function WishlistButton({ productId, initialInWishlist }: Props) {
 
   const { execute, isExecuting } = useAction(toggleWishlist, {
     onSuccess: ({ data }) => {
-      if (data) setInWishlist(data.added);
+      if (data) {
+        setInWishlist(data.added);
+        if (data.added) toast.success("Dodano do ulubionych");
+        else toast("Usunięto z ulubionych");
+      }
       router.refresh();
+    },
+    onError: () => {
+      toast.error("Błąd", { description: "Nie udało się zaktualizować ulubionych" });
     },
   });
 

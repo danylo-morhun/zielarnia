@@ -1,9 +1,10 @@
 "use client";
 
-import { Check, ShoppingCart } from "lucide-react";
+import { ShoppingCart } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useAction } from "next-safe-action/hooks";
 import { useState } from "react";
+import { toast } from "sonner";
 import { formatPrice } from "@/lib/format";
 import { addToCart } from "../actions";
 
@@ -25,13 +26,17 @@ export function AddToCartSection({ variants }: Props) {
   const router = useRouter();
   const defaultVariant = variants.find((v) => v.isDefault) ?? variants[0];
   const [selectedId, setSelectedId] = useState(defaultVariant?.id ?? "");
-  const [added, setAdded] = useState(false);
 
   const { execute, isExecuting } = useAction(addToCart, {
     onSuccess: () => {
       router.refresh();
-      setAdded(true);
-      setTimeout(() => setAdded(false), 2000);
+      toast.success("Dodano do koszyka", {
+        description: selected?.optionValue ?? undefined,
+        duration: 3000,
+      });
+    },
+    onError: () => {
+      toast.error("Błąd", { description: "Nie udało się dodać do koszyka" });
     },
   });
 
@@ -97,21 +102,12 @@ export function AddToCartSection({ variants }: Props) {
 
       <button
         type="button"
-        disabled={isExecuting || selected.stock <= 0 || added}
+        disabled={isExecuting || selected.stock <= 0}
         onClick={() => execute({ variantId: selected.id, quantity: 1 })}
         className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/80 disabled:cursor-not-allowed disabled:opacity-50"
       >
-        {added ? (
-          <>
-            <Check className="size-4" />
-            Dodano do koszyka
-          </>
-        ) : (
-          <>
-            <ShoppingCart className="size-4" />
-            {isExecuting ? "Dodawanie..." : "Dodaj do koszyka"}
-          </>
-        )}
+        <ShoppingCart className="size-4" />
+        {isExecuting ? "Dodawanie…" : "Dodaj do koszyka"}
       </button>
     </div>
   );

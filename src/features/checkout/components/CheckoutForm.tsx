@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useAction } from "next-safe-action/hooks";
 import { useState } from "react";
+import { toast } from "sonner";
 import type { CartItem } from "@/features/cart/lib/session";
 import { placeOrder } from "../actions";
 import { StepContact } from "./StepContact";
@@ -78,7 +79,9 @@ export function CheckoutForm({ cartId, items, subtotal }: Props) {
     onError: ({ error: actionError }) => {
       const msg =
         actionError.serverError ?? actionError.validationErrors?._errors?.[0] ?? "Wystąpił błąd";
-      setError(typeof msg === "string" ? msg : "Wystąpił błąd. Spróbuj ponownie.");
+      const msgStr = typeof msg === "string" ? msg : "Wystąpił błąd. Spróbuj ponownie.";
+      setError(msgStr);
+      toast.error("Błąd zamówienia", { description: msgStr });
     },
   });
 
