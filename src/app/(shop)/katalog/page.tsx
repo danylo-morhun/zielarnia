@@ -4,10 +4,10 @@ import { Breadcrumbs } from "@/features/catalog/components/Breadcrumbs";
 import { FilterSidebar } from "@/features/catalog/components/FilterSidebar";
 import { FilterDrawerButton } from "@/features/catalog/components/FilterDrawerButton";
 import { ActiveFilterChips } from "@/features/catalog/components/ActiveFilterChips";
-import { Pagination } from "@/features/catalog/components/Pagination";
-import { ProductGrid } from "@/features/catalog/components/ProductGrid";
+import { ProductGridServer } from "@/features/catalog/components/ProductGridServer";
+import { ProductGridSkeleton } from "@/features/catalog/components/ProductGridSkeleton";
 import { parseCatalogFilters } from "@/features/catalog/lib/filters";
-import { getBrands, getCategories, getProducts, getTags } from "../../../features/catalog/actions";
+import { getBrands, getCategories, getTags } from "../../../features/catalog/actions";
 
 export const metadata: Metadata = {
   title: "Katalog produktów",
@@ -23,8 +23,7 @@ export default async function KatalogPage({ searchParams }: Props) {
   const params = await searchParams;
   const filters = parseCatalogFilters(params);
 
-  const [{ items, total }, categories, brands, tags] = await Promise.all([
-    getProducts(filters),
+  const [categories, brands, tags] = await Promise.all([
     getCategories(),
     getBrands(),
     getTags(),
@@ -40,9 +39,6 @@ export default async function KatalogPage({ searchParams }: Props) {
       <Breadcrumbs items={breadcrumbs} />
 
       <h1 className="mt-4 text-2xl font-bold text-foreground">Katalog produktów</h1>
-      <p className="mt-1 text-sm text-muted-foreground">
-        {total} {total === 1 ? "produkt" : total < 5 ? "produkty" : "produktów"}
-      </p>
 
       <div className="mt-6 flex gap-8">
         <div className="hidden w-56 shrink-0 lg:block">
@@ -63,8 +59,9 @@ export default async function KatalogPage({ searchParams }: Props) {
             </Suspense>
           </div>
 
-          <ProductGrid products={items} />
-          <Pagination filters={filters} total={total} />
+          <Suspense fallback={<ProductGridSkeleton count={8} />}>
+            <ProductGridServer filters={filters} />
+          </Suspense>
         </div>
       </div>
     </div>
