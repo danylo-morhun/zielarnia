@@ -49,6 +49,46 @@ export async function getCart(cartId: string) {
 export type CartWithItems = NonNullable<Awaited<ReturnType<typeof getCart>>>;
 export type CartItem = CartWithItems["items"][number];
 
+export async function getCartByCustomerId(customerId: string) {
+  return prisma.cart.findUnique({
+    where: { customerId },
+    select: {
+      id: true,
+      items: {
+        select: {
+          id: true,
+          cartId: true,
+          variantId: true,
+          quantity: true,
+          variant: {
+            select: {
+              id: true,
+              pricePln: true,
+              optionLabel: true,
+              optionValue: true,
+              stock: true,
+              product: {
+                select: {
+                  id: true,
+                  slug: true,
+                  namePl: true,
+                  images: {
+                    where: { isMain: true },
+                    select: { url: true, altPl: true },
+                    take: 1,
+                    orderBy: { sortOrder: "asc" },
+                  },
+                },
+              },
+            },
+          },
+        },
+        orderBy: { createdAt: "asc" },
+      },
+    },
+  });
+}
+
 export async function createGuestCart(): Promise<string> {
   const expiresAt = new Date();
   expiresAt.setDate(expiresAt.getDate() + CART_TTL_DAYS);
