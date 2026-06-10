@@ -27,15 +27,18 @@ export default async function AdminEditProductPage({
 
   if (!product) notFound();
 
+  const { variants, images, ...productFields } = product;
+  const serializedVariants = variants.map((v) => ({ ...v, vatRate: Number(v.vatRate) }));
+
   return (
     <div className="space-y-8">
       <h1 className="text-2xl font-bold">{product.namePl}</h1>
-      <ProductForm product={product} categories={categories} brands={brands} tags={tags} />
+      <ProductForm product={productFields} categories={categories} brands={brands} tags={tags} />
       <VariantsTable
         productId={product.id}
-        variants={product.variants.map((v) => ({ ...v, vatRate: Number(v.vatRate) }))}
+        variants={serializedVariants}
       />
-      <ImagesSection productId={product.id} images={product.images} />
+      <ImagesSection productId={product.id} images={images} />
     </div>
   );
 }
