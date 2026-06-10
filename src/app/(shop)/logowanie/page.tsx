@@ -5,11 +5,17 @@ export const metadata = {
   title: "Logowanie — Twoje Zdrowie",
 };
 
-export default function LoginPage() {
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ callbackUrl?: string }>;
+}) {
+  const { callbackUrl } = await searchParams;
+
   return (
     <div className="mx-auto max-w-md px-4 py-16">
       <h1 className="mb-8 text-2xl font-bold">Zaloguj się</h1>
-      <LoginForm />
+      <LoginForm callbackUrl={callbackUrl} />
       <p className="mt-6 text-center text-sm text-muted-foreground">
         Nie masz konta?{" "}
         <Link href="/rejestracja" className="font-medium text-primary hover:underline">

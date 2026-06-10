@@ -35,7 +35,7 @@ export const loginCustomer = actionClient
       await signIn("credentials", {
         email: input.email,
         password: input.password,
-        redirectTo: "/konto",
+        redirectTo: input.callbackUrl ?? "/konto",
       });
     } catch (err) {
       if (err instanceof AuthError) throw new Error("Nieprawidłowy e-mail lub hasło");

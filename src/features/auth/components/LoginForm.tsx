@@ -4,7 +4,9 @@ import { useAction } from "next-safe-action/hooks";
 import { useState } from "react";
 import { loginCustomer } from "../actions";
 
-export function LoginForm() {
+type Props = { callbackUrl?: string };
+
+export function LoginForm({ callbackUrl }: Props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -14,7 +16,7 @@ export function LoginForm() {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    execute({ email, password });
+    execute({ email, password, callbackUrl });
   }
 
   return (
