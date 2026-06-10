@@ -2,16 +2,12 @@
 
 import { cookies } from "next/headers";
 import { CART_COOKIE_NAME } from "@/features/cart/lib/session";
+import { formatPrice } from "@/lib/format";
 import { prisma } from "@/lib/prisma";
 import { actionClient } from "@/lib/safe-action";
 import { getCartForCheckout } from "./lib/cart";
+import { SHIPPING_COSTS } from "./lib/shipping";
 import { checkoutSchema } from "./schema";
-
-const SHIPPING_COSTS: Record<string, number> = {
-  INPOST_PACZKOMAT: 1299,
-  DHL: 1999,
-  DPD: 1999,
-};
 
 export const placeOrder = actionClient
   .schema(checkoutSchema)
@@ -21,46 +17,17 @@ export const placeOrder = actionClient
       throw new Error("Koszyk jest pusty");
     }
 
-    const shippingPln = SHIPPING_COSTS[input.shippingMethod] ?? 1999;
+    const shippingPln = SHIPPING_COSTS[input.shippingMethod as keyof typeof SHIPPING_COSTS] ?? 1999;
     const subtotalPln = cart.items.reduce(
       (sum, item) => sum + item.variant.pricePln * item.quantity,
       0,
     );
-
-    let discountPln = 0;
-    let couponId: string | undefined;
-    let couponCode: string | undefined;
-
-    if (input.couponCode?.trim()) {
-      const coupon = await prisma.coupon.findFirst({
-        where: {
-          code: input.couponCode.trim(),
-          isActive: true,
-          AND: [
-            { OR: [{ validFrom: null }, { validFrom: { lte: new Date() } }] },
-            { OR: [{ validUntil: null }, { validUntil: { gte: new Date() } }] },
-          ],
-        },
-        select: { id: true, type: true, value: true, maxUsages: true, usageCount: true },
-      });
-
-      if (coupon && (coupon.maxUsages === null || coupon.usageCount < coupon.maxUsages)) {
-        couponId = coupon.id;
-        couponCode = input.couponCode.trim();
-        discountPln =
-          coupon.type === "PERCENTAGE"
-            ? Math.round((subtotalPln * coupon.value) / 100)
-            : coupon.value;
-      }
-    }
 
     const taxPln = cart.items.reduce((sum, item) => {
       const itemTotal = item.variant.pricePln * item.quantity;
       const rate = Number(item.variant.vatRate);
       return sum + Math.round((itemTotal * rate) / (100 + rate));
     }, 0);
-
-    const totalPln = subtotalPln + shippingPln - discountPln;
 
     const order = await prisma.$transaction(async (tx) => {
       // Atomic order number
@@ -73,7 +40,63 @@ export const placeOrder = actionClient
       const year = new Date().getFullYear();
       const orderNumber = `TZ-${year}-${String(seq.value).padStart(5, "0")}`;
 
-      // Decrement stock — fails atomically if insufficient
+      // Coupon — all checks + increment inside tx to prevent race conditions
+      let discountPln = 0;
+      let couponId: string | undefined;
+      let couponCode: string | undefined;
+
+      if (input.couponCode?.trim()) {
+        const coupon = await tx.coupon.findFirst({
+          where: {
+            code: input.couponCode.trim(),
+            isActive: true,
+            AND: [
+              { OR: [{ validFrom: null }, { validFrom: { lte: new Date() } }] },
+              { OR: [{ validUntil: null }, { validUntil: { gte: new Date() } }] },
+            ],
+          },
+          select: {
+            id: true,
+            type: true,
+            value: true,
+            maxUsages: true,
+            usageCount: true,
+            minOrderPln: true,
+          },
+        });
+
+        if (coupon) {
+          if (coupon.minOrderPln !== null && subtotalPln < coupon.minOrderPln) {
+            throw new Error(
+              `Minimalna wartość zamówienia dla tego kodu: ${formatPrice(coupon.minOrderPln)}`,
+            );
+          }
+
+          // Atomic increment — WHERE guards against exceeding maxUsages
+          const used = await tx.coupon.updateMany({
+            where: {
+              id: coupon.id,
+              OR: [{ maxUsages: null }, { usageCount: { lt: coupon.maxUsages ?? 0 } }],
+            },
+            data: { usageCount: { increment: 1 } },
+          });
+
+          if (used.count === 0) {
+            throw new Error("Kod rabatowy jest już wyczerpany");
+          }
+
+          couponId = coupon.id;
+          couponCode = input.couponCode.trim();
+          discountPln =
+            coupon.type === "PERCENTAGE"
+              ? Math.round((subtotalPln * coupon.value) / 100)
+              : coupon.value;
+        }
+      }
+
+      const totalPln = subtotalPln + shippingPln - discountPln;
+
+      // Decrement stock atomically
       for (const item of cart.items) {
         const result = await tx.productVariant.updateMany({
           where: { id: item.variantId, stock: { gte: item.quantity } },
@@ -110,6 +133,7 @@ export const placeOrder = actionClient
           billStreet: input.billStreet ?? null,
           billCity: input.billCity ?? null,
           billPostalCode: input.billPostalCode ?? null,
+          billCountry: input.wantsFaktura ? "PL" : null,
           paymentMethod: input.paymentMethod,
           paymentStatus: "PENDING",
           subtotalPln,
@@ -136,17 +160,9 @@ export const placeOrder = actionClient
 
       await tx.cartItem.deleteMany({ where: { cartId: cart.id } });
 
-      if (couponId) {
-        await tx.coupon.update({
-          where: { id: couponId },
-          data: { usageCount: { increment: 1 } },
-        });
-      }
-
       return newOrder;
     });
 
-    // Clear cart cookie — cart record stays but is now empty
     const cookieStore = await cookies();
     cookieStore.delete(CART_COOKIE_NAME);
 

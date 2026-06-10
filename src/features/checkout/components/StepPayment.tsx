@@ -2,6 +2,7 @@
 
 import type { CartItem } from "@/features/cart/lib/session";
 import { formatPrice } from "@/lib/format";
+import { SHIPPING_COSTS, SHIPPING_LABELS } from "../lib/shipping";
 import type { CheckoutFormData } from "./CheckoutForm";
 
 type Props = {
@@ -13,12 +14,6 @@ type Props = {
   subtotal: number;
   pending: boolean;
   error: string | null;
-};
-
-const SHIPPING_COSTS: Record<string, number> = {
-  INPOST_PACZKOMAT: 1299,
-  DHL: 1999,
-  DPD: 1999,
 };
 
 const PAYMENT_OPTIONS = [
@@ -38,8 +33,11 @@ export function StepPayment({
   pending,
   error,
 }: Props) {
-  const shippingCost = SHIPPING_COSTS[data.shippingMethod] ?? 1999;
+  const shippingCost = SHIPPING_COSTS[data.shippingMethod as keyof typeof SHIPPING_COSTS] ?? 1999;
+  const shippingLabel =
+    SHIPPING_LABELS[data.shippingMethod as keyof typeof SHIPPING_LABELS] ?? data.shippingMethod;
   const total = subtotal + shippingCost;
+  const hasCoupon = data.couponCode.trim().length > 0;
 
   return (
     <div className="space-y-6">
@@ -66,11 +64,17 @@ export function StepPayment({
             <span>{formatPrice(subtotal)}</span>
           </div>
           <div className="flex justify-between text-muted-foreground">
-            <span>Dostawa ({data.shippingMethod.replace("_", " ")})</span>
+            <span>Dostawa ({shippingLabel})</span>
             <span>{formatPrice(shippingCost)}</span>
           </div>
+          {hasCoupon && (
+            <div className="flex justify-between text-green-600">
+              <span>Rabat ({data.couponCode})</span>
+              <span>zostanie naliczony</span>
+            </div>
+          )}
           <div className="flex justify-between border-t border-border pt-2 font-semibold">
-            <span>Łącznie</span>
+            <span>Łącznie{hasCoupon ? " (przed rabatem)" : ""}</span>
             <span>{formatPrice(total)}</span>
           </div>
         </div>

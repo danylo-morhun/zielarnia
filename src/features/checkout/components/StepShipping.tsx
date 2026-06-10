@@ -1,6 +1,7 @@
 "use client";
 
 import { formatPrice } from "@/lib/format";
+import { SHIPPING_COSTS, SHIPPING_LABELS } from "../lib/shipping";
 import type { CheckoutFormData } from "./CheckoutForm";
 
 type Props = {
@@ -10,11 +11,9 @@ type Props = {
   onNext: () => void;
 };
 
-const SHIPPING_OPTIONS = [
-  { value: "INPOST_PACZKOMAT" as const, label: "InPost Paczkomat", cost: 1299 },
-  { value: "DHL" as const, label: "DHL Kurier", cost: 1999 },
-  { value: "DPD" as const, label: "DPD Kurier", cost: 1999 },
-];
+const SHIPPING_OPTIONS = (Object.keys(SHIPPING_COSTS) as Array<keyof typeof SHIPPING_COSTS>).map(
+  (key) => ({ value: key, label: SHIPPING_LABELS[key], cost: SHIPPING_COSTS[key] }),
+);
 
 export function StepShipping({ data, onChange, onBack, onNext }: Props) {
   function handleSubmit(e: React.FormEvent) {
