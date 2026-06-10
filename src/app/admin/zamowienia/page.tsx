@@ -23,6 +23,7 @@ export default async function AdminOrdersPage() {
       totalPln: true,
       customerEmail: true,
       createdAt: true,
+      allegroOrderId: true,
     },
   });
 
@@ -34,6 +35,7 @@ export default async function AdminOrdersPage() {
           <thead>
             <tr className="border-b bg-muted/50 text-left">
               <th className="px-4 py-3 font-medium">Numer</th>
+              <th className="px-4 py-3 font-medium">Źródło</th>
               <th className="px-4 py-3 font-medium">Status</th>
               <th className="px-4 py-3 font-medium">Kwota</th>
               <th className="px-4 py-3 font-medium">Klient</th>
@@ -50,6 +52,17 @@ export default async function AdminOrdersPage() {
                   >
                     {order.orderNumber}
                   </Link>
+                </td>
+                <td className="px-4 py-3">
+                  {order.allegroOrderId ? (
+                    <span className="rounded-full bg-orange-100 px-2 py-0.5 text-xs font-medium text-orange-700">
+                      Allegro
+                    </span>
+                  ) : (
+                    <span className="rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-700">
+                      Sklep
+                    </span>
+                  )}
                 </td>
                 <td className="px-4 py-3">
                   <span className="rounded-full bg-muted px-2 py-0.5 text-xs font-medium">
@@ -70,7 +83,7 @@ export default async function AdminOrdersPage() {
             ))}
             {orders.length === 0 && (
               <tr>
-                <td colSpan={5} className="px-4 py-8 text-center text-muted-foreground">
+                <td colSpan={6} className="px-4 py-8 text-center text-muted-foreground">
                   Brak zamówień
                 </td>
               </tr>
