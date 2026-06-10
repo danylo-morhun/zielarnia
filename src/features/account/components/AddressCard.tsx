@@ -51,7 +51,10 @@ export function AddressCard({ address, onEdit }: Props) {
         <button
           type="button"
           disabled={isPending}
-          onClick={() => execute({ addressId: address.id })}
+          onClick={() => {
+            if (!window.confirm("Usunąć ten adres?")) return;
+            execute({ addressId: address.id });
+          }}
           className="text-xs font-medium text-destructive hover:underline disabled:opacity-50"
         >
           {isPending ? "Usuwanie..." : "Usuń"}
