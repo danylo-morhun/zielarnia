@@ -64,16 +64,12 @@ export default async function KoszykPage() {
               <span>Razem</span>
               <span>{formatPrice(subtotal)}</span>
             </div>
-            <button
-              type="button"
-              disabled
-              className="w-full cursor-not-allowed rounded-lg bg-primary px-4 py-3 text-sm font-medium text-primary-foreground opacity-50"
+            <Link
+              href="/zamowienie"
+              className="block w-full rounded-lg bg-primary px-4 py-3 text-center text-sm font-medium text-primary-foreground hover:bg-primary/80"
             >
               Przejdź do kasy
-            </button>
-            <p className="text-center text-xs text-muted-foreground">
-              Dostawa i płatność — wkrótce
-            </p>
+            </Link>
           </div>
         </div>
       </div>
