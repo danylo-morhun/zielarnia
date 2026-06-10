@@ -500,6 +500,12 @@ model Order {
   @@index([allegroOrderId])
 }
 
+// Single-row counter for atomic order number generation
+model OrderSequence {
+  id    Int @id @default(1)
+  value Int @default(0)
+}
+
 model OrderItem {
   id      String @id @default(cuid())
   orderId String
