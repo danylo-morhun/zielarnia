@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { syncProductToBaselinker, syncStockToBaselinker } from "@/lib/baselinker/inventory";
 import { prisma } from "@/lib/prisma";
 import { adminActionClient } from "@/lib/safe-action";
 import {
@@ -121,6 +122,7 @@ export const saveProduct = adminActionClient
       countryOfOrigin: countryOfOrigin || null,
     };
 
+    let savedId: string | undefined;
     await prisma.$transaction(async (tx) => {
       let resolvedId = id;
       if (resolvedId) {
@@ -129,6 +131,7 @@ export const saveProduct = adminActionClient
         const created = await tx.product.create({ data: payload });
         resolvedId = created.id;
       }
+      savedId = resolvedId;
       // Sync tags
       await tx.productTag.deleteMany({ where: { productId: resolvedId } });
       if (tagIds.length > 0) {
@@ -140,6 +143,7 @@ export const saveProduct = adminActionClient
 
     revalidatePath("/admin/produkty");
     revalidatePath("/katalog", "layout");
+    if (savedId) void syncProductToBaselinker(savedId).catch(console.error);
     return { success: true };
   });
 
@@ -189,6 +193,7 @@ export const saveVariant = adminActionClient
     }
     revalidatePath("/admin/produkty");
     revalidatePath(`/admin/produkty/${input.productId}`);
+    void syncProductToBaselinker(input.productId).catch(console.error);
     return { success: true };
   });
 
@@ -214,6 +219,19 @@ export const bulkUpdateStock = adminActionClient
         prisma.productVariant.update({ where: { id: variantId }, data: { stock } }),
       ),
     );
+
+    // Push stock to BaseLinker (fire-and-forget)
+    const variantIds = updates.map((u) => u.variantId);
+    const variants = await prisma.productVariant.findMany({
+      where: { id: { in: variantIds }, baselinkerVariantId: { not: null } },
+      select: { id: true, baselinkerVariantId: true, stock: true },
+    });
+    if (variants.length > 0) {
+      void syncStockToBaselinker(
+        variants.map((v) => ({ blVariantId: v.baselinkerVariantId!, stock: v.stock })),
+      ).catch(console.error);
+    }
+
     revalidatePath("/admin/magazyn");
     return { success: true };
   });

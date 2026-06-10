@@ -69,18 +69,18 @@ export async function pushOrderToBaselinker(orderId: string): Promise<string> {
     products: order.items.map((item) => ({
       storage: "db",
       storage_id: 0,
-      product_id: item.variant.baselinkerVariantId ?? item.sku,
+      product_id: item.variant?.baselinkerVariantId ?? item.sku,
       variant_id: "",
       name: item.variantOpt ? `${item.productName} – ${item.variantOpt}` : item.productName,
       sku: item.sku,
-      ean: item.variant.ean ?? "",
+      ean: item.variant?.ean ?? "",
       location: "",
       warehouse_id: 0,
       attributes: "",
       price_brutto: item.unitPricePln / 100,
       tax_rate: Number(item.vatRate),
       quantity: item.quantity,
-      weight: item.variant.weightGrams ? item.variant.weightGrams / 1000 : 0,
+      weight: item.variant?.weightGrams ? item.variant.weightGrams / 1000 : 0,
     })),
   });
 
