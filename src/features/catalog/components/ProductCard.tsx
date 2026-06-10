@@ -5,9 +5,10 @@ import type { ProductListItem } from "../actions";
 
 type Props = {
   product: ProductListItem;
+  priority?: boolean;
 };
 
-export function ProductCard({ product }: Props) {
+export function ProductCard({ product, priority = false }: Props) {
   const defaultVariant = product.variants[0];
   const mainImage = product.images[0];
   const isOutOfStock = defaultVariant ? defaultVariant.stock <= 0 : true;
@@ -21,8 +22,11 @@ export function ProductCard({ product }: Props) {
               src={mainImage.url}
               alt={mainImage.altPl ?? product.namePl}
               fill
+              priority={priority}
               sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
               className="object-cover transition-transform duration-300 group-hover:scale-105"
+              placeholder="blur"
+              blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjNmNGY2Ii8+PC9zdmc+"
             />
           ) : (
             <div className="flex h-full items-center justify-center text-muted-foreground">
