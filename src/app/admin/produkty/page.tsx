@@ -1,7 +1,10 @@
 import type { ProductStatus } from "@prisma/client";
 import Link from "next/link";
+import { Suspense } from "react";
 import { DeleteProductButton } from "@/features/products/components/DeleteProductButton";
 import { prisma } from "@/lib/prisma";
+import { AdminSearch } from "@/app/admin/components/AdminSearch";
+import { AdminPagination } from "@/app/admin/components/AdminPagination";
 
 const STATUS_LABELS: Record<ProductStatus, string> = {
   DRAFT: "Szkic",
@@ -9,19 +12,48 @@ const STATUS_LABELS: Record<ProductStatus, string> = {
   ARCHIVED: "Zarchiwizowany",
 };
 
-export default async function AdminProductsPage() {
-  const products = await prisma.product.findMany({
-    orderBy: { createdAt: "desc" },
-    select: {
-      id: true,
-      namePl: true,
-      slug: true,
-      status: true,
-      category: { select: { namePl: true } },
-      brand: { select: { name: true } },
-      _count: { select: { variants: true } },
-    },
-  });
+const PAGE_SIZE = 25;
+
+type SearchParams = { szukaj?: string; strona?: string };
+
+export default async function AdminProductsPage({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
+  const params = await searchParams;
+  const page = Math.max(1, parseInt(params.strona ?? "1", 10));
+  const search = params.szukaj ?? "";
+
+  const where = search
+    ? {
+        OR: [
+          { namePl: { contains: search, mode: "insensitive" as const } },
+          { slug: { contains: search, mode: "insensitive" as const } },
+        ],
+      }
+    : {};
+
+  const [products, total] = await Promise.all([
+    prisma.product.findMany({
+      where,
+      orderBy: { createdAt: "desc" },
+      skip: (page - 1) * PAGE_SIZE,
+      take: PAGE_SIZE,
+      select: {
+        id: true,
+        namePl: true,
+        slug: true,
+        status: true,
+        category: { select: { namePl: true } },
+        brand: { select: { name: true } },
+        _count: { select: { variants: true } },
+      },
+    }),
+    prisma.product.count({ where }),
+  ]);
+
+  const totalPages = Math.ceil(total / PAGE_SIZE);
 
   return (
     <div>
@@ -34,6 +66,13 @@ export default async function AdminProductsPage() {
           + Dodaj produkt
         </Link>
       </div>
+
+      <div className="mb-4">
+        <Suspense>
+          <AdminSearch placeholder="Szukaj produktów…" />
+        </Suspense>
+      </div>
+
       <div className="overflow-x-auto rounded-lg border">
         <table className="w-full text-sm">
           <thead>
@@ -90,6 +129,15 @@ export default async function AdminProductsPage() {
             )}
           </tbody>
         </table>
+      </div>
+
+      <div className="flex items-center justify-between pt-4">
+        <p className="text-xs text-muted-foreground">
+          {total} {total === 1 ? "produkt" : "produktów"}
+        </p>
+        <Suspense>
+          <AdminPagination currentPage={page} totalPages={totalPages} />
+        </Suspense>
       </div>
     </div>
   );

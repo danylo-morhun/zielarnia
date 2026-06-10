@@ -1,6 +1,9 @@
 import type { OrderStatus } from "@prisma/client";
 import Link from "next/link";
+import { Suspense } from "react";
 import { prisma } from "@/lib/prisma";
+import { AdminSearch } from "@/app/admin/components/AdminSearch";
+import { AdminPagination } from "@/app/admin/components/AdminPagination";
 
 const STATUS_LABELS: Record<OrderStatus, string> = {
   PENDING: "Oczekujące",
@@ -13,23 +16,94 @@ const STATUS_LABELS: Record<OrderStatus, string> = {
   REFUNDED: "Zwrócone",
 };
 
-export default async function AdminOrdersPage() {
-  const orders = await prisma.order.findMany({
-    orderBy: { createdAt: "desc" },
-    select: {
-      id: true,
-      orderNumber: true,
-      status: true,
-      totalPln: true,
-      customerEmail: true,
-      createdAt: true,
-      allegroOrderId: true,
-    },
-  });
+const STATUS_FILTER_TABS: { label: string; value: string | null }[] = [
+  { label: "Wszystkie", value: null },
+  { label: "Oczekujące", value: "PENDING" },
+  { label: "Opłacone", value: "PAID" },
+  { label: "W realizacji", value: "PROCESSING" },
+  { label: "Wysłane", value: "SHIPPED" },
+  { label: "Anulowane", value: "CANCELLED" },
+];
+
+const PAGE_SIZE = 25;
+
+type SearchParams = { szukaj?: string; status?: string; strona?: string };
+
+export default async function AdminOrdersPage({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
+  const params = await searchParams;
+  const page = Math.max(1, parseInt(params.strona ?? "1", 10));
+  const search = params.szukaj ?? "";
+  const statusFilter = params.status as OrderStatus | undefined;
+
+  const where = {
+    ...(search
+      ? {
+          OR: [
+            { orderNumber: { contains: search, mode: "insensitive" as const } },
+            { customerEmail: { contains: search, mode: "insensitive" as const } },
+          ],
+        }
+      : {}),
+    ...(statusFilter ? { status: statusFilter } : {}),
+  };
+
+  const [orders, total] = await Promise.all([
+    prisma.order.findMany({
+      where,
+      orderBy: { createdAt: "desc" },
+      skip: (page - 1) * PAGE_SIZE,
+      take: PAGE_SIZE,
+      select: {
+        id: true,
+        orderNumber: true,
+        status: true,
+        totalPln: true,
+        customerEmail: true,
+        createdAt: true,
+        allegroOrderId: true,
+      },
+    }),
+    prisma.order.count({ where }),
+  ]);
+
+  const totalPages = Math.ceil(total / PAGE_SIZE);
 
   return (
     <div>
       <h1 className="mb-6 text-2xl font-bold">Zamówienia</h1>
+
+      <div className="mb-4 flex flex-wrap items-center gap-3">
+        <Suspense>
+          <AdminSearch placeholder="Szukaj zamówień lub emaila…" />
+        </Suspense>
+      </div>
+
+      <div className="mb-4 flex flex-wrap gap-2">
+        {STATUS_FILTER_TABS.map((tab) => {
+          const isActive = (tab.value ?? "") === (statusFilter ?? "");
+          const href = tab.value
+            ? `/admin/zamowienia?status=${tab.value}`
+            : "/admin/zamowienia";
+          return (
+            <Link
+              key={tab.label}
+              href={href}
+              className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
+                isActive
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-muted text-muted-foreground hover:bg-muted/80"
+              }`}
+            >
+              {tab.label}
+            </Link>
+          );
+        })}
+      </div>
+
       <div className="overflow-x-auto rounded-lg border">
         <table className="w-full text-sm">
           <thead>
@@ -90,6 +164,15 @@ export default async function AdminOrdersPage() {
             )}
           </tbody>
         </table>
+      </div>
+
+      <div className="flex items-center justify-between pt-4">
+        <p className="text-xs text-muted-foreground">
+          {total} {total === 1 ? "zamówienie" : "zamówień"}
+        </p>
+        <Suspense>
+          <AdminPagination currentPage={page} totalPages={totalPages} />
+        </Suspense>
       </div>
     </div>
   );

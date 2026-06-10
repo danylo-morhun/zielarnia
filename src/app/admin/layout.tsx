@@ -1,16 +1,21 @@
 import Link from "next/link";
 import { signOut } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 
-const NAV_ITEMS = [
-  { href: "/admin/zamowienia", label: "Zamówienia" },
-  { href: "/admin/produkty", label: "Produkty" },
-  { href: "/admin/magazyn", label: "Magazyn" },
-  { href: "/admin/kategorie", label: "Kategorie" },
-  { href: "/admin/marki", label: "Marki" },
-  { href: "/admin/tagi", label: "Tagi" },
-];
+export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+  const lowStockCount = await prisma.productVariant.count({
+    where: { stock: { lte: 5, gt: 0 }, trackStock: true },
+  });
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  const navItems = [
+    { href: "/admin/zamowienia", label: "Zamówienia", badge: null },
+    { href: "/admin/produkty", label: "Produkty", badge: null },
+    { href: "/admin/magazyn", label: "Magazyn", badge: lowStockCount > 0 ? lowStockCount : null },
+    { href: "/admin/kategorie", label: "Kategorie", badge: null },
+    { href: "/admin/marki", label: "Marki", badge: null },
+    { href: "/admin/tagi", label: "Tagi", badge: null },
+  ];
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
       <div className="flex flex-col gap-8 md:flex-row">
@@ -19,13 +24,18 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             Panel admina
           </p>
           <nav className="flex flex-col gap-1">
-            {NAV_ITEMS.map((item) => (
+            {navItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                className="flex items-center justify-between rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
               >
                 {item.label}
+                {item.badge !== null && (
+                  <span className="rounded-full bg-warning px-1.5 py-0.5 text-xs font-bold text-warning-foreground">
+                    {item.badge}
+                  </span>
+                )}
               </Link>
             ))}
             <form
