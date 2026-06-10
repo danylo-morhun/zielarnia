@@ -28,8 +28,9 @@ export async function getProducts(filters: CatalogFilters) {
           take: 1,
         },
         variants: {
-          where: { isDefault: true, isActive: true },
-          select: { pricePln: true, comparePricePln: true, stock: true },
+          where: { isActive: true },
+          select: { pricePln: true, comparePricePln: true, stock: true, isDefault: true },
+          orderBy: { isDefault: "desc" },
           take: 1,
         },
         tags: {
