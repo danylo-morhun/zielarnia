@@ -1,4 +1,4 @@
-// Required env: BASELINKER_TOKEN
+// Required env: BASELINKER_API_KEY
 const BASE_URL = "https://api.baselinker.com/connector.php";
 
 export async function blCall<T = Record<string, unknown>>(
@@ -6,7 +6,7 @@ export async function blCall<T = Record<string, unknown>>(
   parameters: Record<string, unknown> = {},
 ): Promise<T> {
   const body = new URLSearchParams({
-    token: process.env.BASELINKER_TOKEN ?? "",
+    token: process.env.BASELINKER_API_KEY ?? "",
     method,
     parameters: JSON.stringify(parameters),
   });
