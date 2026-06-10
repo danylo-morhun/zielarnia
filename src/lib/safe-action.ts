@@ -10,3 +10,11 @@ export const authActionClient = actionClient.use(async ({ next }) => {
   }
   return next({ ctx: { customerId: session.user.id } });
 });
+
+export const adminActionClient = actionClient.use(async ({ next }) => {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== "ADMIN") {
+    throw new Error("Brak uprawnień");
+  }
+  return next({ ctx: { adminId: session.user.id } });
+});

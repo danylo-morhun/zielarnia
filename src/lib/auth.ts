@@ -27,7 +27,7 @@ const config: NextAuthConfig = {
         if (!credentials?.email || !credentials?.password) return null;
         const customer = await prisma.customer.findUnique({
           where: { email: String(credentials.email) },
-          select: { id: true, email: true, firstName: true, passwordHash: true },
+          select: { id: true, email: true, firstName: true, passwordHash: true, isAdmin: true },
         });
         if (!customer?.passwordHash) return null;
         const valid = await bcrypt.compare(String(credentials.password), customer.passwordHash);
@@ -36,7 +36,7 @@ const config: NextAuthConfig = {
           id: customer.id,
           email: customer.email,
           name: customer.firstName ?? customer.email,
-          role: "CUSTOMER" as const,
+          role: customer.isAdmin ? ("ADMIN" as const) : ("CUSTOMER" as const),
         };
       },
     }),
