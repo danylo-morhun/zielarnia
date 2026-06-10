@@ -1,10 +1,12 @@
 "use client";
 
-import { Trash2 } from "lucide-react";
+import { ShoppingCart, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAction } from "next-safe-action/hooks";
+import { toast } from "sonner";
+import { addToCart } from "@/features/cart/actions";
 import { formatPrice } from "@/lib/format";
 import { removeFromWishlist } from "../actions";
 import type { WishlistItem } from "../lib/session";
@@ -15,18 +17,33 @@ type Props = {
 
 export function WishlistItemCard({ item }: Props) {
   const router = useRouter();
+
   const { execute: doRemove, isExecuting: removing } = useAction(removeFromWishlist, {
-    onSuccess: () => router.refresh(),
+    onSuccess: () => {
+      router.refresh();
+      toast("Usunięto z ulubionych");
+    },
+    onError: () => toast.error("Błąd", { description: "Nie udało się usunąć z ulubionych" }),
+  });
+
+  const { execute: doAddToCart, isExecuting: adding } = useAction(addToCart, {
+    onSuccess: () => {
+      router.refresh();
+      toast.success("Dodano do koszyka");
+    },
+    onError: () => toast.error("Błąd", { description: "Nie udało się dodać do koszyka" }),
   });
 
   const image = item.product.images[0];
   const variant = item.product.variants[0];
+  const inStock = variant && variant.stock > 0;
+  const lowStock = inStock && variant.stock <= 5;
 
   return (
-    <div className="flex gap-4 py-4">
+    <div className="flex gap-4 rounded-xl border bg-card p-4">
       <Link
         href={`/produkt/${item.product.slug}`}
-        className="relative size-20 shrink-0 overflow-hidden rounded-md border border-border bg-muted"
+        className="relative size-20 shrink-0 overflow-hidden rounded-lg bg-muted"
       >
         {image ? (
           <Image
@@ -42,29 +59,49 @@ export function WishlistItemCard({ item }: Props) {
           </span>
         )}
       </Link>
+
       <div className="flex flex-1 flex-col gap-1">
+        {item.product.brand && (
+          <p className="text-xs text-muted-foreground">{item.product.brand.name}</p>
+        )}
         <Link
           href={`/produkt/${item.product.slug}`}
-          className="text-sm font-medium text-foreground hover:text-primary"
+          className="line-clamp-2 text-sm font-semibold hover:text-primary"
         >
           {item.product.namePl}
         </Link>
-        {variant && <p className="text-sm font-semibold">{formatPrice(variant.pricePln)}</p>}
-        <p
-          className={`text-xs ${variant && variant.stock > 0 ? "text-green-600" : "text-muted-foreground"}`}
-        >
-          {variant && variant.stock > 0 ? "Dostępny" : "Niedostępny"}
-        </p>
+        {variant && (
+          <p className="text-base font-bold text-primary">{formatPrice(variant.pricePln)}</p>
+        )}
+        <div className="flex items-center gap-1 text-xs">
+          <span className={`size-2 rounded-full ${inStock ? "bg-success" : "bg-destructive"}`} />
+          <span className={inStock ? "text-success" : "text-muted-foreground"}>
+            {inStock ? (lowStock ? `Ostatnie ${variant.stock} szt.` : "Dostępny") : "Niedostępny"}
+          </span>
+        </div>
+      </div>
+
+      <div className="flex flex-col items-end justify-between gap-2">
         <button
           type="button"
-          disabled={removing}
           onClick={() => doRemove({ wishlistItemId: item.id })}
-          className="mt-auto flex w-fit items-center gap-1 text-xs text-muted-foreground hover:text-destructive disabled:opacity-40"
+          disabled={removing}
           aria-label="Usuń z ulubionych"
+          className="text-muted-foreground hover:text-destructive disabled:opacity-40"
         >
-          <Trash2 className="size-3" />
-          Usuń
+          <Trash2 className="size-4" />
         </button>
+        {variant && inStock && (
+          <button
+            type="button"
+            onClick={() => doAddToCart({ variantId: variant.id, quantity: 1 })}
+            disabled={adding}
+            className="flex items-center gap-1 rounded-md bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
+          >
+            <ShoppingCart className="size-3" />
+            {adding ? "…" : "Do koszyka"}
+          </button>
+        )}
       </div>
     </div>
   );

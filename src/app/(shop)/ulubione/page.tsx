@@ -38,11 +38,9 @@ export default async function UlubinonePage() {
   return (
     <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6 lg:px-8">
       <h1 className="mb-8 text-2xl font-bold">Ulubione ({items.length})</h1>
-      <div className="divide-y divide-border rounded-lg border border-border">
+      <div className="space-y-3">
         {items.map((item) => (
-          <div key={item.id} className="px-4">
-            <WishlistItemCard item={item} />
-          </div>
+          <WishlistItemCard key={item.id} item={item} />
         ))}
       </div>
     </div>

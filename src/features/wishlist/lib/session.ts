@@ -28,9 +28,12 @@ export async function getWishlist(wishlistId: string) {
                 take: 1,
                 orderBy: { sortOrder: "asc" },
               },
+              brand: {
+                select: { name: true, slug: true },
+              },
               variants: {
                 where: { isDefault: true },
-                select: { pricePln: true, comparePricePln: true, stock: true },
+                select: { id: true, pricePln: true, comparePricePln: true, stock: true },
                 take: 1,
               },
             },
