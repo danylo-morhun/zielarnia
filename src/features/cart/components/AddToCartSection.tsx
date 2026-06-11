@@ -136,7 +136,7 @@ export function AddToCartSection({ variants }: Props) {
         type="button"
         disabled={isExecuting || selected.stock <= 0}
         onClick={() => execute({ variantId: selected.id, quantity })}
-        className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/80 disabled:cursor-not-allowed disabled:opacity-50"
+        className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 text-sm font-medium text-primary-foreground transition-colors duration-150 hover:bg-[oklch(0.40_0.14_145)] disabled:cursor-not-allowed disabled:opacity-50 motion-reduce:transition-none"
       >
         <ShoppingCart className="size-4" />
         {isExecuting ? "Dodawanie…" : "Dodaj do koszyka"}

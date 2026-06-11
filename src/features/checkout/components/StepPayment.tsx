@@ -184,7 +184,7 @@ export function StepPayment({
           type="button"
           onClick={onSubmit}
           disabled={pending}
-          className="flex-1 rounded-lg bg-primary px-4 py-3 text-sm font-medium text-primary-foreground hover:bg-primary/80 disabled:opacity-50"
+          className="flex-1 rounded-lg bg-primary px-4 py-3 text-sm font-medium text-primary-foreground transition-colors duration-150 hover:bg-[oklch(0.40_0.14_145)] disabled:opacity-50 motion-reduce:transition-none"
         >
           {pending ? "Składam zamówienie…" : `Złóż zamówienie — ${formatPrice(total)}`}
         </button>

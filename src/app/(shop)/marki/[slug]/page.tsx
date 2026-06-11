@@ -54,7 +54,7 @@ export default async function MarkiSlugPage({ params, searchParams }: Props) {
           />
         )}
         <div>
-          <h1 className="text-2xl font-bold text-foreground">{brand.name}</h1>
+          <h1 className="text-balance font-heading text-2xl font-semibold text-foreground">{brand.name}</h1>
           {brand.description && <p className="mt-1 text-muted-foreground">{brand.description}</p>}
           {brand.website && (
             <a

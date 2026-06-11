@@ -3,6 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback } from "react";
 import type { BrandItem, CategoryItem, TagItem } from "../actions";
+import { SearchInput } from "./SearchInput";
 
 type Props = {
   categories: CategoryItem[];
@@ -56,6 +57,8 @@ export function FilterSidebar({ categories, brands, tags, basePath = "/katalog",
 
   return (
     <aside className="space-y-6">
+      <SearchInput />
+
       <div className="flex items-center justify-between">
         <h2 className="text-sm font-semibold text-foreground">Filtry</h2>
         {hasActiveFilters && (
@@ -70,7 +73,7 @@ export function FilterSidebar({ categories, brands, tags, basePath = "/katalog",
       </div>
 
       <div>
-        <p className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+        <p className="mb-2 text-sm font-semibold text-foreground">
           Sortowanie
         </p>
         <select
@@ -86,7 +89,7 @@ export function FilterSidebar({ categories, brands, tags, basePath = "/katalog",
 
       {categories.length > 0 && (
         <div>
-          <p className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+          <p className="mb-2 text-sm font-semibold text-foreground">
             Kategoria
           </p>
           <ul className="space-y-1">
@@ -114,7 +117,7 @@ export function FilterSidebar({ categories, brands, tags, basePath = "/katalog",
 
       {brands.length > 0 && (
         <div>
-          <p className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+          <p className="mb-2 text-sm font-semibold text-foreground">
             Marka
           </p>
           <ul className="space-y-1">
@@ -140,7 +143,7 @@ export function FilterSidebar({ categories, brands, tags, basePath = "/katalog",
 
       {tags.length > 0 && (
         <div>
-          <p className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+          <p className="mb-2 text-sm font-semibold text-foreground">
             Cechy
           </p>
           <div className="flex flex-wrap gap-2">

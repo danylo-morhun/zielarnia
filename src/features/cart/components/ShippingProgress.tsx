@@ -23,7 +23,7 @@ export function ShippingProgress({ subtotal }: Props) {
       </p>
       <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
         <div
-          className="h-full rounded-full bg-primary transition-all duration-500"
+          className="h-full rounded-full bg-primary transition-all duration-500 motion-reduce:transition-none"
           style={{ width: `${pct}%` }}
         />
       </div>

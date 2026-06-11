@@ -14,7 +14,7 @@ export function ProductCard({ product, priority = false }: Props) {
   const isOutOfStock = defaultVariant ? defaultVariant.stock <= 0 : true;
 
   return (
-    <article className="group relative flex flex-col overflow-hidden rounded-xl border border-border bg-card transition-shadow hover:shadow-md">
+    <article className="group relative flex flex-col overflow-hidden rounded-xl border border-border bg-card transition-shadow duration-200 hover:shadow-md motion-reduce:transition-none">
       <Link href={`/produkt/${product.slug}`} className="block">
         <div className="relative aspect-square overflow-hidden bg-muted">
           {mainImage ? (
@@ -24,7 +24,7 @@ export function ProductCard({ product, priority = false }: Props) {
               fill
               priority={priority}
               sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              className="object-cover transition-transform duration-300 group-hover:scale-105 motion-reduce:group-hover:scale-100"
               placeholder="blur"
               blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjNmNGY2Ii8+PC9zdmc+"
             />
@@ -34,7 +34,7 @@ export function ProductCard({ product, priority = false }: Props) {
             </div>
           )}
           {product.isNewArrival && (
-            <span className="absolute left-2 top-2 rounded bg-primary px-2 py-0.5 text-xs font-medium text-primary-foreground">
+            <span className="absolute left-2 top-2 rounded-full bg-primary px-2.5 py-0.5 text-xs font-medium text-primary-foreground">
               Nowość
             </span>
           )}

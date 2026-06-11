@@ -11,13 +11,13 @@ export function CategoryGrid({ categories }: Props) {
 
   return (
     <section className="space-y-4">
-      <h2 className="font-heading text-2xl font-semibold">Kategorie</h2>
+      <h2 className="text-balance font-heading text-2xl font-semibold">Kategorie</h2>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
         {topLevel.map((cat) => (
           <Link
             key={cat.id}
             href={`/katalog?kategoria=${cat.slug}`}
-            className="group flex flex-col items-center gap-2 rounded-xl border bg-card p-4 text-center transition-colors hover:border-primary hover:bg-primary/5"
+            className="group flex flex-col items-center gap-2 rounded-xl border bg-card p-4 text-center transition-colors duration-150 hover:border-primary hover:bg-primary/5"
           >
             {cat.image ? (
               <div className="relative size-16">

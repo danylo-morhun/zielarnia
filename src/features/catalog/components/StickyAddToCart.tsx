@@ -46,7 +46,7 @@ export function StickyAddToCart({ productName, selectedVariantId, price, stock, 
         <button
           onClick={() => execute({ variantId: selectedVariantId, quantity: 1 })}
           disabled={isExecuting || stock <= 0}
-          className="rounded-lg bg-primary px-6 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
+          className="rounded-lg bg-primary px-6 py-2 text-sm font-semibold text-primary-foreground transition-colors duration-150 hover:bg-[oklch(0.40_0.14_145)] disabled:opacity-50 motion-reduce:transition-none"
         >
           {stock <= 0 ? "Brak" : isExecuting ? "…" : "Dodaj do koszyka"}
         </button>

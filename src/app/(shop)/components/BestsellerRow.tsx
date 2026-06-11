@@ -14,8 +14,8 @@ export function BestsellerRow({ products, title, href }: Props) {
   return (
     <section className="space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="font-heading text-2xl font-semibold">{title}</h2>
-        <Link href={href} className="text-sm font-medium text-primary hover:underline">
+        <h2 className="text-balance font-heading text-2xl font-semibold">{title}</h2>
+        <Link href={href} className="text-sm font-medium text-primary transition-colors duration-150 hover:text-primary/70">
           Zobacz wszystkie →
         </Link>
       </div>

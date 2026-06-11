@@ -6,6 +6,7 @@ import { FilterDrawerButton } from "@/features/catalog/components/FilterDrawerBu
 import { ActiveFilterChips } from "@/features/catalog/components/ActiveFilterChips";
 import { ProductGridServer } from "@/features/catalog/components/ProductGridServer";
 import { ProductGridSkeleton } from "@/features/catalog/components/ProductGridSkeleton";
+import { SearchInput } from "@/features/catalog/components/SearchInput";
 import { parseCatalogFilters } from "@/features/catalog/lib/filters";
 import { getBrands, getCategories, getTags } from "../../../features/catalog/actions";
 
@@ -38,7 +39,7 @@ export default async function KatalogPage({ searchParams }: Props) {
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <Breadcrumbs items={breadcrumbs} />
 
-      <h1 className="mt-4 text-2xl font-bold text-foreground">Katalog produktów</h1>
+      <h1 className="mt-4 text-balance font-heading text-2xl font-semibold text-foreground">Katalog produktów</h1>
 
       <div className="mt-6 flex gap-8">
         <div className="hidden w-56 shrink-0 lg:block">
@@ -49,7 +50,10 @@ export default async function KatalogPage({ searchParams }: Props) {
 
         <div className="min-w-0 flex-1 space-y-6">
           <div className="lg:hidden">
-            <div className="mb-3 flex items-center gap-3">
+            <div className="mb-3 space-y-3">
+              <Suspense>
+                <SearchInput />
+              </Suspense>
               <Suspense>
                 <FilterDrawerButton categories={categories} brands={brands} tags={tags} />
               </Suspense>

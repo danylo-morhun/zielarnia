@@ -58,7 +58,7 @@ export function LoginForm({ callbackUrl }: Props) {
       <button
         type="submit"
         disabled={isPending}
-        className="w-full rounded-lg bg-primary px-4 py-3 text-sm font-medium text-primary-foreground hover:bg-primary/80 disabled:opacity-50"
+        className="w-full rounded-lg bg-primary px-4 py-3 text-sm font-medium text-primary-foreground transition-colors duration-150 hover:bg-[oklch(0.40_0.14_145)] disabled:opacity-50 motion-reduce:transition-none"
       >
         {isPending ? "Logowanie..." : "Zaloguj się"}
       </button>

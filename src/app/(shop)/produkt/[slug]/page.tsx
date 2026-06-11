@@ -145,7 +145,7 @@ export default async function ProduktPage({ params }: Props) {
               </a>
             )}
 
-            <h1 className="text-2xl font-bold text-foreground leading-tight">{product.namePl}</h1>
+            <h1 className="text-balance font-heading text-2xl font-semibold text-foreground leading-tight">{product.namePl}</h1>
 
             {product.shortDescPl && <p className="text-muted-foreground">{product.shortDescPl}</p>}
 

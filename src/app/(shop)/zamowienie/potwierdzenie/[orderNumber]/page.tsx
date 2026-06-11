@@ -69,7 +69,7 @@ export default async function PotwierdzeniePage({ params }: Props) {
         ) : (
           <Clock className="size-12 text-amber-500" />
         )}
-        <h1 className="text-2xl font-bold">
+        <h1 className="text-balance font-heading text-2xl font-semibold">
           {order.paymentStatus === "CAPTURED" ? "Zamówienie opłacone!" : "Zamówienie złożone!"}
         </h1>
         <p className="text-muted-foreground">
@@ -136,7 +136,7 @@ export default async function PotwierdzeniePage({ params }: Props) {
       <div className="mt-8 flex flex-col items-center gap-3">
         <Link
           href="/katalog"
-          className="rounded-lg bg-primary px-6 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/80"
+          className="rounded-lg bg-primary px-6 py-2 text-sm font-medium text-primary-foreground transition-colors duration-150 hover:bg-[oklch(0.40_0.14_145)] motion-reduce:transition-none"
         >
           Kontynuuj zakupy
         </Link>
