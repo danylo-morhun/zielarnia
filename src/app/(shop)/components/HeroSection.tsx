@@ -47,14 +47,17 @@ export function HeroSection() {
       <div className="relative z-10 max-w-xl">
         <h1
           id="hero-heading"
-          className="mb-4 text-balance font-heading text-4xl font-semibold leading-tight md:text-5xl lg:text-6xl"
+          className="mb-4 animate-fade-up text-balance font-heading text-4xl font-semibold leading-tight motion-reduce:animate-none md:text-5xl lg:text-6xl"
         >
           Twoje zdrowie zaczyna się tutaj
         </h1>
-        <p className="mb-8 max-w-[52ch] text-lg text-muted-foreground">
+        <p
+          className="mb-8 max-w-[52ch] animate-fade-up text-lg text-muted-foreground motion-reduce:animate-none"
+          style={{ animationDelay: "80ms" }}
+        >
           Certyfikowane suplementy diety, witaminy i produkty bio. Sprawdzona jakość, uczciwe ceny.
         </p>
-        <div className="flex flex-wrap gap-3">
+        <div className="flex animate-fade-up flex-wrap gap-3 motion-reduce:animate-none" style={{ animationDelay: "160ms" }}>
           <Link
             href="/katalog"
             className="rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors duration-150 hover:bg-[oklch(0.40_0.14_145)] motion-reduce:transition-none"
