@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { RefObject } from "react";
 import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
@@ -17,9 +17,16 @@ type Props = {
 
 export function StickyAddToCart({ productName, selectedVariantId, price, stock, anchorRef }: Props) {
   const [visible, setVisible] = useState(false);
+  const [succeeded, setSucceeded] = useState(false);
+  const successTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const { execute, isExecuting } = useAction(addToCart, {
-    onSuccess: () => toast.success("Dodano do koszyka"),
+    onSuccess: () => {
+      if (successTimer.current) clearTimeout(successTimer.current);
+      setSucceeded(true);
+      successTimer.current = setTimeout(() => setSucceeded(false), 1500);
+      toast.success("Dodano do koszyka");
+    },
     onError: () => toast.error("Błąd dodawania"),
   });
 
@@ -46,9 +53,14 @@ export function StickyAddToCart({ productName, selectedVariantId, price, stock, 
         <button
           onClick={() => execute({ variantId: selectedVariantId, quantity: 1 })}
           disabled={isExecuting || stock <= 0}
-          className="rounded-lg bg-primary px-6 py-2 text-sm font-semibold text-primary-foreground transition-colors duration-150 hover:bg-[oklch(0.40_0.14_145)] disabled:opacity-50 motion-reduce:transition-none"
+          className="rounded-lg bg-primary px-6 py-2 text-sm font-semibold text-primary-foreground transition-[transform,background-color,color,border-color] duration-[160ms] ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-[oklch(0.40_0.14_145)] active:scale-[0.97] disabled:opacity-50 motion-reduce:transition-none motion-reduce:active:scale-100"
         >
-          {stock <= 0 ? "Brak" : isExecuting ? "…" : "Dodaj do koszyka"}
+          <span
+            key={stock <= 0 ? "brak" : isExecuting ? "loading" : succeeded ? "success" : "idle"}
+            className="animate-[btn-text-in_200ms_ease-out_both]"
+          >
+            {stock <= 0 ? "Brak" : isExecuting ? "…" : succeeded ? "✓ Dodano" : "Dodaj do koszyka"}
+          </span>
         </button>
       </div>
     </div>

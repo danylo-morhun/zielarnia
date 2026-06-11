@@ -65,7 +65,7 @@ export function CartItemRow({ item, onRemove }: Props) {
             type="button"
             disabled={pending || item.quantity <= 1}
             onClick={() => doUpdate({ cartItemId: item.id, quantity: item.quantity - 1 })}
-            className="flex size-10 items-center justify-center rounded border border-border transition-colors duration-150 hover:bg-muted disabled:opacity-40"
+            className="flex size-10 items-center justify-center rounded border border-border transition-[transform,background-color,border-color] duration-[160ms] ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-muted active:scale-[0.97] disabled:opacity-40 motion-reduce:active:scale-100"
             aria-label="Zmniejsz ilość"
           >
             <Minus className="size-4" />
@@ -75,7 +75,7 @@ export function CartItemRow({ item, onRemove }: Props) {
             type="button"
             disabled={pending || item.quantity >= item.variant.stock}
             onClick={() => doUpdate({ cartItemId: item.id, quantity: item.quantity + 1 })}
-            className="flex size-10 items-center justify-center rounded border border-border transition-colors duration-150 hover:bg-muted disabled:opacity-40"
+            className="flex size-10 items-center justify-center rounded border border-border transition-[transform,background-color,border-color] duration-[160ms] ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-muted active:scale-[0.97] disabled:opacity-40 motion-reduce:active:scale-100"
             aria-label="Zwiększ ilość"
           >
             <Plus className="size-4" />
@@ -91,7 +91,7 @@ export function CartItemRow({ item, onRemove }: Props) {
                 doRemove({ cartItemId: item.id });
               }
             }}
-            className="ml-auto flex size-10 items-center justify-center rounded transition-colors duration-150 text-muted-foreground hover:text-destructive disabled:opacity-40"
+            className="ml-auto flex size-10 items-center justify-center rounded transition-[transform,color] duration-[160ms] ease-[cubic-bezier(0.23,1,0.32,1)] text-muted-foreground hover:text-destructive active:scale-[0.97] disabled:opacity-40 motion-reduce:active:scale-100"
             aria-label="Usuń z koszyka"
           >
             <Trash2 className="size-4" />

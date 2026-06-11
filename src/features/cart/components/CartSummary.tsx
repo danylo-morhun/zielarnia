@@ -35,7 +35,7 @@ export function CartSummary({ subtotal }: Props) {
       <CouponInput subtotal={subtotal} onDiscount={setDiscount} />
       <Link
         href="/zamowienie"
-        className="block w-full rounded-lg bg-primary px-4 py-3 text-center text-sm font-medium text-primary-foreground transition-colors duration-150 hover:bg-[oklch(0.40_0.14_145)] motion-reduce:transition-none"
+        className="block w-full rounded-lg bg-primary px-4 py-3 text-center text-sm font-medium text-primary-foreground transition-[transform,background-color,color,border-color] duration-[160ms] ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-[oklch(0.40_0.14_145)] active:scale-[0.97] motion-reduce:transition-none motion-reduce:active:scale-100"
       >
         Przejdź do kasy
       </Link>

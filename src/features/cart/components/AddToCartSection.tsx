@@ -27,10 +27,13 @@ export function AddToCartSection({ variants }: Props) {
   const defaultVariant = variants.find((v) => v.isDefault) ?? variants[0];
   const [selectedId, setSelectedId] = useState(defaultVariant?.id ?? "");
   const [quantity, setQuantity] = useState(1);
+  const [succeeded, setSucceeded] = useState(false);
 
   const { execute, isExecuting } = useAction(addToCart, {
     onSuccess: () => {
       router.refresh();
+      setSucceeded(true);
+      setTimeout(() => setSucceeded(false), 1500);
       toast.success("Dodano do koszyka", {
         description: selected?.optionValue ?? undefined,
         duration: 3000,
@@ -72,7 +75,7 @@ export function AddToCartSection({ variants }: Props) {
                 type="button"
                 onClick={() => setSelectedId(v.id)}
                 disabled={v.stock <= 0}
-                className={`rounded-md border px-3 py-1.5 text-sm transition-colors disabled:opacity-40 ${
+                className={`rounded-md border px-3 py-1.5 text-sm transition-[transform,background-color,color,border-color] duration-[160ms] ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.97] disabled:opacity-40 ${
                   v.id === selectedId
                     ? "border-primary bg-primary text-primary-foreground"
                     : "border-border hover:border-primary hover:bg-muted"
@@ -115,7 +118,7 @@ export function AddToCartSection({ variants }: Props) {
             onClick={() => setQuantity((q) => Math.max(1, q - 1))}
             disabled={quantity <= 1}
             aria-label="Zmniejsz ilość"
-            className="flex size-9 items-center justify-center hover:bg-muted disabled:opacity-40"
+            className="flex size-9 items-center justify-center transition-[transform,background-color] duration-[160ms] ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-muted active:scale-[0.97] disabled:opacity-40 motion-reduce:active:scale-100"
           >
             <Minus className="size-4" />
           </button>
@@ -125,7 +128,7 @@ export function AddToCartSection({ variants }: Props) {
             onClick={() => setQuantity((q) => Math.min(selected.stock, q + 1))}
             disabled={quantity >= selected.stock}
             aria-label="Zwiększ ilość"
-            className="flex size-9 items-center justify-center hover:bg-muted disabled:opacity-40"
+            className="flex size-9 items-center justify-center transition-[transform,background-color] duration-[160ms] ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-muted active:scale-[0.97] disabled:opacity-40 motion-reduce:active:scale-100"
           >
             <Plus className="size-4" />
           </button>
@@ -136,10 +139,15 @@ export function AddToCartSection({ variants }: Props) {
         type="button"
         disabled={isExecuting || selected.stock <= 0}
         onClick={() => execute({ variantId: selected.id, quantity })}
-        className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 text-sm font-medium text-primary-foreground transition-colors duration-150 hover:bg-[oklch(0.40_0.14_145)] disabled:cursor-not-allowed disabled:opacity-50 motion-reduce:transition-none"
+        className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 text-sm font-medium text-primary-foreground transition-[transform,background-color,color,border-color] duration-[160ms] ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-[oklch(0.40_0.14_145)] active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-50 motion-reduce:transition-none motion-reduce:active:scale-100"
       >
         <ShoppingCart className="size-4" />
-        {isExecuting ? "Dodawanie…" : "Dodaj do koszyka"}
+        <span
+          key={isExecuting ? "loading" : succeeded ? "success" : "idle"}
+          className="animate-[btn-text-in_200ms_ease-out_both]"
+        >
+          {isExecuting ? "Dodawanie…" : succeeded ? "✓ Dodano" : "Dodaj do koszyka"}
+        </span>
       </button>
     </div>
   );
