@@ -29,7 +29,7 @@ export async function getProducts(filters: CatalogFilters) {
         },
         variants: {
           where: { isActive: true },
-          select: { pricePln: true, comparePricePln: true, stock: true, isDefault: true },
+          select: { id: true, pricePln: true, comparePricePln: true, stock: true, isDefault: true },
           orderBy: { isDefault: "desc" },
           take: 1,
         },

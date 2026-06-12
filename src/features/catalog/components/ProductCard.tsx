@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { QuickAddButton } from "@/features/cart/components/QuickAddButton";
 import { formatPrice } from "@/lib/format";
 import type { ProductListItem } from "../actions";
 
@@ -94,6 +95,12 @@ export function ProductCard({ product, priority = false }: Props) {
             <span className="text-sm text-muted-foreground">Cena niedostępna</span>
           )}
         </div>
+
+        {defaultVariant && (
+          <div className="mt-3">
+            <QuickAddButton variantId={defaultVariant.id} disabled={isOutOfStock} />
+          </div>
+        )}
       </div>
     </article>
   );
