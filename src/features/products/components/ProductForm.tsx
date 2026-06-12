@@ -71,7 +71,7 @@ export function ProductForm({ product, categories, brands, tags }: Props) {
       {product && <input type="hidden" name="id" value={product.id} />}
 
       {/* Basic info */}
-      <section className="rounded-lg border p-4">
+      <section className="rounded-2xl bg-card p-5 shadow-card">
         <h2 className="mb-4 font-semibold">Podstawowe informacje</h2>
         <div className="grid gap-3 sm:grid-cols-2">
           <div className="sm:col-span-2">
@@ -184,7 +184,7 @@ export function ProductForm({ product, categories, brands, tags }: Props) {
       </section>
 
       {/* Supplement details */}
-      <section className="rounded-lg border p-4">
+      <section className="rounded-2xl bg-card p-5 shadow-card">
         <h2 className="mb-4 font-semibold">Szczegóły suplementu</h2>
         <div className="grid gap-3 sm:grid-cols-3">
           <div>
@@ -239,7 +239,7 @@ export function ProductForm({ product, categories, brands, tags }: Props) {
       </section>
 
       {/* Tags */}
-      <section className="rounded-lg border p-4">
+      <section className="rounded-2xl bg-card p-5 shadow-card">
         <h2 className="mb-4 font-semibold">Tagi</h2>
         <div className="flex flex-wrap gap-2">
           {tags.map((tag) => (
@@ -257,7 +257,7 @@ export function ProductForm({ product, categories, brands, tags }: Props) {
       </section>
 
       {/* SEO */}
-      <section className="rounded-lg border p-4">
+      <section className="rounded-2xl bg-card p-5 shadow-card">
         <h2 className="mb-4 font-semibold">SEO</h2>
         <div className="grid gap-3">
           <div>
@@ -287,7 +287,7 @@ export function ProductForm({ product, categories, brands, tags }: Props) {
       <button
         type="submit"
         disabled={isPending}
-        className="rounded-md bg-foreground px-5 py-2 font-medium text-background disabled:opacity-50"
+        className="rounded-lg bg-primary px-5 py-2 font-medium text-primary-foreground transition-colors duration-200 hover:bg-primary-deep disabled:opacity-50 motion-reduce:transition-none"
       >
         {isPending ? "Zapisywanie…" : product ? "Zapisz zmiany" : "Utwórz produkt"}
       </button>

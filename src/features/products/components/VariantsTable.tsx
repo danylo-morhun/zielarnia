@@ -53,7 +53,7 @@ export function VariantsTable({ productId, variants }: Props) {
   }
 
   const variantForm = (item?: SerializedVariant) => (
-    <form onSubmit={handleSubmit} className="mt-2 grid gap-2 rounded border bg-muted/20 p-3">
+    <form onSubmit={handleSubmit} className="mt-2 grid gap-2 rounded-xl bg-muted p-3">
       {item && <input type="hidden" name="id" value={item.id} />}
       <div className="grid grid-cols-3 gap-2">
         <input
@@ -61,19 +61,19 @@ export function VariantsTable({ productId, variants }: Props) {
           defaultValue={item?.sku ?? EMPTY_FORM.sku}
           placeholder="SKU *"
           required
-          className="rounded border px-2 py-1 text-sm"
+          className="rounded-lg border border-border px-2 py-1 text-sm"
         />
         <input
           name="optionLabel"
           defaultValue={item?.optionLabel ?? ""}
           placeholder="Etykieta (np. Pojemność)"
-          className="rounded border px-2 py-1 text-sm"
+          className="rounded-lg border border-border px-2 py-1 text-sm"
         />
         <input
           name="optionValue"
           defaultValue={item?.optionValue ?? ""}
           placeholder="Wartość (np. 60 kaps.)"
-          className="rounded border px-2 py-1 text-sm"
+          className="rounded-lg border border-border px-2 py-1 text-sm"
         />
         <div>
           <label className="mb-0.5 block text-xs text-muted-foreground">
@@ -85,7 +85,7 @@ export function VariantsTable({ productId, variants }: Props) {
               placeholder="4990 = 49.90 zł"
               required
               min={1}
-              className="mt-0.5 w-full rounded border px-2 py-1 text-sm font-normal"
+              className="mt-0.5 w-full rounded-lg border border-border px-2 py-1 text-sm font-normal"
             />
           </label>
         </div>
@@ -97,7 +97,7 @@ export function VariantsTable({ productId, variants }: Props) {
               type="number"
               defaultValue={item?.stock ?? 0}
               min={0}
-              className="mt-0.5 w-full rounded border px-2 py-1 text-sm font-normal"
+              className="mt-0.5 w-full rounded-lg border border-border px-2 py-1 text-sm font-normal"
             />
           </label>
         </div>
@@ -109,7 +109,7 @@ export function VariantsTable({ productId, variants }: Props) {
               type="number"
               step="0.01"
               defaultValue={Number(item?.vatRate ?? 5)}
-              className="mt-0.5 w-full rounded border px-2 py-1 text-sm font-normal"
+              className="mt-0.5 w-full rounded-lg border border-border px-2 py-1 text-sm font-normal"
             />
           </label>
         </div>
@@ -128,7 +128,7 @@ export function VariantsTable({ productId, variants }: Props) {
         <button
           type="submit"
           disabled={saving}
-          className="rounded bg-foreground px-3 py-1 text-xs font-medium text-background disabled:opacity-50"
+          className="rounded-lg bg-primary px-3 py-1 text-xs font-medium text-primary-foreground transition-colors duration-200 hover:bg-primary-deep motion-reduce:transition-none disabled:opacity-50"
         >
           {saving ? "…" : "Zapisz"}
         </button>
@@ -138,7 +138,7 @@ export function VariantsTable({ productId, variants }: Props) {
             setEditing(null);
             setShowNew(false);
           }}
-          className="rounded border px-3 py-1 text-xs"
+          className="rounded-lg border border-border px-3 py-1 text-xs"
         >
           Anuluj
         </button>
@@ -147,13 +147,13 @@ export function VariantsTable({ productId, variants }: Props) {
   );
 
   return (
-    <section className="rounded-lg border p-4">
+    <section className="rounded-2xl bg-card p-5 shadow-card">
       <div className="mb-4 flex items-center justify-between">
         <h2 className="font-semibold">Warianty</h2>
         <button
           type="button"
           onClick={() => setShowNew(true)}
-          className="rounded bg-foreground px-3 py-1 text-xs font-medium text-background"
+          className="rounded-lg bg-primary px-3 py-1 text-xs font-medium text-primary-foreground transition-colors duration-200 hover:bg-primary-deep motion-reduce:transition-none"
         >
           + Dodaj wariant
         </button>
@@ -184,7 +184,7 @@ export function VariantsTable({ productId, variants }: Props) {
                 <button
                   type="button"
                   onClick={() => setEditing(v)}
-                  className="rounded border px-2 py-1 text-xs"
+                  className="rounded-lg border border-border px-2 py-1 text-xs"
                 >
                   Edytuj
                 </button>
@@ -194,7 +194,7 @@ export function VariantsTable({ productId, variants }: Props) {
                   onClick={() => {
                     if (confirm(`Usunąć wariant "${v.sku}"?`)) execDelete({ id: v.id });
                   }}
-                  className="rounded border border-destructive px-2 py-1 text-xs text-destructive disabled:opacity-50"
+                  className="rounded-lg border border-border border-destructive px-2 py-1 text-xs text-destructive disabled:opacity-50"
                 >
                   Usuń
                 </button>

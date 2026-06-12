@@ -53,21 +53,29 @@ export default async function AdminPage() {
       <h1 className="mb-6 text-2xl font-bold">Dashboard</h1>
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         {kpis.map(({ label, value, icon: Icon, href }) => {
-          const card = (
-            <div className="rounded-xl border bg-card p-5">
+          const cardClass =
+            "rounded-2xl bg-card p-5 shadow-card transition-[box-shadow,transform] duration-200 ease-out motion-reduce:transition-none";
+          const inner = (
+            <>
               <div className="mb-3 flex items-center justify-between">
                 <span className="text-sm font-medium text-muted-foreground">{label}</span>
                 <Icon className="size-4 text-muted-foreground" />
               </div>
               <p className="text-2xl font-bold">{value}</p>
-            </div>
+            </>
           );
           return href ? (
-            <Link key={label} href={href} className="hover:opacity-80">
-              {card}
+            <Link
+              key={label}
+              href={href}
+              className={`${cardClass} hover:-translate-y-0.5 hover:shadow-card-hover motion-reduce:hover:translate-y-0`}
+            >
+              {inner}
             </Link>
           ) : (
-            <div key={label}>{card}</div>
+            <div key={label} className={cardClass}>
+              {inner}
+            </div>
           );
         })}
       </div>

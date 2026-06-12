@@ -42,7 +42,7 @@ export function DeleteProductButton({ productId, productName }: Props) {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="rounded border border-destructive px-2 py-1 text-xs text-destructive hover:bg-destructive/10"
+        className="rounded-lg border border-border border-destructive px-2 py-1 text-xs text-destructive hover:bg-destructive/10"
       >
         <Trash2 className="size-3.5" />
       </button>

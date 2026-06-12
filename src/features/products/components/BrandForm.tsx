@@ -35,7 +35,7 @@ export function BrandForm({ brands }: Props) {
   }
 
   const form = (item?: Brand) => (
-    <form onSubmit={handleSubmit} className="mt-2 grid gap-2 rounded-lg border p-3">
+    <form onSubmit={handleSubmit} className="mt-2 grid gap-2 rounded-2xl bg-card p-4 shadow-card">
       {item && <input type="hidden" name="id" value={item.id} />}
       <div className="grid grid-cols-2 gap-2">
         <input
@@ -43,40 +43,40 @@ export function BrandForm({ brands }: Props) {
           defaultValue={item?.name}
           placeholder="Nazwa *"
           required
-          className="rounded border px-2 py-1 text-sm"
+          className="rounded-lg border border-border px-2 py-1 text-sm"
         />
         <input
           name="slug"
           defaultValue={item?.slug}
           placeholder="Slug *"
           required
-          className="rounded border px-2 py-1 text-sm"
+          className="rounded-lg border border-border px-2 py-1 text-sm"
         />
         <input
           name="website"
           defaultValue={item?.website ?? ""}
           placeholder="Strona www"
-          className="rounded border px-2 py-1 text-sm"
+          className="rounded-lg border border-border px-2 py-1 text-sm"
         />
         <input
           name="countryCode"
           defaultValue={item?.countryCode ?? ""}
           placeholder="Kraj (PL, DE…)"
           maxLength={2}
-          className="rounded border px-2 py-1 text-sm"
+          className="rounded-lg border border-border px-2 py-1 text-sm"
         />
         <input
           name="description"
           defaultValue={item?.description ?? ""}
           placeholder="Opis"
-          className="col-span-2 rounded border px-2 py-1 text-sm"
+          className="col-span-2 rounded-lg border border-border px-2 py-1 text-sm"
         />
       </div>
       <div className="flex gap-2">
         <button
           type="submit"
           disabled={saving}
-          className="rounded bg-foreground px-3 py-1 text-xs font-medium text-background disabled:opacity-50"
+          className="rounded-lg bg-primary px-3 py-1 text-xs font-medium text-primary-foreground transition-colors duration-200 hover:bg-primary-deep motion-reduce:transition-none disabled:opacity-50"
         >
           {saving ? "…" : "Zapisz"}
         </button>
@@ -86,7 +86,7 @@ export function BrandForm({ brands }: Props) {
             setEditing(null);
             setShowNew(false);
           }}
-          className="rounded border px-3 py-1 text-xs"
+          className="rounded-lg border border-border px-3 py-1 text-xs"
         >
           Anuluj
         </button>
@@ -101,13 +101,13 @@ export function BrandForm({ brands }: Props) {
         <button
           type="button"
           onClick={() => setShowNew(true)}
-          className="rounded bg-foreground px-3 py-1.5 text-sm font-medium text-background"
+          className="rounded-lg bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground transition-colors duration-200 hover:bg-primary-deep motion-reduce:transition-none"
         >
           + Dodaj
         </button>
       </div>
       {showNew && !editing && form()}
-      <div className="divide-y rounded-lg border">
+      <div className="divide-y divide-border rounded-2xl bg-card shadow-card">
         {brands.map((brand) => (
           <div key={brand.id}>
             <div className="flex items-center justify-between px-4 py-3">
@@ -122,7 +122,7 @@ export function BrandForm({ brands }: Props) {
                 <button
                   type="button"
                   onClick={() => setEditing(brand)}
-                  className="rounded border px-2 py-1 text-xs"
+                  className="rounded-lg border border-border px-2 py-1 text-xs"
                 >
                   Edytuj
                 </button>
@@ -132,7 +132,7 @@ export function BrandForm({ brands }: Props) {
                   onClick={() => {
                     if (confirm(`Usunąć markę "${brand.name}"?`)) execDelete({ id: brand.id });
                   }}
-                  className="rounded border border-destructive px-2 py-1 text-xs text-destructive disabled:opacity-50"
+                  className="rounded-lg border border-border border-destructive px-2 py-1 text-xs text-destructive disabled:opacity-50"
                 >
                   Usuń
                 </button>

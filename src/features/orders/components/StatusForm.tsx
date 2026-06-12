@@ -44,7 +44,7 @@ export function StatusForm({ orderId, currentStatus, currentNote }: Props) {
           id="status"
           name="status"
           defaultValue={currentStatus}
-          className="w-full rounded-md border px-3 py-2 text-sm"
+          className="w-full rounded-lg border border-border bg-card px-3 py-2 text-sm focus:border-transparent focus:outline-none focus:ring-2 focus:ring-ring/50"
         >
           {Object.entries(STATUS_LABELS).map(([value, label]) => (
             <option key={value} value={value}>
@@ -62,13 +62,13 @@ export function StatusForm({ orderId, currentStatus, currentNote }: Props) {
           name="noteAdmin"
           defaultValue={currentNote ?? ""}
           rows={3}
-          className="w-full rounded-md border px-3 py-2 text-sm"
+          className="w-full rounded-lg border border-border bg-card px-3 py-2 text-sm focus:border-transparent focus:outline-none focus:ring-2 focus:ring-ring/50"
         />
       </div>
       <button
         type="submit"
         disabled={isPending}
-        className="rounded-md bg-foreground px-4 py-2 text-sm font-medium text-background disabled:opacity-50"
+        className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors duration-200 hover:bg-primary-deep motion-reduce:transition-none disabled:opacity-50"
       >
         {isPending ? "Zapisywanie…" : "Zapisz"}
       </button>

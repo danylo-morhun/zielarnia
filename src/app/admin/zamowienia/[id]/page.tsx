@@ -26,7 +26,7 @@ export default async function AdminOrderDetailPage({
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
-        <section className="rounded-lg border p-4">
+        <section className="rounded-2xl bg-card p-5 shadow-card">
           <h2 className="mb-3 font-semibold">Klient</h2>
           <p>{order.customerName}</p>
           <p className="text-sm text-muted-foreground">{order.customerEmail}</p>
@@ -35,7 +35,7 @@ export default async function AdminOrderDetailPage({
           )}
         </section>
 
-        <section className="rounded-lg border p-4">
+        <section className="rounded-2xl bg-card p-5 shadow-card">
           <h2 className="mb-3 font-semibold">Dostawa</h2>
           <p className="text-sm">
             {order.shipFirstName} {order.shipLastName}
@@ -54,7 +54,7 @@ export default async function AdminOrderDetailPage({
         </section>
       </div>
 
-      <section className="rounded-lg border p-4">
+      <section className="rounded-2xl bg-card p-5 shadow-card">
         <h2 className="mb-3 font-semibold">Produkty</h2>
         <table className="w-full text-sm">
           <thead>
@@ -106,7 +106,7 @@ export default async function AdminOrderDetailPage({
             </span>
           </div>
           {order.discountPln > 0 && (
-            <div className="flex justify-between text-green-600">
+            <div className="flex justify-between text-success">
               <span>Rabat</span>
               <span>
                 -
@@ -129,7 +129,7 @@ export default async function AdminOrderDetailPage({
         </div>
       </section>
 
-      <section className="rounded-lg border p-4">
+      <section className="rounded-2xl bg-card p-5 shadow-card">
         <h2 className="mb-4 font-semibold">Status i notatka</h2>
         <StatusForm orderId={order.id} currentStatus={order.status} currentNote={order.noteAdmin} />
       </section>

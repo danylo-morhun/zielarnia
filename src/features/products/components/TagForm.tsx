@@ -42,7 +42,7 @@ export function TagForm({ tags }: Props) {
   }
 
   const form = (item?: Tag) => (
-    <form onSubmit={handleSubmit} className="mt-2 grid gap-2 rounded-lg border p-3">
+    <form onSubmit={handleSubmit} className="mt-2 grid gap-2 rounded-2xl bg-card p-4 shadow-card">
       {item && <input type="hidden" name="id" value={item.id} />}
       <div className="grid grid-cols-2 gap-2">
         <input
@@ -50,26 +50,26 @@ export function TagForm({ tags }: Props) {
           defaultValue={item?.namePl}
           placeholder="Nazwa (PL) *"
           required
-          className="rounded border px-2 py-1 text-sm"
+          className="rounded-lg border border-border px-2 py-1 text-sm"
         />
         <input
           name="slug"
           defaultValue={item?.slug}
           placeholder="Slug *"
           required
-          className="rounded border px-2 py-1 text-sm"
+          className="rounded-lg border border-border px-2 py-1 text-sm"
         />
         <input
           name="nameEn"
           defaultValue={item?.nameEn ?? ""}
           placeholder="Nazwa (EN)"
-          className="rounded border px-2 py-1 text-sm"
+          className="rounded-lg border border-border px-2 py-1 text-sm"
         />
         <select
           name="type"
           defaultValue={item?.type ?? "OTHER"}
           required
-          className="rounded border px-2 py-1 text-sm"
+          className="rounded-lg border border-border px-2 py-1 text-sm"
         >
           {Object.entries(TAG_TYPE_LABELS).map(([value, label]) => (
             <option key={value} value={value}>
@@ -82,14 +82,14 @@ export function TagForm({ tags }: Props) {
           type="number"
           defaultValue={item?.sortOrder ?? 0}
           placeholder="Kolejność"
-          className="rounded border px-2 py-1 text-sm"
+          className="rounded-lg border border-border px-2 py-1 text-sm"
         />
       </div>
       <div className="flex gap-2">
         <button
           type="submit"
           disabled={saving}
-          className="rounded bg-foreground px-3 py-1 text-xs font-medium text-background disabled:opacity-50"
+          className="rounded-lg bg-primary px-3 py-1 text-xs font-medium text-primary-foreground transition-colors duration-200 hover:bg-primary-deep motion-reduce:transition-none disabled:opacity-50"
         >
           {saving ? "…" : "Zapisz"}
         </button>
@@ -99,7 +99,7 @@ export function TagForm({ tags }: Props) {
             setEditing(null);
             setShowNew(false);
           }}
-          className="rounded border px-3 py-1 text-xs"
+          className="rounded-lg border border-border px-3 py-1 text-xs"
         >
           Anuluj
         </button>
@@ -114,13 +114,13 @@ export function TagForm({ tags }: Props) {
         <button
           type="button"
           onClick={() => setShowNew(true)}
-          className="rounded bg-foreground px-3 py-1.5 text-sm font-medium text-background"
+          className="rounded-lg bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground transition-colors duration-200 hover:bg-primary-deep motion-reduce:transition-none"
         >
           + Dodaj
         </button>
       </div>
       {showNew && !editing && form()}
-      <div className="divide-y rounded-lg border">
+      <div className="divide-y divide-border rounded-2xl bg-card shadow-card">
         {tags.map((tag) => (
           <div key={tag.id}>
             <div className="flex items-center justify-between px-4 py-3">
@@ -134,7 +134,7 @@ export function TagForm({ tags }: Props) {
                 <button
                   type="button"
                   onClick={() => setEditing(tag)}
-                  className="rounded border px-2 py-1 text-xs"
+                  className="rounded-lg border border-border px-2 py-1 text-xs"
                 >
                   Edytuj
                 </button>
@@ -144,7 +144,7 @@ export function TagForm({ tags }: Props) {
                   onClick={() => {
                     if (confirm(`Usunąć tag "${tag.namePl}"?`)) execDelete({ id: tag.id });
                   }}
-                  className="rounded border border-destructive px-2 py-1 text-xs text-destructive disabled:opacity-50"
+                  className="rounded-lg border border-border border-destructive px-2 py-1 text-xs text-destructive disabled:opacity-50"
                 >
                   Usuń
                 </button>

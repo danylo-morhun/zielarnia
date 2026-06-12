@@ -19,7 +19,7 @@ export function ImagesSection({ productId, images }: Props) {
   const { execute: execDelete, isPending: deleting } = useAction(deleteProductImage);
 
   return (
-    <section className="rounded-lg border p-4">
+    <section className="rounded-2xl bg-card p-5 shadow-card">
       <div className="mb-4 flex items-center justify-between">
         <h2 className="font-semibold">Zdjęcia</h2>
         {CLOUD_NAME && UPLOAD_PRESET ? (
@@ -40,14 +40,14 @@ export function ImagesSection({ productId, images }: Props) {
               <button
                 type="button"
                 onClick={() => open()}
-                className="rounded bg-foreground px-3 py-1 text-xs font-medium text-background"
+                className="rounded-lg bg-primary px-3 py-1 text-xs font-medium text-primary-foreground transition-colors duration-200 hover:bg-primary-deep motion-reduce:transition-none"
               >
                 + Dodaj zdjęcie
               </button>
             )}
           </CldUploadWidget>
         ) : (
-          <span className="rounded border border-dashed px-2 py-1 text-xs text-muted-foreground">
+          <span className="rounded-lg border border-border border-dashed px-2 py-1 text-xs text-muted-foreground">
             Cloudinary nie skonfigurowany — użyj URL poniżej
           </span>
         )}
@@ -103,11 +103,11 @@ export function ImagesSection({ productId, images }: Props) {
             type="url"
             placeholder="https://…"
             required
-            className="flex-1 rounded border px-2 py-1 text-sm"
+            className="flex-1 rounded-lg border border-border px-2 py-1 text-sm"
           />
           <button
             type="submit"
-            className="rounded bg-foreground px-3 py-1 text-xs font-medium text-background"
+            className="rounded-lg bg-primary px-3 py-1 text-xs font-medium text-primary-foreground transition-colors duration-200 hover:bg-primary-deep motion-reduce:transition-none"
           >
             Dodaj
           </button>

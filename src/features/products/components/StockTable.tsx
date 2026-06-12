@@ -35,12 +35,12 @@ export function StockTable({ variants }: Props) {
           type="button"
           disabled={isPending}
           onClick={handleSave}
-          className="rounded bg-foreground px-4 py-1.5 text-sm font-medium text-background disabled:opacity-50"
+          className="rounded-lg bg-primary px-4 py-1.5 text-sm font-medium text-primary-foreground transition-colors duration-200 hover:bg-primary-deep motion-reduce:transition-none disabled:opacity-50"
         >
           {isPending ? "Zapisywanie…" : "Zapisz zmiany"}
         </button>
       </div>
-      <div className="overflow-x-auto rounded-lg border">
+      <div className="overflow-x-auto rounded-2xl bg-card shadow-card">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b bg-muted/50 text-left">
@@ -52,7 +52,7 @@ export function StockTable({ variants }: Props) {
           </thead>
           <tbody>
             {variants.map((v) => (
-              <tr key={v.id} className="border-b last:border-0">
+              <tr key={v.id} className="border-b last:border-0 transition-colors hover:bg-muted/30">
                 <td className="px-4 py-2">{v.productName}</td>
                 <td className="px-4 py-2 text-muted-foreground">{v.sku}</td>
                 <td className="px-4 py-2 text-muted-foreground">{v.optionValue ?? "—"}</td>
@@ -67,7 +67,7 @@ export function StockTable({ variants }: Props) {
                         [v.id]: Math.max(0, Number(e.target.value)),
                       }))
                     }
-                    className="w-24 rounded border px-2 py-1 text-sm"
+                    className="w-24 rounded-lg border border-border px-2 py-1 text-sm"
                   />
                 </td>
               </tr>

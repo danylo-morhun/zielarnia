@@ -61,7 +61,7 @@ export default async function AdminProductsPage({
         <h1 className="text-2xl font-bold">Produkty</h1>
         <Link
           href="/admin/produkty/nowy"
-          className="rounded bg-foreground px-3 py-1.5 text-sm font-medium text-background"
+          className="rounded-lg bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground transition-colors duration-200 hover:bg-primary-deep motion-reduce:transition-none"
         >
           + Dodaj produkt
         </Link>
@@ -73,7 +73,7 @@ export default async function AdminProductsPage({
         </Suspense>
       </div>
 
-      <div className="overflow-x-auto rounded-lg border">
+      <div className="overflow-x-auto rounded-2xl bg-card shadow-card">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b bg-muted/50 text-left">
@@ -111,7 +111,7 @@ export default async function AdminProductsPage({
                   <div className="flex gap-2">
                     <Link
                       href={`/admin/produkty/${product.id}`}
-                      className="rounded border px-2 py-1 text-xs"
+                      className="rounded-lg border border-border px-2 py-1 text-xs"
                     >
                       Edytuj
                     </Link>

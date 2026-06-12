@@ -95,7 +95,7 @@ export default async function AdminOrdersPage({
               className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
                 isActive
                   ? "bg-primary text-primary-foreground"
-                  : "bg-muted text-muted-foreground hover:bg-muted/80"
+                  : "bg-muted text-muted-foreground hover:bg-secondary hover:text-secondary-foreground"
               }`}
             >
               {tab.label}
@@ -104,7 +104,7 @@ export default async function AdminOrdersPage({
         })}
       </div>
 
-      <div className="overflow-x-auto rounded-lg border">
+      <div className="overflow-x-auto rounded-2xl bg-card shadow-card">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b bg-muted/50 text-left">
