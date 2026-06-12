@@ -27,7 +27,7 @@ export function NewsletterForm() {
 
   if (subscribed) {
     return (
-      <p className="mx-auto mt-6 max-w-md rounded-full bg-primary-foreground/10 px-6 py-3 text-sm font-medium animate-pop-in motion-reduce:animate-none">
+      <p className="mx-auto mt-6 max-w-md rounded-full bg-band-foreground/10 px-6 py-3 text-sm font-medium animate-pop-in motion-reduce:animate-none">
         ✓ Jesteś na liście — do usłyszenia!
       </p>
     );
@@ -51,12 +51,12 @@ export function NewsletterForm() {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         placeholder="twoj@email.pl"
-        className="flex-1 rounded-full border border-primary-foreground/25 bg-primary-foreground/10 px-5 py-3 text-sm text-primary-foreground placeholder:text-primary-foreground/60 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary-foreground/60"
+        className="flex-1 rounded-full border border-band-foreground/25 bg-band-foreground/10 px-5 py-3 text-sm text-band-foreground placeholder:text-band-foreground/60 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-band-foreground/60"
       />
       <button
         type="submit"
         disabled={isExecuting}
-        className="rounded-full bg-card px-6 py-3 text-sm font-semibold text-primary transition-[transform,background-color] duration-200 hover:bg-secondary active:scale-[0.97] disabled:opacity-60 motion-reduce:transition-none motion-reduce:active:scale-100"
+        className="rounded-full bg-band-foreground px-6 py-3 text-sm font-semibold text-band transition-[transform,background-color] duration-200 hover:bg-secondary active:scale-[0.97] disabled:opacity-60 motion-reduce:transition-none motion-reduce:active:scale-100"
       >
         <span
           key={isExecuting ? "loading" : "idle"}

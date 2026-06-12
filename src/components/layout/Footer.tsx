@@ -27,7 +27,7 @@ const deliveryMethods = ["InPost", "DHL", "DPD"];
 
 export function Footer() {
   return (
-    <footer className="mt-16 bg-primary-deep text-primary-foreground">
+    <footer className="mt-16 bg-band text-band-foreground">
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 gap-10 md:grid-cols-5">
           <div className="col-span-2">
@@ -37,10 +37,10 @@ export function Footer() {
               </span>
               <span className="text-lg font-extrabold tracking-tight">Twoje Zdrowie</span>
             </Link>
-            <p className="mt-4 max-w-xs text-sm leading-relaxed text-primary-foreground/75">
+            <p className="mt-4 max-w-xs text-sm leading-relaxed text-band-foreground/75">
               Certyfikowane suplementy diety, witaminy i produkty bio najwyższej jakości.
             </p>
-            <ul className="mt-6 space-y-2.5 text-sm text-primary-foreground/75">
+            <ul className="mt-6 space-y-2.5 text-sm text-band-foreground/75">
               <li className="flex items-center gap-2.5">
                 <Mail className="size-4 shrink-0" strokeWidth={1.75} />
                 kontakt@twojezdrowie.pl
@@ -70,7 +70,7 @@ export function Footer() {
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="text-sm text-primary-foreground/75 transition-colors hover:text-primary-foreground"
+                      className="text-sm text-band-foreground/75 transition-colors hover:text-band-foreground"
                     >
                       {link.label}
                     </Link>
@@ -81,30 +81,30 @@ export function Footer() {
           ))}
         </div>
 
-        <div className="mt-12 flex flex-col gap-4 border-t border-primary-foreground/15 pt-8 md:flex-row md:items-center md:justify-between">
+        <div className="mt-12 flex flex-col gap-4 border-t border-band-foreground/15 pt-8 md:flex-row md:items-center md:justify-between">
           <div className="flex flex-wrap items-center gap-2">
             {paymentMethods.map((method) => (
               <span
                 key={method}
-                className="rounded-md bg-primary-foreground/10 px-2.5 py-1 text-xs font-semibold text-primary-foreground/90"
+                className="rounded-md bg-band-foreground/10 px-2.5 py-1 text-xs font-semibold text-band-foreground/90"
               >
                 {method}
               </span>
             ))}
             <span
-              className="mx-1 hidden h-4 w-px bg-primary-foreground/20 sm:block"
+              className="mx-1 hidden h-4 w-px bg-band-foreground/20 sm:block"
               aria-hidden="true"
             />
             {deliveryMethods.map((method) => (
               <span
                 key={method}
-                className="rounded-md bg-primary-foreground/10 px-2.5 py-1 text-xs font-semibold text-primary-foreground/90"
+                className="rounded-md bg-band-foreground/10 px-2.5 py-1 text-xs font-semibold text-band-foreground/90"
               >
                 {method}
               </span>
             ))}
           </div>
-          <div className="text-xs text-primary-foreground/60">
+          <div className="text-xs text-band-foreground/60">
             <p>&copy; {new Date().getFullYear()} Twoje Zdrowie. Wszelkie prawa zastrzeżone.</p>
             <p className="mt-1">
               Suplement diety nie zastępuje zrównoważonej diety i zdrowego trybu życia.

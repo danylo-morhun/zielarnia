@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
 import type { TouchEvent } from "react";
+import { useState } from "react";
 
 type GalleryImage = {
   id: string;
@@ -24,7 +24,8 @@ export function ProductGallery({ images, productName }: Props) {
   const [active, setActive] = useState(mainIndex >= 0 ? mainIndex : 0);
   const [touchStart, setTouchStart] = useState<number | null>(null);
 
-  const handleTouchStart = (e: TouchEvent<HTMLDivElement>) => setTouchStart(e.targetTouches[0].clientX);
+  const handleTouchStart = (e: TouchEvent<HTMLDivElement>) =>
+    setTouchStart(e.targetTouches[0].clientX);
   const handleTouchEnd = (e: TouchEvent<HTMLDivElement>) => {
     if (touchStart === null) return;
     const delta = touchStart - e.changedTouches[0].clientX;
@@ -48,7 +49,7 @@ export function ProductGallery({ images, productName }: Props) {
   return (
     <div className="flex flex-col gap-3">
       <div
-        className="relative aspect-square overflow-hidden rounded-xl bg-muted"
+        className="relative aspect-square overflow-hidden rounded-xl bg-white dark:shadow-card"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
@@ -64,9 +65,9 @@ export function ProductGallery({ images, productName }: Props) {
 
       {fallback.length > 1 && (
         <div className="mt-2 flex justify-center gap-1 lg:hidden">
-          {fallback.map((_, i) => (
+          {fallback.map((img, i) => (
             <button
-              key={i}
+              key={img.id}
               type="button"
               onClick={() => setActive(i)}
               aria-label={`Zdjęcie ${i + 1}`}
