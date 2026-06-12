@@ -22,7 +22,7 @@ export function ProductCard({ product, priority = false }: Props) {
       : 0;
 
   return (
-    <article className="group relative flex flex-col overflow-hidden rounded-xl border border-border bg-card transition-shadow duration-200 hover:shadow-card-hover motion-reduce:transition-none">
+    <article className="group relative flex flex-col overflow-hidden rounded-2xl bg-card shadow-card transition-[box-shadow,transform] duration-200 ease-out hover:-translate-y-0.5 hover:shadow-card-hover motion-reduce:transition-none motion-reduce:hover:translate-y-0">
       <Link href={`/produkt/${product.slug}`} className="block">
         <div className="relative aspect-square overflow-hidden bg-card">
           {mainImage ? (
@@ -32,22 +32,22 @@ export function ProductCard({ product, priority = false }: Props) {
               fill
               priority={priority}
               sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-              className="object-contain p-4 transition-transform duration-300 ease-out group-hover:scale-[1.04] motion-reduce:group-hover:scale-100"
+              className="object-contain p-5 transition-transform duration-300 ease-out group-hover:scale-[1.05] motion-reduce:group-hover:scale-100"
             />
           ) : (
-            <div className="flex h-full items-center justify-center rounded-lg bg-muted text-muted-foreground">
+            <div className="flex h-full items-center justify-center text-muted-foreground">
               <span className="text-sm">Brak zdjęcia</span>
             </div>
           )}
 
           <div className="absolute left-3 top-3 flex flex-col items-start gap-1.5">
             {hasDiscount && (
-              <span className="rounded-full bg-destructive/10 px-2.5 py-0.5 text-xs font-semibold text-destructive">
+              <span className="flex size-10 items-center justify-center rounded-full bg-accent text-[11px] font-bold text-accent-foreground animate-pop-in motion-reduce:animate-none">
                 -{discountPct}%
               </span>
             )}
             {product.isNewArrival && (
-              <span className="rounded-full bg-primary px-2.5 py-0.5 text-xs font-medium text-primary-foreground">
+              <span className="rounded-full bg-primary px-2.5 py-1 text-xs font-semibold text-primary-foreground">
                 Nowość
               </span>
             )}
@@ -55,7 +55,7 @@ export function ProductCard({ product, priority = false }: Props) {
 
           {isOutOfStock && (
             <div className="absolute inset-0 flex items-center justify-center bg-background/60">
-              <span className="rounded-md bg-background px-3 py-1 text-sm font-medium text-muted-foreground shadow-card-hover">
+              <span className="rounded-full bg-card px-3.5 py-1.5 text-sm font-medium text-muted-foreground shadow-float">
                 Niedostępny
               </span>
             </div>
@@ -63,7 +63,7 @@ export function ProductCard({ product, priority = false }: Props) {
         </div>
       </Link>
 
-      <div className="flex flex-1 flex-col border-t border-border p-3.5">
+      <div className="flex flex-1 flex-col p-4 pt-2">
         {product.brand && (
           <Link
             href={`/marki/${product.brand.slug}`}
@@ -74,7 +74,7 @@ export function ProductCard({ product, priority = false }: Props) {
         )}
 
         <Link href={`/produkt/${product.slug}`} className="flex-1">
-          <h2 className="line-clamp-2 font-sans text-sm font-medium leading-snug text-foreground">
+          <h2 className="line-clamp-2 text-sm font-semibold leading-snug text-foreground transition-colors group-hover:text-primary">
             {product.namePl}
           </h2>
         </Link>
@@ -95,7 +95,7 @@ export function ProductCard({ product, priority = false }: Props) {
         <div className="mt-3 flex items-baseline gap-2">
           {defaultVariant ? (
             <>
-              <span className="text-base font-semibold text-foreground">
+              <span className="text-base font-bold text-foreground">
                 {formatPrice(defaultVariant.pricePln)}
               </span>
               {hasDiscount && comparePrice != null && (
