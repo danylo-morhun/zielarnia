@@ -13,11 +13,18 @@ export function ProductCard({ product, priority = false }: Props) {
   const defaultVariant = product.variants[0];
   const mainImage = product.images[0];
   const isOutOfStock = defaultVariant ? defaultVariant.stock <= 0 : true;
+  const comparePrice = defaultVariant?.comparePricePln ?? null;
+  const hasDiscount =
+    defaultVariant != null && comparePrice != null && comparePrice > defaultVariant.pricePln;
+  const discountPct =
+    hasDiscount && comparePrice != null
+      ? Math.round(((comparePrice - defaultVariant.pricePln) / comparePrice) * 100)
+      : 0;
 
   return (
-    <article className="group relative flex flex-col overflow-hidden rounded-xl border border-border bg-card transition-shadow duration-200 hover:shadow-md motion-reduce:transition-none">
+    <article className="group relative flex flex-col overflow-hidden rounded-xl border border-border bg-card transition-shadow duration-200 hover:shadow-[0_4px_16px_oklch(0.15_0.02_145/0.08)] motion-reduce:transition-none">
       <Link href={`/produkt/${product.slug}`} className="block">
-        <div className="relative aspect-square overflow-hidden bg-muted">
+        <div className="relative aspect-square overflow-hidden bg-card">
           {mainImage ? (
             <Image
               src={mainImage.url}
@@ -25,23 +32,30 @@ export function ProductCard({ product, priority = false }: Props) {
               fill
               priority={priority}
               sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-              className="object-cover transition-transform duration-300 group-hover:scale-105 motion-reduce:group-hover:scale-100"
-              placeholder="blur"
-              blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjNmNGY2Ii8+PC9zdmc+"
+              className="object-contain p-4 transition-transform duration-300 ease-out group-hover:scale-[1.04] motion-reduce:group-hover:scale-100"
             />
           ) : (
-            <div className="flex h-full items-center justify-center text-muted-foreground">
+            <div className="flex h-full items-center justify-center rounded-lg bg-muted text-muted-foreground">
               <span className="text-sm">Brak zdjęcia</span>
             </div>
           )}
-          {product.isNewArrival && (
-            <span className="absolute left-2 top-2 rounded-full bg-primary px-2.5 py-0.5 text-xs font-medium text-primary-foreground">
-              Nowość
-            </span>
-          )}
+
+          <div className="absolute left-3 top-3 flex flex-col items-start gap-1.5">
+            {hasDiscount && (
+              <span className="rounded-full bg-destructive/10 px-2.5 py-0.5 text-xs font-semibold text-destructive">
+                -{discountPct}%
+              </span>
+            )}
+            {product.isNewArrival && (
+              <span className="rounded-full bg-primary px-2.5 py-0.5 text-xs font-medium text-primary-foreground">
+                Nowość
+              </span>
+            )}
+          </div>
+
           {isOutOfStock && (
             <div className="absolute inset-0 flex items-center justify-center bg-background/60">
-              <span className="rounded bg-background px-3 py-1 text-sm font-medium text-muted-foreground shadow">
+              <span className="rounded-md bg-background px-3 py-1 text-sm font-medium text-muted-foreground shadow-[0_4px_16px_oklch(0.15_0.02_145/0.08)]">
                 Niedostępny
               </span>
             </div>
@@ -49,25 +63,25 @@ export function ProductCard({ product, priority = false }: Props) {
         </div>
       </Link>
 
-      <div className="flex flex-1 flex-col p-3">
+      <div className="flex flex-1 flex-col border-t border-border p-3.5">
         {product.brand && (
           <Link
             href={`/marki/${product.brand.slug}`}
-            className="mb-1 text-xs font-medium text-muted-foreground hover:text-foreground"
+            className="mb-1 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
           >
             {product.brand.name}
           </Link>
         )}
 
         <Link href={`/produkt/${product.slug}`} className="flex-1">
-          <h2 className="line-clamp-2 text-sm font-medium text-foreground leading-tight">
+          <h2 className="line-clamp-2 text-sm font-medium leading-snug text-foreground">
             {product.namePl}
           </h2>
         </Link>
 
         {product.tags.length > 0 && (
           <div className="mt-2 flex flex-wrap gap-1">
-            {product.tags.slice(0, 3).map(({ tag }) => (
+            {product.tags.slice(0, 2).map(({ tag }) => (
               <span
                 key={tag.slug}
                 className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground"
@@ -84,12 +98,11 @@ export function ProductCard({ product, priority = false }: Props) {
               <span className="text-base font-semibold text-foreground">
                 {formatPrice(defaultVariant.pricePln)}
               </span>
-              {defaultVariant.comparePricePln &&
-                defaultVariant.comparePricePln > defaultVariant.pricePln && (
-                  <span className="text-sm text-muted-foreground line-through">
-                    {formatPrice(defaultVariant.comparePricePln)}
-                  </span>
-                )}
+              {hasDiscount && comparePrice != null && (
+                <span className="text-sm text-muted-foreground line-through">
+                  {formatPrice(comparePrice)}
+                </span>
+              )}
             </>
           ) : (
             <span className="text-sm text-muted-foreground">Cena niedostępna</span>
