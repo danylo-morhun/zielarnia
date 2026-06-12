@@ -58,7 +58,7 @@ export function ProductGallery({ images, productName }: Props) {
           alt={current.altPl ?? productName}
           fill
           sizes="(max-width: 768px) 100vw, 50vw"
-          className="object-cover"
+          className="object-contain"
           priority
         />
       </div>
@@ -94,7 +94,7 @@ export function ProductGallery({ images, productName }: Props) {
                 alt={img.altPl ?? productName}
                 fill
                 sizes="64px"
-                className="object-cover"
+                className="object-contain"
               />
             </button>
           ))}
