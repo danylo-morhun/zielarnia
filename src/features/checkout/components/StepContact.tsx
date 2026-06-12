@@ -52,7 +52,7 @@ export function StepContact({ data, onChange, onNext }: Props) {
 
   const handlePostalCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value.replace(/\D/g, "").slice(0, 5);
-    if (value.length > 2) value = value.slice(0, 2) + "-" + value.slice(2);
+    if (value.length > 2) value = `${value.slice(0, 2)}-${value.slice(2)}`;
     setValue("postalCode", value, { shouldValidate: true });
   };
 
@@ -65,15 +65,29 @@ export function StepContact({ data, onChange, onNext }: Props) {
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="mb-1 block text-sm font-medium">Imię *</label>
-          <input {...register("firstName")} autoComplete="given-name" className={inputClass} />
+          <label htmlFor="co-firstName" className="mb-1 block text-sm font-medium">
+            Imię *
+          </label>
+          <input
+            id="co-firstName"
+            {...register("firstName")}
+            autoComplete="given-name"
+            className={inputClass}
+          />
           {errors.firstName && (
             <p className="mt-1 text-xs text-destructive">{errors.firstName.message}</p>
           )}
         </div>
         <div>
-          <label className="mb-1 block text-sm font-medium">Nazwisko *</label>
-          <input {...register("lastName")} autoComplete="family-name" className={inputClass} />
+          <label htmlFor="co-lastName" className="mb-1 block text-sm font-medium">
+            Nazwisko *
+          </label>
+          <input
+            id="co-lastName"
+            {...register("lastName")}
+            autoComplete="family-name"
+            className={inputClass}
+          />
           {errors.lastName && (
             <p className="mt-1 text-xs text-destructive">{errors.lastName.message}</p>
           )}
@@ -81,8 +95,11 @@ export function StepContact({ data, onChange, onNext }: Props) {
       </div>
 
       <div>
-        <label className="mb-1 block text-sm font-medium">Adres e-mail *</label>
+        <label htmlFor="co-email" className="mb-1 block text-sm font-medium">
+          Adres e-mail *
+        </label>
         <input
+          id="co-email"
           {...register("email")}
           type="email"
           autoComplete="email"
@@ -92,26 +109,38 @@ export function StepContact({ data, onChange, onNext }: Props) {
       </div>
 
       <div>
-        <label className="mb-1 block text-sm font-medium">Telefon *</label>
-        <input {...register("phone")} type="tel" autoComplete="tel" className={inputClass} />
+        <label htmlFor="co-phone" className="mb-1 block text-sm font-medium">
+          Telefon *
+        </label>
+        <input
+          id="co-phone"
+          {...register("phone")}
+          type="tel"
+          autoComplete="tel"
+          className={inputClass}
+        />
         {errors.phone && <p className="mt-1 text-xs text-destructive">{errors.phone.message}</p>}
       </div>
 
       <div>
-        <label className="mb-1 block text-sm font-medium">Ulica i numer *</label>
+        <label htmlFor="co-street" className="mb-1 block text-sm font-medium">
+          Ulica i numer *
+        </label>
         <input
+          id="co-street"
           {...register("street")}
           autoComplete="address-line1"
           className={inputClass}
         />
-        {errors.street && (
-          <p className="mt-1 text-xs text-destructive">{errors.street.message}</p>
-        )}
+        {errors.street && <p className="mt-1 text-xs text-destructive">{errors.street.message}</p>}
       </div>
 
       <div>
-        <label className="mb-1 block text-sm font-medium">Numer lokalu</label>
+        <label htmlFor="co-apartment" className="mb-1 block text-sm font-medium">
+          Numer lokalu
+        </label>
         <input
+          id="co-apartment"
           {...register("apartment")}
           autoComplete="address-line2"
           placeholder="Opcjonalnie"
@@ -121,8 +150,11 @@ export function StepContact({ data, onChange, onNext }: Props) {
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="mb-1 block text-sm font-medium">Kod pocztowy *</label>
+          <label htmlFor="co-postalCode" className="mb-1 block text-sm font-medium">
+            Kod pocztowy *
+          </label>
           <input
+            id="co-postalCode"
             {...register("postalCode")}
             onChange={handlePostalCodeChange}
             placeholder="00-000"
@@ -134,15 +166,16 @@ export function StepContact({ data, onChange, onNext }: Props) {
           )}
         </div>
         <div>
-          <label className="mb-1 block text-sm font-medium">Miasto *</label>
+          <label htmlFor="co-city" className="mb-1 block text-sm font-medium">
+            Miasto *
+          </label>
           <input
+            id="co-city"
             {...register("city")}
             autoComplete="address-level2"
             className={inputClass}
           />
-          {errors.city && (
-            <p className="mt-1 text-xs text-destructive">{errors.city.message}</p>
-          )}
+          {errors.city && <p className="mt-1 text-xs text-destructive">{errors.city.message}</p>}
         </div>
       </div>
 

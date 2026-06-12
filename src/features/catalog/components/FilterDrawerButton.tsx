@@ -1,9 +1,9 @@
 "use client";
-import { useState } from "react";
 import { SlidersHorizontal } from "lucide-react";
+import { useState } from "react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import type { BrandItem, CategoryItem, TagItem } from "../actions";
 import { FilterSidebar } from "./FilterSidebar";
-import type { CategoryItem, BrandItem, TagItem } from "../actions";
 
 type Props = {
   categories: CategoryItem[];
@@ -18,8 +18,9 @@ export function FilterDrawerButton({ categories, brands, tags, basePath }: Props
   return (
     <>
       <button
+        type="button"
         onClick={() => setOpen(true)}
-        className="flex items-center gap-2 rounded-md border border-input bg-background px-4 py-2 text-sm font-medium shadow-sm hover:bg-accent lg:hidden"
+        className="flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium transition-colors hover:bg-muted lg:hidden"
       >
         <SlidersHorizontal className="size-4" />
         Filtruj

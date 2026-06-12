@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
 import { useAction } from "next-safe-action/hooks";
+import { useState } from "react";
 import type { CartItem } from "@/features/cart/lib/session";
 import { formatPrice } from "@/lib/format";
-import { SHIPPING_COSTS, SHIPPING_LABELS } from "../lib/shipping";
 import { verifyCoupon } from "../actions";
+import { SHIPPING_COSTS, SHIPPING_LABELS } from "../lib/shipping";
 import type { CheckoutFormData } from "./CheckoutForm";
 
 type Props = {
@@ -76,8 +76,7 @@ export function StepPayment({
             <li key={item.id} className="flex justify-between py-2 text-sm">
               <span className="text-muted-foreground">
                 {item.variant.product.namePl}
-                {item.variant.optionValue ? ` (${item.variant.optionValue})` : ""} ×{" "}
-                {item.quantity}
+                {item.variant.optionValue ? ` (${item.variant.optionValue})` : ""} × {item.quantity}
               </span>
               <span>{formatPrice(item.variant.pricePln * item.quantity)}</span>
             </li>
@@ -108,9 +107,12 @@ export function StepPayment({
 
       {/* Coupon */}
       <div className="space-y-2">
-        <label className="mb-1 block text-sm font-medium">Kod rabatowy (opcjonalnie)</label>
+        <label htmlFor="couponCode" className="mb-1 block text-sm font-medium">
+          Kod rabatowy (opcjonalnie)
+        </label>
         <div className="flex gap-2">
           <input
+            id="couponCode"
             type="text"
             value={data.couponCode}
             onChange={(e) => {

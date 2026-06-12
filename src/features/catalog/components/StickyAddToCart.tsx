@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import type { RefObject } from "react";
 import { useAction } from "next-safe-action/hooks";
+import type { RefObject } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import { formatPrice } from "@/lib/format";
 import { addToCart } from "@/features/cart/actions";
+import { formatPrice } from "@/lib/format";
 
 type Props = {
   productName: string;
@@ -15,7 +15,13 @@ type Props = {
   anchorRef: RefObject<HTMLElement | null>;
 };
 
-export function StickyAddToCart({ productName, selectedVariantId, price, stock, anchorRef }: Props) {
+export function StickyAddToCart({
+  productName,
+  selectedVariantId,
+  price,
+  stock,
+  anchorRef,
+}: Props) {
   const [visible, setVisible] = useState(false);
   const [succeeded, setSucceeded] = useState(false);
   const successTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -33,10 +39,9 @@ export function StickyAddToCart({ productName, selectedVariantId, price, stock, 
   useEffect(() => {
     const el = anchorRef.current;
     if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => setVisible(!entry.isIntersecting),
-      { threshold: 0 },
-    );
+    const observer = new IntersectionObserver(([entry]) => setVisible(!entry.isIntersecting), {
+      threshold: 0,
+    });
     observer.observe(el);
     return () => observer.disconnect();
   }, [anchorRef]);
@@ -51,6 +56,7 @@ export function StickyAddToCart({ productName, selectedVariantId, price, stock, 
           <p className="text-lg font-bold text-primary">{formatPrice(price)}</p>
         </div>
         <button
+          type="button"
           onClick={() => execute({ variantId: selectedVariantId, quantity: 1 })}
           disabled={isExecuting || stock <= 0}
           className="rounded-lg bg-primary px-6 py-2 text-sm font-semibold text-primary-foreground transition-[transform,background-color,color,border-color] duration-[160ms] ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-primary-deep active:scale-[0.97] disabled:opacity-50 motion-reduce:transition-none motion-reduce:active:scale-100"

@@ -3,8 +3,8 @@ import { ProductCardSkeleton } from "./ProductCardSkeleton";
 export function ProductGridSkeleton({ count = 8 }: { count?: number }) {
   return (
     <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-      {Array.from({ length: count }).map((_, i) => (
-        <ProductCardSkeleton key={i} />
+      {Array.from({ length: count }, (_, i) => `card-${i}`).map((id) => (
+        <ProductCardSkeleton key={id} />
       ))}
     </div>
   );
