@@ -30,7 +30,7 @@ const productSelect = {
 } as const;
 
 export async function getHomepageData() {
-  const [categories, featured, newArrivals] = await Promise.all([
+  const [categories, featured, newArrivals, promos] = await Promise.all([
     getCategories(),
     prisma.product.findMany({
       where: { status: "ACTIVE", isFeatured: true },
@@ -40,11 +40,23 @@ export async function getHomepageData() {
     }),
     prisma.product.findMany({
       where: { status: "ACTIVE", isNewArrival: true },
-      take: 4,
+      take: 8,
       orderBy: { createdAt: "desc" },
+      select: productSelect,
+    }),
+    prisma.product.findMany({
+      // comparePricePln is only set when a variant is discounted
+      where: {
+        status: "ACTIVE",
+        variants: { some: { isActive: true, comparePricePln: { not: null } } },
+      },
+      take: 8,
+      orderBy: { updatedAt: "desc" },
       select: productSelect,
     }),
   ]);
 
-  return { categories, featured, newArrivals };
+  const heroProduct = featured.find((p) => p.images.length > 0) ?? null;
+
+  return { categories, featured, newArrivals, promos, heroProduct };
 }
