@@ -114,6 +114,9 @@ export function buildCatalogUrl(base: string, overrides: Partial<CatalogFilters>
   if (overrides.priceMin) params.set("cenaMin", String(overrides.priceMin / 100));
   if (overrides.priceMax) params.set("cenaMax", String(overrides.priceMax / 100));
   if (overrides.search) params.set("szukaj", overrides.search);
+  if (overrides.onlyPromo) params.set("promocje", "1");
+  if (overrides.onlyNew) params.set("nowosci", "1");
+  if (overrides.onlyFeatured) params.set("polecane", "1");
   if (overrides.sort && overrides.sort !== "newest") params.set("sortuj", overrides.sort);
   if (overrides.page && overrides.page > 1) params.set("strona", String(overrides.page));
   const qs = params.toString();

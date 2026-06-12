@@ -43,6 +43,24 @@ export function ActiveFilterChips({ categories, brands, tags, basePath = "/katal
     });
   }
 
+  const flagChips: { param: string; label: string }[] = [
+    { param: "promocje", label: "Promocje" },
+    { param: "nowosci", label: "Nowości" },
+    { param: "polecane", label: "Polecane" },
+  ];
+  for (const { param, label } of flagChips) {
+    if (searchParams.get(param) === "1") {
+      chips.push({
+        label,
+        onRemove: () => {
+          const p = new URLSearchParams(searchParams.toString());
+          p.delete(param);
+          router.push(`${basePath}?${p.toString()}`);
+        },
+      });
+    }
+  }
+
   for (const tagSlug of activeTags) {
     const tag = tags.find((t) => t.slug === tagSlug);
     chips.push({
@@ -67,7 +85,12 @@ export function ActiveFilterChips({ categories, brands, tags, basePath = "/katal
           className="flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary"
         >
           {chip.label}
-          <button onClick={chip.onRemove} className="ml-1 rounded-full hover:text-destructive">
+          <button
+            type="button"
+            onClick={chip.onRemove}
+            aria-label={`Usuń filtr ${chip.label}`}
+            className="ml-1 rounded-full transition-colors hover:text-destructive"
+          >
             <X className="size-3" />
           </button>
         </span>

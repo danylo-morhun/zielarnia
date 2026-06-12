@@ -28,7 +28,7 @@ export function Pagination({ filters, total, basePath = "/katalog" }: Props) {
       {page > 1 && (
         <a
           href={pageUrl(page - 1)}
-          className="flex h-9 min-w-9 items-center justify-center rounded-md border border-border px-3 text-sm hover:bg-muted"
+          className="flex h-9 min-w-9 items-center justify-center rounded-lg border border-border px-3 text-sm hover:bg-muted"
           aria-label="Poprzednia strona"
         >
           ‹
@@ -39,7 +39,7 @@ export function Pagination({ filters, total, basePath = "/katalog" }: Props) {
         <>
           <a
             href={pageUrl(1)}
-            className="flex h-9 min-w-9 items-center justify-center rounded-md border border-border px-3 text-sm hover:bg-muted"
+            className="flex h-9 min-w-9 items-center justify-center rounded-lg border border-border px-3 text-sm hover:bg-muted"
           >
             1
           </a>
@@ -52,7 +52,7 @@ export function Pagination({ filters, total, basePath = "/katalog" }: Props) {
           key={p}
           href={pageUrl(p)}
           aria-current={p === page ? "page" : undefined}
-          className={`flex h-9 min-w-9 items-center justify-center rounded-md border px-3 text-sm ${
+          className={`flex h-9 min-w-9 items-center justify-center rounded-lg border px-3 text-sm ${
             p === page
               ? "border-primary bg-primary text-primary-foreground"
               : "border-border hover:bg-muted"
@@ -67,7 +67,7 @@ export function Pagination({ filters, total, basePath = "/katalog" }: Props) {
           {end < totalPages - 1 && <span className="px-1 text-muted-foreground">…</span>}
           <a
             href={pageUrl(totalPages)}
-            className="flex h-9 min-w-9 items-center justify-center rounded-md border border-border px-3 text-sm hover:bg-muted"
+            className="flex h-9 min-w-9 items-center justify-center rounded-lg border border-border px-3 text-sm hover:bg-muted"
           >
             {totalPages}
           </a>
@@ -77,7 +77,7 @@ export function Pagination({ filters, total, basePath = "/katalog" }: Props) {
       {page < totalPages && (
         <a
           href={pageUrl(page + 1)}
-          className="flex h-9 min-w-9 items-center justify-center rounded-md border border-border px-3 text-sm hover:bg-muted"
+          className="flex h-9 min-w-9 items-center justify-center rounded-lg border border-border px-3 text-sm hover:bg-muted"
           aria-label="Następna strona"
         >
           ›
