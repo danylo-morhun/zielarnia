@@ -1,3 +1,4 @@
+import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { buildProductOrderBy, buildProductWhere, type CatalogFilters } from "./lib/filters";
 
@@ -48,8 +49,8 @@ export async function getProducts(filters: CatalogFilters) {
 
 export type ProductListItem = Awaited<ReturnType<typeof getProducts>>["items"][number];
 
-export async function getProduct(slug: string) {
-  return prisma.product.findFirst({
+export const getProduct = unstable_cache(
+  async (slug: string) => prisma.product.findFirst({
     where: { slug, status: "ACTIVE" },
     select: {
       id: true,
@@ -117,79 +118,96 @@ export async function getProduct(slug: string) {
         },
       },
     },
-  });
-}
+  }),
+  ["product-by-slug"],
+  { tags: ["products"] },
+);
 
 export type ProductDetail = NonNullable<Awaited<ReturnType<typeof getProduct>>>;
 
-export async function getCategories() {
-  return prisma.category.findMany({
-    select: {
-      id: true,
-      slug: true,
-      namePl: true,
-      image: true,
-      sortOrder: true,
-      parentId: true,
-      _count: { select: { products: { where: { status: "ACTIVE" } } } },
-    },
-    orderBy: { sortOrder: "asc" },
-  });
-}
+export const getCategories = unstable_cache(
+  async () =>
+    prisma.category.findMany({
+      select: {
+        id: true,
+        slug: true,
+        namePl: true,
+        image: true,
+        sortOrder: true,
+        parentId: true,
+        _count: { select: { products: { where: { status: "ACTIVE" } } } },
+      },
+      orderBy: { sortOrder: "asc" },
+    }),
+  ["categories"],
+  { tags: ["categories"] },
+);
 
 export type CategoryItem = Awaited<ReturnType<typeof getCategories>>[number];
 
-export async function getBrands() {
-  return prisma.brand.findMany({
-    where: { products: { some: { status: "ACTIVE" } } },
-    select: {
-      id: true,
-      slug: true,
-      name: true,
-      logo: true,
-      _count: { select: { products: { where: { status: "ACTIVE" } } } },
-    },
-    orderBy: { name: "asc" },
-  });
-}
+export const getBrands = unstable_cache(
+  async () =>
+    prisma.brand.findMany({
+      where: { products: { some: { status: "ACTIVE" } } },
+      select: {
+        id: true,
+        slug: true,
+        name: true,
+        logo: true,
+        _count: { select: { products: { where: { status: "ACTIVE" } } } },
+      },
+      orderBy: { name: "asc" },
+    }),
+  ["brands"],
+  { tags: ["brands"] },
+);
 
 export type BrandItem = Awaited<ReturnType<typeof getBrands>>[number];
 
-export async function getTags() {
-  return prisma.tag.findMany({
-    select: { id: true, slug: true, namePl: true, iconUrl: true, type: true },
-    orderBy: { sortOrder: "asc" },
-  });
-}
+export const getTags = unstable_cache(
+  async () =>
+    prisma.tag.findMany({
+      select: { id: true, slug: true, namePl: true, iconUrl: true, type: true },
+      orderBy: { sortOrder: "asc" },
+    }),
+  ["tags"],
+  { tags: ["tags"] },
+);
 
 export type TagItem = Awaited<ReturnType<typeof getTags>>[number];
 
-export async function getCategoryBySlug(slug: string) {
-  return prisma.category.findUnique({
-    where: { slug },
-    select: {
-      id: true,
-      slug: true,
-      namePl: true,
-      descriptionPl: true,
-      image: true,
-      parentId: true,
-      parent: { select: { namePl: true, slug: true } },
-    },
-  });
-}
+export const getCategoryBySlug = unstable_cache(
+  async (slug: string) =>
+    prisma.category.findUnique({
+      where: { slug },
+      select: {
+        id: true,
+        slug: true,
+        namePl: true,
+        descriptionPl: true,
+        image: true,
+        parentId: true,
+        parent: { select: { namePl: true, slug: true } },
+      },
+    }),
+  ["category-by-slug"],
+  { tags: ["categories"] },
+);
 
-export async function getBrandBySlug(slug: string) {
-  return prisma.brand.findUnique({
-    where: { slug },
-    select: {
-      id: true,
-      slug: true,
-      name: true,
-      description: true,
-      logo: true,
-      website: true,
-      countryCode: true,
-    },
-  });
-}
+export const getBrandBySlug = unstable_cache(
+  async (slug: string) =>
+    prisma.brand.findUnique({
+      where: { slug },
+      select: {
+        id: true,
+        slug: true,
+        name: true,
+        description: true,
+        logo: true,
+        website: true,
+        countryCode: true,
+      },
+    }),
+  ["brand-by-slug"],
+  { tags: ["brands"] },
+);

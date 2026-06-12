@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { ActionError } from "@/lib/action-error";
 import { syncProductToBaselinker, syncStockToBaselinker } from "@/lib/baselinker/inventory";
 import { prisma } from "@/lib/prisma";
@@ -38,6 +38,7 @@ export const saveCategory = adminActionClient
     }
     revalidatePath("/admin/kategorie");
     revalidatePath("/katalog", "layout");
+    revalidateTag("categories", "max");
     return { success: true };
   });
 
@@ -47,6 +48,7 @@ export const deleteCategory = adminActionClient
     await prisma.category.delete({ where: { id } });
     revalidatePath("/admin/kategorie");
     revalidatePath("/katalog", "layout");
+    revalidateTag("categories", "max");
     return { success: true };
   });
 
@@ -70,6 +72,7 @@ export const saveBrand = adminActionClient
     }
     revalidatePath("/admin/marki");
     revalidatePath("/marki", "layout");
+    revalidateTag("brands", "max");
     return { success: true };
   });
 
@@ -79,6 +82,7 @@ export const deleteBrand = adminActionClient
     await prisma.brand.delete({ where: { id } });
     revalidatePath("/admin/marki");
     revalidatePath("/marki", "layout");
+    revalidateTag("brands", "max");
     return { success: true };
   });
 
@@ -99,6 +103,7 @@ export const saveTag = adminActionClient
       await prisma.tag.create({ data: payload });
     }
     revalidatePath("/admin/tagi");
+    revalidateTag("tags", "max");
     return { success: true };
   });
 
@@ -107,6 +112,7 @@ export const deleteTag = adminActionClient
   .action(async ({ parsedInput: { id } }) => {
     await prisma.tag.delete({ where: { id } });
     revalidatePath("/admin/tagi");
+    revalidateTag("tags", "max");
     return { success: true };
   });
 
@@ -144,6 +150,7 @@ export const saveProduct = adminActionClient
 
     revalidatePath("/admin/produkty");
     revalidatePath("/katalog", "layout");
+    revalidateTag("products", "max");
     if (savedId) void syncProductToBaselinker(savedId).catch(console.error);
     return { success: true };
   });
@@ -160,6 +167,7 @@ export const deleteProduct = adminActionClient
     await prisma.product.delete({ where: { id } });
     revalidatePath("/admin/produkty");
     revalidatePath("/katalog", "layout");
+    revalidateTag("products", "max");
     return { success: true };
   });
 
@@ -194,6 +202,7 @@ export const saveVariant = adminActionClient
     }
     revalidatePath("/admin/produkty");
     revalidatePath(`/admin/produkty/${input.productId}`);
+    revalidateTag("products", "max");
     void syncProductToBaselinker(input.productId).catch(console.error);
     return { success: true };
   });
@@ -207,6 +216,7 @@ export const deleteVariant = adminActionClient
     }
     await prisma.productVariant.delete({ where: { id } });
     revalidatePath("/admin/produkty");
+    revalidateTag("products", "max");
     return { success: true };
   });
 

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+export const dynamic = "force-static";
+
 export const metadata: Metadata = {
   title: "Polityka prywatności — Twoje Zdrowie",
   description: "Zasady przetwarzania danych osobowych w sklepie Twoje Zdrowie.",

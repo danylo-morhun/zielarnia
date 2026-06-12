@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 
+export const dynamic = "force-static";
+
 export const metadata: Metadata = {
   title: "Zwroty i reklamacje — Twoje Zdrowie",
   description: "Informacje o prawie odstąpienia od umowy, zwrotach i reklamacjach.",
