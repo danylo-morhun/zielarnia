@@ -74,7 +74,7 @@ export function ProductCard({ product, priority = false }: Props) {
         )}
 
         <Link href={`/produkt/${product.slug}`} className="flex-1">
-          <h2 className="line-clamp-2 text-sm font-medium leading-snug text-foreground">
+          <h2 className="line-clamp-2 font-sans text-sm font-medium leading-snug text-foreground">
             {product.namePl}
           </h2>
         </Link>

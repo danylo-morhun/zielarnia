@@ -60,7 +60,7 @@ export function FilterSidebar({ categories, brands, tags, basePath = "/katalog",
       <SearchInput />
 
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-semibold text-foreground">Filtry</h2>
+        <h2 className="font-sans text-sm font-semibold text-foreground">Filtry</h2>
         {hasActiveFilters && (
           <button
             type="button"
