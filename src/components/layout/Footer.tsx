@@ -1,10 +1,11 @@
+import { Clock, Mail, MapPin } from "lucide-react";
 import Link from "next/link";
 
 const footerLinks = {
   sklep: [
     { label: "Katalog produktów", href: "/katalog" },
     { label: "Marki", href: "/marki" },
-    { label: "Nowości", href: "/katalog?sortuj=newest" },
+    { label: "Nowości", href: "/katalog?nowosci=1" },
     { label: "Promocje", href: "/katalog?promocje=1" },
   ],
   pomoc: [
@@ -21,72 +22,94 @@ const footerLinks = {
   ],
 };
 
+const paymentMethods = ["BLIK", "Przelewy24", "Apple Pay", "Google Pay"];
+const deliveryMethods = ["InPost", "DHL", "DPD"];
+
 export function Footer() {
   return (
-    <footer className="border-t border-border bg-muted/30">
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
-          <div className="col-span-2 md:col-span-1">
-            <p className="text-lg font-bold text-foreground">Twoje Zdrowie</p>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Suplementy diety, witaminy i produkty bio najwyższej jakości.
+    <footer className="mt-16 bg-primary-deep text-primary-foreground">
+      <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-2 gap-10 md:grid-cols-5">
+          <div className="col-span-2">
+            <Link href="/" className="flex items-center gap-2">
+              <span className="flex size-8 items-center justify-center rounded-full bg-card text-base font-extrabold text-primary">
+                +
+              </span>
+              <span className="text-lg font-extrabold tracking-tight">Twoje Zdrowie</span>
+            </Link>
+            <p className="mt-4 max-w-xs text-sm leading-relaxed text-primary-foreground/75">
+              Certyfikowane suplementy diety, witaminy i produkty bio najwyższej jakości.
             </p>
-          </div>
-
-          <div>
-            <p className="text-sm font-semibold text-foreground">Sklep</p>
-            <ul className="mt-4 space-y-2">
-              {footerLinks.sklep.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
+            <ul className="mt-6 space-y-2.5 text-sm text-primary-foreground/75">
+              <li className="flex items-center gap-2.5">
+                <Mail className="size-4 shrink-0" strokeWidth={1.75} />
+                kontakt@twojezdrowie.pl
+              </li>
+              <li className="flex items-center gap-2.5">
+                <Clock className="size-4 shrink-0" strokeWidth={1.75} />
+                pon–pt 9:00–17:00
+              </li>
+              <li className="flex items-center gap-2.5">
+                <MapPin className="size-4 shrink-0" strokeWidth={1.75} />
+                Kalisz, Polska
+              </li>
             </ul>
           </div>
 
-          <div>
-            <p className="text-sm font-semibold text-foreground">Pomoc</p>
-            <ul className="mt-4 space-y-2">
-              {footerLinks.pomoc.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <p className="text-sm font-semibold text-foreground">Firma</p>
-            <ul className="mt-4 space-y-2">
-              {footerLinks.firma.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {(
+            [
+              ["Sklep", footerLinks.sklep],
+              ["Pomoc", footerLinks.pomoc],
+              ["Firma", footerLinks.firma],
+            ] as const
+          ).map(([title, links]) => (
+            <div key={title}>
+              <p className="text-sm font-bold">{title}</p>
+              <ul className="mt-4 space-y-2.5">
+                {links.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="text-sm text-primary-foreground/75 transition-colors hover:text-primary-foreground"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
 
-        <div className="mt-8 border-t border-border pt-8 text-center text-sm text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} Twoje Zdrowie. Wszelkie prawa zastrzeżone.</p>
-          <p className="mt-1">
-            Suplement diety nie zastępuje zrównoważonej diety i zdrowego trybu życia.
-          </p>
+        <div className="mt-12 flex flex-col gap-4 border-t border-primary-foreground/15 pt-8 md:flex-row md:items-center md:justify-between">
+          <div className="flex flex-wrap items-center gap-2">
+            {paymentMethods.map((method) => (
+              <span
+                key={method}
+                className="rounded-md bg-primary-foreground/10 px-2.5 py-1 text-xs font-semibold text-primary-foreground/90"
+              >
+                {method}
+              </span>
+            ))}
+            <span
+              className="mx-1 hidden h-4 w-px bg-primary-foreground/20 sm:block"
+              aria-hidden="true"
+            />
+            {deliveryMethods.map((method) => (
+              <span
+                key={method}
+                className="rounded-md bg-primary-foreground/10 px-2.5 py-1 text-xs font-semibold text-primary-foreground/90"
+              >
+                {method}
+              </span>
+            ))}
+          </div>
+          <div className="text-xs text-primary-foreground/60">
+            <p>&copy; {new Date().getFullYear()} Twoje Zdrowie. Wszelkie prawa zastrzeżone.</p>
+            <p className="mt-1">
+              Suplement diety nie zastępuje zrównoważonej diety i zdrowego trybu życia.
+            </p>
+          </div>
         </div>
       </div>
     </footer>
