@@ -52,7 +52,7 @@ export function WishlistIconClient({ itemCount, items }: Props) {
             </SheetClose>
           </SheetHeader>
 
-          <div className="flex-1 overflow-y-auto px-6">
+          <div className="flex-1 overflow-y-auto px-6 py-4">
             {items.length === 0 ? (
               <div className="flex h-full flex-col items-center justify-center gap-3 py-12 text-center">
                 <Heart className="size-10 text-muted-foreground" />
@@ -66,7 +66,7 @@ export function WishlistIconClient({ itemCount, items }: Props) {
                 </button>
               </div>
             ) : (
-              <div className="divide-y divide-border">
+              <div className="flex flex-col gap-3">
                 {items.map((item) => (
                   <WishlistItemCard key={item.id} item={item} />
                 ))}
