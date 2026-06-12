@@ -51,7 +51,7 @@ export function WishlistItemCard({ item }: Props) {
             alt={image.altPl ?? item.product.namePl}
             fill
             sizes="80px"
-            className="object-cover"
+            className="object-contain"
           />
         ) : (
           <span className="flex size-full items-center justify-center text-xs text-muted-foreground">
