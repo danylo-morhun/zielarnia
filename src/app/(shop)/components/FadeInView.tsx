@@ -28,7 +28,9 @@ export function FadeInView({ children, className, delay = 0 }: Props) {
           observer.disconnect();
         }
       },
-      { threshold: 0.08 },
+      // Start the reveal ~120px before the section enters the viewport so the
+      // 560ms transition finishes by the time the user actually sees it
+      { threshold: 0, rootMargin: "0px 0px 120px 0px" },
     );
     observer.observe(el);
     return () => observer.disconnect();
