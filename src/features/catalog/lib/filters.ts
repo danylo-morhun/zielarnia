@@ -9,6 +9,9 @@ export type CatalogFilters = {
   priceMin?: number; // grosz
   priceMax?: number; // grosz
   search?: string;
+  onlyPromo?: boolean;
+  onlyNew?: boolean;
+  onlyFeatured?: boolean;
   page: number;
   perPage: number;
   sort: SortOption;
@@ -41,6 +44,9 @@ export function parseCatalogFilters(
         ? Math.round(Number(params.cenaMax) * 100)
         : undefined,
     search: typeof params.szukaj === "string" ? params.szukaj : undefined,
+    onlyPromo: params.promocje === "1" || undefined,
+    onlyNew: params.nowosci === "1" || undefined,
+    onlyFeatured: params.polecane === "1" || undefined,
     page,
     perPage: ITEMS_PER_PAGE,
     sort,
@@ -59,15 +65,24 @@ export function buildProductWhere(filters: CatalogFilters): Prisma.ProductWhereI
   if (filters.tags?.length) {
     where.tags = { some: { tag: { slug: { in: filters.tags } } } };
   }
-  if (filters.priceMin !== undefined || filters.priceMax !== undefined) {
+  const hasPriceFilter = filters.priceMin !== undefined || filters.priceMax !== undefined;
+  if (hasPriceFilter || filters.onlyPromo) {
     where.variants = {
       some: {
         isActive: true,
-        isDefault: true,
+        ...(hasPriceFilter && { isDefault: true }),
         ...(filters.priceMin !== undefined && { pricePln: { gte: filters.priceMin } }),
         ...(filters.priceMax !== undefined && { pricePln: { lte: filters.priceMax } }),
+        // Prisma cannot compare two columns; comparePricePln is only set when discounted
+        ...(filters.onlyPromo && { comparePricePln: { not: null } }),
       },
     };
+  }
+  if (filters.onlyNew) {
+    where.isNewArrival = true;
+  }
+  if (filters.onlyFeatured) {
+    where.isFeatured = true;
   }
   if (filters.search) {
     where.OR = [
