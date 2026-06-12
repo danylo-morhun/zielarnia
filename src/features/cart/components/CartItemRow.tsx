@@ -46,7 +46,7 @@ export function CartItemRow({ item, onRemove }: Props) {
             alt={image.altPl ?? item.variant.product.namePl}
             fill
             sizes="96px"
-            className="object-cover"
+            className="object-contain"
           />
         ) : (
           <span className="flex size-full items-center justify-center text-xs text-muted-foreground">
@@ -55,7 +55,7 @@ export function CartItemRow({ item, onRemove }: Props) {
         )}
       </div>
 
-      <div className="flex flex-1 flex-col gap-1">
+      <div className="flex min-w-0 flex-1 flex-col gap-1">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
             <p className="truncate text-sm font-semibold leading-snug text-foreground">
