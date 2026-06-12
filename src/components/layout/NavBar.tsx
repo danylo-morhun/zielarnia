@@ -50,7 +50,7 @@ export async function NavBar() {
         <div className="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4 sm:px-6 lg:gap-6 lg:px-8">
           <MobileMenu navLinks={navLinks} utilityLinks={utilityLinks} />
           <Link href="/" className="flex shrink-0 items-center gap-2">
-            <span className="flex size-8 items-center justify-center rounded-full bg-primary text-base font-extrabold text-primary-foreground">
+            <span className="flex size-8 items-center justify-center rounded-full bg-primary text-base font-extrabold leading-none text-primary-foreground">
               +
             </span>
             <span className="text-lg font-extrabold tracking-tight text-foreground">
