@@ -12,20 +12,18 @@ interface Props {
   variants: SerializedVariant[];
 }
 
-const EMPTY_FORM = {
-  sku: "",
-  optionLabel: "",
-  optionValue: "",
-  pricePln: "",
-  stock: "0",
-  vatRate: "5",
-  isDefault: false,
-  isActive: true,
-};
+function plnToGrosze(value: string): number {
+  return Math.round(parseFloat(value || "0") * 100);
+}
+
+function groszeToPln(grosze: number): string {
+  return (grosze / 100).toFixed(2);
+}
 
 export function VariantsTable({ productId, variants }: Props) {
   const [editing, setEditing] = useState<SerializedVariant | null>(null);
   const [showNew, setShowNew] = useState(false);
+  const [showAdvanced, setShowAdvanced] = useState(false);
 
   const { execute: execSave, isPending: saving } = useAction(saveVariant, {
     onSuccess: () => {
@@ -38,27 +36,41 @@ export function VariantsTable({ productId, variants }: Props) {
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
+
+    const compareRaw = fd.get("comparePricePln") as string;
+    const costRaw = fd.get("costPricePln") as string;
+    const weightRaw = fd.get("weightGrams") as string;
+    const lowStockRaw = fd.get("lowStockThreshold") as string;
+
     execSave({
       id: (fd.get("id") as string) || undefined,
       productId,
       sku: fd.get("sku") as string,
+      ean: (fd.get("ean") as string) || undefined,
       optionLabel: (fd.get("optionLabel") as string) || undefined,
       optionValue: (fd.get("optionValue") as string) || undefined,
-      pricePln: Number(fd.get("pricePln")),
+      pricePln: plnToGrosze(fd.get("pricePln") as string),
+      comparePricePln: compareRaw ? plnToGrosze(compareRaw) : undefined,
+      costPricePln: costRaw ? plnToGrosze(costRaw) : undefined,
       stock: Number(fd.get("stock") || 0),
       vatRate: Number(fd.get("vatRate") || 5),
+      weightGrams: weightRaw ? Number(weightRaw) : undefined,
+      lowStockThreshold: lowStockRaw ? Number(lowStockRaw) : 5,
+      trackStock: fd.get("trackStock") === "on",
       isDefault: fd.get("isDefault") === "on",
       isActive: fd.get("isActive") === "on",
     });
   }
 
   const variantForm = (item?: SerializedVariant) => (
-    <form onSubmit={handleSubmit} className="mt-2 grid gap-2 rounded-xl bg-muted p-3">
+    <form onSubmit={handleSubmit} className="mt-2 space-y-2 rounded-xl bg-muted p-3">
       {item && <input type="hidden" name="id" value={item.id} />}
+
+      {/* Row 1: SKU, option, EAN */}
       <div className="grid grid-cols-3 gap-2">
         <input
           name="sku"
-          defaultValue={item?.sku ?? EMPTY_FORM.sku}
+          defaultValue={item?.sku ?? ""}
           placeholder="SKU *"
           required
           className="rounded-lg border border-border px-2 py-1 text-sm"
@@ -75,16 +87,35 @@ export function VariantsTable({ productId, variants }: Props) {
           placeholder="Wartość (np. 60 kaps.)"
           className="rounded-lg border border-border px-2 py-1 text-sm"
         />
+      </div>
+
+      {/* Row 2: price, compare price, stock, VAT */}
+      <div className="grid grid-cols-4 gap-2">
         <div>
           <label className="mb-0.5 block text-xs text-muted-foreground">
-            Cena (grosze) *
+            Cena (zł) *
             <input
               name="pricePln"
               type="number"
-              defaultValue={item?.pricePln ?? ""}
-              placeholder="4990 = 49.90 zł"
+              step="0.01"
+              min="0.01"
+              defaultValue={item ? groszeToPln(item.pricePln) : ""}
+              placeholder="49.90"
               required
-              min={1}
+              className="mt-0.5 w-full rounded-lg border border-border px-2 py-1 text-sm font-normal"
+            />
+          </label>
+        </div>
+        <div>
+          <label className="mb-0.5 block text-xs text-muted-foreground">
+            Cena przed (zł)
+            <input
+              name="comparePricePln"
+              type="number"
+              step="0.01"
+              min="0.01"
+              defaultValue={item?.comparePricePln ? groszeToPln(item.comparePricePln) : ""}
+              placeholder="59.90"
               className="mt-0.5 w-full rounded-lg border border-border px-2 py-1 text-sm font-normal"
             />
           </label>
@@ -95,8 +126,8 @@ export function VariantsTable({ productId, variants }: Props) {
             <input
               name="stock"
               type="number"
-              defaultValue={item?.stock ?? 0}
               min={0}
+              defaultValue={item?.stock ?? 0}
               className="mt-0.5 w-full rounded-lg border border-border px-2 py-1 text-sm font-normal"
             />
           </label>
@@ -114,6 +145,31 @@ export function VariantsTable({ productId, variants }: Props) {
           </label>
         </div>
       </div>
+
+      {/* Row 3: EAN, weight */}
+      <div className="grid grid-cols-2 gap-2">
+        <input
+          name="ean"
+          defaultValue={item?.ean ?? ""}
+          placeholder="EAN / kod kreskowy"
+          className="rounded-lg border border-border px-2 py-1 text-sm"
+        />
+        <div>
+          <label className="mb-0.5 block text-xs text-muted-foreground">
+            Waga [g]
+            <input
+              name="weightGrams"
+              type="number"
+              min={1}
+              defaultValue={item?.weightGrams ?? ""}
+              placeholder="150"
+              className="mt-0.5 w-full rounded-lg border border-border px-2 py-1 text-sm font-normal"
+            />
+          </label>
+        </div>
+      </div>
+
+      {/* Flags */}
       <div className="flex items-center gap-4">
         <label className="flex items-center gap-1.5 text-sm">
           <input type="checkbox" name="isDefault" defaultChecked={item?.isDefault} />
@@ -124,6 +180,53 @@ export function VariantsTable({ productId, variants }: Props) {
           Aktywny
         </label>
       </div>
+
+      {/* Advanced toggle */}
+      <button
+        type="button"
+        onClick={() => setShowAdvanced((v) => !v)}
+        className="text-xs text-muted-foreground hover:text-foreground"
+      >
+        {showAdvanced ? "▲ Ukryj zaawansowane" : "▾ Zaawansowane"}
+      </button>
+
+      {showAdvanced && (
+        <div className="grid grid-cols-3 gap-2 border-t border-border pt-2">
+          <div>
+            <label className="mb-0.5 block text-xs text-muted-foreground">
+              Cena zakupu (zł)
+              <input
+                name="costPricePln"
+                type="number"
+                step="0.01"
+                min="0.01"
+                defaultValue={item?.costPricePln ? groszeToPln(item.costPricePln) : ""}
+                placeholder="25.00"
+                className="mt-0.5 w-full rounded-lg border border-border px-2 py-1 text-sm font-normal"
+              />
+            </label>
+          </div>
+          <div>
+            <label className="mb-0.5 block text-xs text-muted-foreground">
+              Alert stanu (szt.)
+              <input
+                name="lowStockThreshold"
+                type="number"
+                min={0}
+                defaultValue={item?.lowStockThreshold ?? 5}
+                className="mt-0.5 w-full rounded-lg border border-border px-2 py-1 text-sm font-normal"
+              />
+            </label>
+          </div>
+          <div className="flex items-end pb-1">
+            <label className="flex items-center gap-1.5 text-sm">
+              <input type="checkbox" name="trackStock" defaultChecked={item?.trackStock ?? true} />
+              Śledź stan
+            </label>
+          </div>
+        </div>
+      )}
+
       <div className="flex gap-2">
         <button
           type="submit"
@@ -169,12 +272,23 @@ export function VariantsTable({ productId, variants }: Props) {
                   {v.optionValue && (
                     <span className="ml-2 text-muted-foreground">— {v.optionValue}</span>
                   )}
+                  {v.ean && (
+                    <span className="ml-2 font-mono text-xs text-muted-foreground">{v.ean}</span>
+                  )}
                 </p>
                 <p className="text-xs text-muted-foreground">
                   {(v.pricePln / 100).toLocaleString("pl-PL", {
                     style: "currency",
                     currency: "PLN",
-                  })}{" "}
+                  })}
+                  {v.comparePricePln && (
+                    <span className="ml-1 line-through">
+                      {(v.comparePricePln / 100).toLocaleString("pl-PL", {
+                        style: "currency",
+                        currency: "PLN",
+                      })}
+                    </span>
+                  )}{" "}
                   · stock: {v.stock}
                   {v.isDefault && " · domyślny"}
                   {!v.isActive && " · nieaktywny"}
@@ -194,7 +308,7 @@ export function VariantsTable({ productId, variants }: Props) {
                   onClick={() => {
                     if (confirm(`Usunąć wariant "${v.sku}"?`)) execDelete({ id: v.id });
                   }}
-                  className="rounded-lg border border-border border-destructive px-2 py-1 text-xs text-destructive disabled:opacity-50"
+                  className="rounded-lg border border-destructive px-2 py-1 text-xs text-destructive disabled:opacity-50"
                 >
                   Usuń
                 </button>
