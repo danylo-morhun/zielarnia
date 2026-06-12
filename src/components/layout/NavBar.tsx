@@ -1,6 +1,7 @@
 import { Search, ShoppingBag, Truck, User } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
+import { MobileMenu } from "@/components/layout/MobileMenu";
 import { CartIcon } from "@/features/cart/components/CartIcon";
 import { WishlistIcon, WishlistIconFallback } from "@/features/wishlist/components/WishlistIcon";
 import { auth } from "@/lib/auth";
@@ -46,6 +47,7 @@ export async function NavBar() {
       {/* Main row */}
       <div className="border-b border-border">
         <div className="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4 sm:px-6 lg:gap-6 lg:px-8">
+          <MobileMenu navLinks={navLinks} utilityLinks={utilityLinks} />
           <Link href="/" className="flex shrink-0 items-center gap-2">
             <span className="flex size-8 items-center justify-center rounded-full bg-primary text-base font-extrabold text-primary-foreground">
               +
@@ -69,13 +71,6 @@ export async function NavBar() {
           </search>
 
           <div className="ml-auto flex items-center gap-0.5 md:ml-0">
-            <Link
-              href="/katalog?szukaj="
-              aria-label="Szukaj produktów"
-              className="rounded-full p-2.5 text-muted-foreground transition-colors hover:bg-secondary hover:text-primary md:hidden"
-            >
-              <Search className="size-5" />
-            </Link>
             <Suspense fallback={<WishlistIconFallback />}>
               <WishlistIcon />
             </Suspense>
