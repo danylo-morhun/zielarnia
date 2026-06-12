@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { CouponInput } from "./CouponInput";
 import { formatPrice } from "@/lib/format";
+import { CouponInput } from "./CouponInput";
 
 type Props = { subtotal: number };
 

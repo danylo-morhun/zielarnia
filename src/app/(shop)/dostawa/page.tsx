@@ -52,17 +52,17 @@ export default function DostawaPage() {
           <h2 className="mb-3 text-xl">Darmowa dostawa od 200 zł</h2>
           <p className="text-muted-foreground">
             Przy zamówieniu o wartości 200 zł lub więcej dostawa jest bezpłatna dla wszystkich
-            dostępnych metod. Próg liczony jest od wartości produktów po zastosowaniu rabatów,
-            bez uwzględnienia kosztów dostawy.
+            dostępnych metod. Próg liczony jest od wartości produktów po zastosowaniu rabatów, bez
+            uwzględnienia kosztów dostawy.
           </p>
         </section>
 
         <section>
           <h2 className="mb-3 text-xl">Paczkomaty InPost</h2>
           <p className="text-muted-foreground">
-            Podczas składania zamówienia możesz wybrać dowolny Paczkomat InPost w Polsce.
-            Po opłaceniu zamówienia otrzymasz e-mail z kodem odbioru oraz numerem przesyłki.
-            Paczka czeka w paczkomacie przez 48 godzin od momentu dostarczenia.
+            Podczas składania zamówienia możesz wybrać dowolny Paczkomat InPost w Polsce. Po
+            opłaceniu zamówienia otrzymasz e-mail z kodem odbioru oraz numerem przesyłki. Paczka
+            czeka w paczkomacie przez 48 godzin od momentu dostarczenia.
           </p>
           <p className="mt-2 text-muted-foreground">
             Sieć liczy ponad 20 000 automatów na terenie całego kraju — znajdź najbliższy na{" "}
@@ -90,8 +90,8 @@ export default function DostawaPage() {
         <section>
           <h2 className="mb-3 text-xl">Dostawa za granicę</h2>
           <p className="text-muted-foreground">
-            Aktualnie realizujemy dostawy wyłącznie na terenie Polski. Dostawę
-            zagraniczną planujemy uruchomić w przyszłości — śledź nasze nowości.
+            Aktualnie realizujemy dostawy wyłącznie na terenie Polski. Dostawę zagraniczną planujemy
+            uruchomić w przyszłości — śledź nasze nowości.
           </p>
         </section>
 

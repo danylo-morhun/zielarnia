@@ -14,14 +14,17 @@ export default function ZwrotyPage() {
         <section>
           <h2 className="mb-3 text-xl">Prawo do odstąpienia od umowy</h2>
           <p className="text-muted-foreground">
-            Zgodnie z ustawą z dnia 30 maja 2014 r. o prawach konsumenta (Dz.U. 2014 poz. 827)
-            masz prawo odstąpić od umowy zawartej na odległość bez podania przyczyny w terminie
+            Zgodnie z ustawą z dnia 30 maja 2014 r. o prawach konsumenta (Dz.U. 2014 poz. 827) masz
+            prawo odstąpić od umowy zawartej na odległość bez podania przyczyny w terminie
             <strong className="text-foreground"> 14 dni</strong> od dnia otrzymania przesyłki.
           </p>
           <p className="mt-2 text-muted-foreground">
-            Aby skorzystać z prawa odstąpienia, poinformuj nas o swojej decyzji drogą e-mailową
-            na adres{" "}
-            <a href="mailto:kontakt@twojezdrowie.pl" className="text-primary underline-offset-4 hover:underline">
+            Aby skorzystać z prawa odstąpienia, poinformuj nas o swojej decyzji drogą e-mailową na
+            adres{" "}
+            <a
+              href="mailto:kontakt@twojezdrowie.pl"
+              className="text-primary underline-offset-4 hover:underline"
+            >
               kontakt@twojezdrowie.pl
             </a>{" "}
             przed upływem terminu. Wzór formularza odstąpienia dostępny jest poniżej.
@@ -33,15 +36,25 @@ export default function ZwrotyPage() {
           <ol className="list-inside list-decimal space-y-2 text-muted-foreground">
             <li>
               Wyślij e-mail na{" "}
-              <a href="mailto:kontakt@twojezdrowie.pl" className="text-primary underline-offset-4 hover:underline">
+              <a
+                href="mailto:kontakt@twojezdrowie.pl"
+                className="text-primary underline-offset-4 hover:underline"
+              >
                 kontakt@twojezdrowie.pl
               </a>{" "}
               z numerem zamówienia i informacją, które produkty zwracasz.
             </li>
             <li>Zapakuj produkty starannie w oryginalne opakowanie (o ile to możliwe).</li>
-            <li>Dołącz do paczki wypełniony formularz zwrotu (dostępny poniżej) lub kopię faktury/paragonu.</li>
-            <li>Wyślij paczkę na wskazany przez nas adres zwrotny (otrzymasz go w odpowiedzi e-mail).</li>
-            <li>Koszty przesyłki zwrotnej ponosi Kupujący, z wyjątkiem przypadku wadliwego towaru.</li>
+            <li>
+              Dołącz do paczki wypełniony formularz zwrotu (dostępny poniżej) lub kopię
+              faktury/paragonu.
+            </li>
+            <li>
+              Wyślij paczkę na wskazany przez nas adres zwrotny (otrzymasz go w odpowiedzi e-mail).
+            </li>
+            <li>
+              Koszty przesyłki zwrotnej ponosi Kupujący, z wyjątkiem przypadku wadliwego towaru.
+            </li>
           </ol>
         </section>
 
@@ -54,7 +67,10 @@ export default function ZwrotyPage() {
           <ul className="mt-2 list-inside list-disc space-y-1 text-muted-foreground">
             <li>
               E-mailem:{" "}
-              <a href="mailto:kontakt@twojezdrowie.pl" className="text-primary underline-offset-4 hover:underline">
+              <a
+                href="mailto:kontakt@twojezdrowie.pl"
+                className="text-primary underline-offset-4 hover:underline"
+              >
                 kontakt@twojezdrowie.pl
               </a>
             </li>
@@ -69,16 +85,16 @@ export default function ZwrotyPage() {
           <h2 className="mb-3 text-xl">Zwrot pieniędzy</h2>
           <p className="text-muted-foreground">
             Po otrzymaniu i sprawdzeniu zwróconego towaru dokonamy zwrotu należności w terminie
-            <strong className="text-foreground"> do 14 dni</strong> od daty otrzymania przesyłki zwrotnej.
-            Zwrot realizowany jest tą samą metodą płatności, którą wybrano przy zakupie.
+            <strong className="text-foreground"> do 14 dni</strong> od daty otrzymania przesyłki
+            zwrotnej. Zwrot realizowany jest tą samą metodą płatności, którą wybrano przy zakupie.
           </p>
         </section>
 
         <section>
           <h2 className="mb-3 text-xl">Produkty bez prawa zwrotu</h2>
           <p className="text-muted-foreground">
-            Zgodnie z art. 38 pkt 5 ustawy o prawach konsumenta, prawo odstąpienia nie przysługuje
-            w przypadku produktów dostarczonych w zapieczętowanym opakowaniu, których po otwarciu nie
+            Zgodnie z art. 38 pkt 5 ustawy o prawach konsumenta, prawo odstąpienia nie przysługuje w
+            przypadku produktów dostarczonych w zapieczętowanym opakowaniu, których po otwarciu nie
             można zwrócić ze względu na ochronę zdrowia lub ze względów higienicznych. Dotyczy to
             suplementów diety i żywności funkcjonalnej z naruszonym opakowaniem.
           </p>
@@ -87,14 +103,12 @@ export default function ZwrotyPage() {
         <section>
           <h2 className="mb-3 text-xl">Formularz zwrotu</h2>
           <p className="text-muted-foreground">
-            Formularz odstąpienia od umowy możesz pobrać w formacie PDF (wkrótce) lub skorzystać
-            z poniższego wzoru:
+            Formularz odstąpienia od umowy możesz pobrać w formacie PDF (wkrótce) lub skorzystać z
+            poniższego wzoru:
           </p>
           <div className="mt-4 rounded-xl bg-muted p-4 text-xs text-muted-foreground">
             <p className="font-semibold text-foreground">WZÓR FORMULARZA ODSTĄPIENIA OD UMOWY</p>
-            <p className="mt-2">
-              Adresat: Twoje Zdrowie, kontakt@twojezdrowie.pl
-            </p>
+            <p className="mt-2">Adresat: Twoje Zdrowie, kontakt@twojezdrowie.pl</p>
             <p className="mt-2">
               Niniejszym informuję o moim odstąpieniu od umowy sprzedaży następujących towarów:
               [nazwa towaru]

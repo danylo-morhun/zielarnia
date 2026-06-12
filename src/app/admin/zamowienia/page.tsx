@@ -1,9 +1,9 @@
 import type { OrderStatus } from "@prisma/client";
 import Link from "next/link";
 import { Suspense } from "react";
-import { prisma } from "@/lib/prisma";
-import { AdminSearch } from "@/app/admin/components/AdminSearch";
 import { AdminPagination } from "@/app/admin/components/AdminPagination";
+import { AdminSearch } from "@/app/admin/components/AdminSearch";
+import { prisma } from "@/lib/prisma";
 
 const STATUS_LABELS: Record<OrderStatus, string> = {
   PENDING: "Oczekujące",
@@ -85,9 +85,7 @@ export default async function AdminOrdersPage({
       <div className="mb-4 flex flex-wrap gap-2">
         {STATUS_FILTER_TABS.map((tab) => {
           const isActive = (tab.value ?? "") === (statusFilter ?? "");
-          const href = tab.value
-            ? `/admin/zamowienia?status=${tab.value}`
-            : "/admin/zamowienia";
+          const href = tab.value ? `/admin/zamowienia?status=${tab.value}` : "/admin/zamowienia";
           return (
             <Link
               key={tab.label}

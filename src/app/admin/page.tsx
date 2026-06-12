@@ -1,7 +1,7 @@
+import { AlertTriangle, Clock, ShoppingBag, TrendingUp } from "lucide-react";
 import Link from "next/link";
-import { ShoppingBag, Clock, AlertTriangle, TrendingUp } from "lucide-react";
-import { prisma } from "@/lib/prisma";
 import { formatPrice } from "@/lib/format";
+import { prisma } from "@/lib/prisma";
 
 export default async function AdminPage() {
   const now = new Date();

@@ -23,7 +23,14 @@ export const verifyCoupon = actionClient
           { OR: [{ validUntil: null }, { validUntil: { gte: new Date() } }] },
         ],
       },
-      select: { id: true, type: true, value: true, minOrderPln: true, maxUsages: true, usageCount: true },
+      select: {
+        id: true,
+        type: true,
+        value: true,
+        minOrderPln: true,
+        maxUsages: true,
+        usageCount: true,
+      },
     });
 
     if (!coupon) {

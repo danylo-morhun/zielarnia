@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAction } from "next-safe-action/hooks";
+import { useState } from "react";
 import { toast } from "sonner";
 import { addToCart } from "../actions";
-import { CartItemRow } from "./CartItemRow";
 import type { CartItem } from "../lib/session";
+import { CartItemRow } from "./CartItemRow";
 
 type Props = { items: CartItem[] };
 
@@ -34,9 +34,7 @@ export function CartList({ items: initialItems }: Props) {
   };
 
   if (items.length === 0) {
-    return (
-      <p className="py-8 text-center text-sm text-muted-foreground">Koszyk jest pusty</p>
-    );
+    return <p className="py-8 text-center text-sm text-muted-foreground">Koszyk jest pusty</p>;
   }
 
   return (

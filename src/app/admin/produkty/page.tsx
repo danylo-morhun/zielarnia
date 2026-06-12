@@ -1,10 +1,10 @@
 import type { ProductStatus } from "@prisma/client";
 import Link from "next/link";
 import { Suspense } from "react";
+import { AdminPagination } from "@/app/admin/components/AdminPagination";
+import { AdminSearch } from "@/app/admin/components/AdminSearch";
 import { DeleteProductButton } from "@/features/products/components/DeleteProductButton";
 import { prisma } from "@/lib/prisma";
-import { AdminSearch } from "@/app/admin/components/AdminSearch";
-import { AdminPagination } from "@/app/admin/components/AdminPagination";
 
 const STATUS_LABELS: Record<ProductStatus, string> = {
   DRAFT: "Szkic",

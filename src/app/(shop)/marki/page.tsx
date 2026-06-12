@@ -4,7 +4,8 @@ import { prisma } from "@/lib/prisma";
 
 export const metadata = {
   title: "Marki",
-  description: "Przeglądaj produkty według marek — suplementy, witaminy i produkty bio najwyższej jakości.",
+  description:
+    "Przeglądaj produkty według marek — suplementy, witaminy i produkty bio najwyższej jakości.",
 };
 
 export default async function MarkiPage() {

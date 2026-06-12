@@ -1,8 +1,8 @@
 "use client";
 
 import { useRef } from "react";
-import { AddToCartSection } from "@/features/cart/components/AddToCartSection";
 import type { Variant } from "@/features/cart/components/AddToCartSection";
+import { AddToCartSection } from "@/features/cart/components/AddToCartSection";
 import { StickyAddToCart } from "./StickyAddToCart";
 
 type Props = {

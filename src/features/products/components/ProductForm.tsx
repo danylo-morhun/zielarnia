@@ -75,7 +75,9 @@ export function ProductForm({ product, categories, brands, tags }: Props) {
         <h2 className="mb-4 font-semibold">Podstawowe informacje</h2>
         <div className="grid gap-3 sm:grid-cols-2">
           <div className="sm:col-span-2">
-            <label htmlFor="namePl" className="mb-1 block text-sm font-medium">Nazwa (PL) *</label>
+            <label htmlFor="namePl" className="mb-1 block text-sm font-medium">
+              Nazwa (PL) *
+            </label>
             <input
               id="namePl"
               name="namePl"
@@ -85,7 +87,9 @@ export function ProductForm({ product, categories, brands, tags }: Props) {
             />
           </div>
           <div>
-            <label htmlFor="nameEn" className="mb-1 block text-sm font-medium">Nazwa (EN)</label>
+            <label htmlFor="nameEn" className="mb-1 block text-sm font-medium">
+              Nazwa (EN)
+            </label>
             <input
               id="nameEn"
               name="nameEn"
@@ -94,7 +98,9 @@ export function ProductForm({ product, categories, brands, tags }: Props) {
             />
           </div>
           <div>
-            <label htmlFor="slug" className="mb-1 block text-sm font-medium">Slug *</label>
+            <label htmlFor="slug" className="mb-1 block text-sm font-medium">
+              Slug *
+            </label>
             <input
               id="slug"
               name="slug"
@@ -104,7 +110,9 @@ export function ProductForm({ product, categories, brands, tags }: Props) {
             />
           </div>
           <div>
-            <label htmlFor="status" className="mb-1 block text-sm font-medium">Status</label>
+            <label htmlFor="status" className="mb-1 block text-sm font-medium">
+              Status
+            </label>
             <select
               id="status"
               name="status"
@@ -119,7 +127,9 @@ export function ProductForm({ product, categories, brands, tags }: Props) {
             </select>
           </div>
           <div>
-            <label htmlFor="categoryId" className="mb-1 block text-sm font-medium">Kategoria</label>
+            <label htmlFor="categoryId" className="mb-1 block text-sm font-medium">
+              Kategoria
+            </label>
             <select
               id="categoryId"
               name="categoryId"
@@ -135,7 +145,9 @@ export function ProductForm({ product, categories, brands, tags }: Props) {
             </select>
           </div>
           <div>
-            <label htmlFor="brandId" className="mb-1 block text-sm font-medium">Marka</label>
+            <label htmlFor="brandId" className="mb-1 block text-sm font-medium">
+              Marka
+            </label>
             <select
               id="brandId"
               name="brandId"
@@ -151,7 +163,9 @@ export function ProductForm({ product, categories, brands, tags }: Props) {
             </select>
           </div>
           <div className="sm:col-span-2">
-            <label htmlFor="shortDescPl" className="mb-1 block text-sm font-medium">Krótki opis (PL)</label>
+            <label htmlFor="shortDescPl" className="mb-1 block text-sm font-medium">
+              Krótki opis (PL)
+            </label>
             <textarea
               id="shortDescPl"
               name="shortDescPl"
@@ -161,7 +175,9 @@ export function ProductForm({ product, categories, brands, tags }: Props) {
             />
           </div>
           <div className="sm:col-span-2">
-            <label htmlFor="descriptionPl" className="mb-1 block text-sm font-medium">Pełny opis (PL)</label>
+            <label htmlFor="descriptionPl" className="mb-1 block text-sm font-medium">
+              Pełny opis (PL)
+            </label>
             <textarea
               id="descriptionPl"
               name="descriptionPl"
@@ -188,7 +204,9 @@ export function ProductForm({ product, categories, brands, tags }: Props) {
         <h2 className="mb-4 font-semibold">Szczegóły suplementu</h2>
         <div className="grid gap-3 sm:grid-cols-3">
           <div>
-            <label htmlFor="netWeight" className="mb-1 block text-sm font-medium">Waga netto</label>
+            <label htmlFor="netWeight" className="mb-1 block text-sm font-medium">
+              Waga netto
+            </label>
             <input
               id="netWeight"
               name="netWeight"
@@ -198,7 +216,9 @@ export function ProductForm({ product, categories, brands, tags }: Props) {
             />
           </div>
           <div>
-            <label htmlFor="servingSize" className="mb-1 block text-sm font-medium">Porcja</label>
+            <label htmlFor="servingSize" className="mb-1 block text-sm font-medium">
+              Porcja
+            </label>
             <input
               id="servingSize"
               name="servingSize"
@@ -208,7 +228,9 @@ export function ProductForm({ product, categories, brands, tags }: Props) {
             />
           </div>
           <div>
-            <label htmlFor="countryOfOrigin" className="mb-1 block text-sm font-medium">Kraj pochodzenia</label>
+            <label htmlFor="countryOfOrigin" className="mb-1 block text-sm font-medium">
+              Kraj pochodzenia
+            </label>
             <input
               id="countryOfOrigin"
               name="countryOfOrigin"
@@ -261,7 +283,9 @@ export function ProductForm({ product, categories, brands, tags }: Props) {
         <h2 className="mb-4 font-semibold">SEO</h2>
         <div className="grid gap-3">
           <div>
-            <label htmlFor="metaTitlePl" className="mb-1 block text-sm font-medium">Meta tytuł (PL)</label>
+            <label htmlFor="metaTitlePl" className="mb-1 block text-sm font-medium">
+              Meta tytuł (PL)
+            </label>
             <input
               id="metaTitlePl"
               name="metaTitlePl"
@@ -271,7 +295,9 @@ export function ProductForm({ product, categories, brands, tags }: Props) {
             />
           </div>
           <div>
-            <label htmlFor="metaDescPl" className="mb-1 block text-sm font-medium">Meta opis (PL)</label>
+            <label htmlFor="metaDescPl" className="mb-1 block text-sm font-medium">
+              Meta opis (PL)
+            </label>
             <textarea
               id="metaDescPl"
               name="metaDescPl"

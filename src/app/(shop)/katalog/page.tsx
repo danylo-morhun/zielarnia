@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { Breadcrumbs } from "@/features/catalog/components/Breadcrumbs";
-import { FilterSidebar } from "@/features/catalog/components/FilterSidebar";
-import { FilterDrawerButton } from "@/features/catalog/components/FilterDrawerButton";
 import { ActiveFilterChips } from "@/features/catalog/components/ActiveFilterChips";
+import { Breadcrumbs } from "@/features/catalog/components/Breadcrumbs";
+import { FilterDrawerButton } from "@/features/catalog/components/FilterDrawerButton";
+import { FilterSidebar } from "@/features/catalog/components/FilterSidebar";
 import { ProductGridServer } from "@/features/catalog/components/ProductGridServer";
 import { ProductGridSkeleton } from "@/features/catalog/components/ProductGridSkeleton";
 import { SearchInput } from "@/features/catalog/components/SearchInput";
@@ -24,11 +24,7 @@ export default async function KatalogPage({ searchParams }: Props) {
   const params = await searchParams;
   const filters = parseCatalogFilters(params);
 
-  const [categories, brands, tags] = await Promise.all([
-    getCategories(),
-    getBrands(),
-    getTags(),
-  ]);
+  const [categories, brands, tags] = await Promise.all([getCategories(), getBrands(), getTags()]);
 
   const breadcrumbs = [
     { name: "Strona główna", href: "/" },

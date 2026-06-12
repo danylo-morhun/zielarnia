@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
+import { Breadcrumbs } from "@/features/catalog/components/Breadcrumbs";
 import { ProductActionsClient } from "@/features/catalog/components/ProductActionsClient";
 import { ProductCard } from "@/features/catalog/components/ProductCard";
-import { Breadcrumbs } from "@/features/catalog/components/Breadcrumbs";
 import { ProductGallery } from "@/features/catalog/components/ProductGallery";
 import { WishlistButton } from "@/features/wishlist/components/WishlistButton";
 import { getWishlist, WISHLIST_COOKIE_NAME } from "@/features/wishlist/lib/session";
-import { buildProductJsonLd } from "@/lib/seo";
-import { sanitizeRichText } from "@/lib/sanitize";
 import { prisma } from "@/lib/prisma";
+import { sanitizeRichText } from "@/lib/sanitize";
+import { buildProductJsonLd } from "@/lib/seo";
 import { getProduct } from "../../../../features/catalog/actions";
 
 type Props = {
@@ -65,7 +65,13 @@ export default async function ProduktPage({ params }: Props) {
             },
             variants: {
               where: { isActive: true },
-              select: { id: true, pricePln: true, comparePricePln: true, stock: true, isDefault: true },
+              select: {
+                id: true,
+                pricePln: true,
+                comparePricePln: true,
+                stock: true,
+                isDefault: true,
+              },
               orderBy: { isDefault: "desc" },
               take: 1,
             },
@@ -145,7 +151,9 @@ export default async function ProduktPage({ params }: Props) {
               </a>
             )}
 
-            <h1 className="text-balance text-2xl text-foreground leading-tight">{product.namePl}</h1>
+            <h1 className="text-balance text-2xl text-foreground leading-tight">
+              {product.namePl}
+            </h1>
 
             {product.shortDescPl && <p className="text-muted-foreground">{product.shortDescPl}</p>}
 

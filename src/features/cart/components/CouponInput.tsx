@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import { useAction } from "next-safe-action/hooks";
+import { useState } from "react";
 import { verifyCoupon } from "@/features/checkout/actions";
 import { formatPrice } from "@/lib/format";
 

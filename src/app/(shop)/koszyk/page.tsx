@@ -5,8 +5,8 @@ import Link from "next/link";
 import { CartList } from "@/features/cart/components/CartList";
 import { CartSummary } from "@/features/cart/components/CartSummary";
 import { ShippingProgress } from "@/features/cart/components/ShippingProgress";
-import { auth } from "@/lib/auth";
 import { CART_COOKIE_NAME, getCart, getCartByCustomerId } from "@/features/cart/lib/session";
+import { auth } from "@/lib/auth";
 
 export const metadata: Metadata = {
   title: "Koszyk — Twoje Zdrowie",

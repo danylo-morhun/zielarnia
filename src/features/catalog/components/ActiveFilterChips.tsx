@@ -1,6 +1,6 @@
 "use client";
-import { useSearchParams, useRouter } from "next/navigation";
 import { X } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 type Props = {
   categories: { slug: string; namePl: string }[];

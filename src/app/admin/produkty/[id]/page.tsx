@@ -34,10 +34,7 @@ export default async function AdminEditProductPage({
     <div className="space-y-8">
       <h1 className="text-2xl font-bold">{product.namePl}</h1>
       <ProductForm product={productFields} categories={categories} brands={brands} tags={tags} />
-      <VariantsTable
-        productId={product.id}
-        variants={serializedVariants}
-      />
+      <VariantsTable productId={product.id} variants={serializedVariants} />
       <ImagesSection productId={product.id} images={images} />
     </div>
   );

@@ -9,17 +9,15 @@ export function ShippingProgress({ subtotal }: Props) {
   const pct = Math.min((subtotal / FREE_SHIPPING_THRESHOLD) * 100, 100);
 
   if (subtotal >= FREE_SHIPPING_THRESHOLD) {
-    return (
-      <p className="text-sm font-medium text-success">✓ Masz darmową dostawę!</p>
-    );
+    return <p className="text-sm font-medium text-success">✓ Masz darmową dostawę!</p>;
   }
 
   return (
     <div className="space-y-1">
       <p className="text-sm text-muted-foreground">
         Dodaj produkty za{" "}
-        <span className="font-semibold text-foreground">{formatPrice(remaining)}</span>{" "}
-        do darmowej dostawy
+        <span className="font-semibold text-foreground">{formatPrice(remaining)}</span> do darmowej
+        dostawy
       </p>
       <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
         <div

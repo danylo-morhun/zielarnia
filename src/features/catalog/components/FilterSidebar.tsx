@@ -13,7 +13,13 @@ type Props = {
   onFilterChange?: () => void;
 };
 
-export function FilterSidebar({ categories, brands, tags, basePath = "/katalog", onFilterChange }: Props) {
+export function FilterSidebar({
+  categories,
+  brands,
+  tags,
+  basePath = "/katalog",
+  onFilterChange,
+}: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -73,9 +79,7 @@ export function FilterSidebar({ categories, brands, tags, basePath = "/katalog",
       </div>
 
       <div>
-        <p className="mb-2 text-sm font-semibold text-foreground">
-          Sortowanie
-        </p>
+        <p className="mb-2 text-sm font-semibold text-foreground">Sortowanie</p>
         <select
           value={active.sort}
           onChange={(e) => setParam("sortuj", e.target.value)}
@@ -89,9 +93,7 @@ export function FilterSidebar({ categories, brands, tags, basePath = "/katalog",
 
       {categories.length > 0 && (
         <div>
-          <p className="mb-2 text-sm font-semibold text-foreground">
-            Kategoria
-          </p>
+          <p className="mb-2 text-sm font-semibold text-foreground">Kategoria</p>
           <ul className="space-y-1">
             {categories.map((cat) => (
               <li key={cat.id}>
@@ -117,9 +119,7 @@ export function FilterSidebar({ categories, brands, tags, basePath = "/katalog",
 
       {brands.length > 0 && (
         <div>
-          <p className="mb-2 text-sm font-semibold text-foreground">
-            Marka
-          </p>
+          <p className="mb-2 text-sm font-semibold text-foreground">Marka</p>
           <ul className="space-y-1">
             {brands.map((brand) => (
               <li key={brand.id}>
@@ -143,9 +143,7 @@ export function FilterSidebar({ categories, brands, tags, basePath = "/katalog",
 
       {tags.length > 0 && (
         <div>
-          <p className="mb-2 text-sm font-semibold text-foreground">
-            Cechy
-          </p>
+          <p className="mb-2 text-sm font-semibold text-foreground">Cechy</p>
           <div className="flex flex-wrap gap-2">
             {tags.map((tag) => {
               const isActive = active.tags.includes(tag.slug);
