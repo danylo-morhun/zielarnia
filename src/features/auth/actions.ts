@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 import { AuthError } from "next-auth";
 import { CART_COOKIE_NAME, mergeGuestCart } from "@/features/cart/lib/session";
 import { mergeGuestWishlist, WISHLIST_COOKIE_NAME } from "@/features/wishlist/lib/session";
+import { ActionError } from "@/lib/action-error";
 import { signIn } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { actionClient } from "@/lib/safe-action";
@@ -19,10 +20,10 @@ export const loginCustomer = actionClient
       select: { id: true, passwordHash: true },
     });
     if (!customer?.passwordHash) {
-      throw new Error("Nieprawidłowy e-mail lub hasło");
+      throw new ActionError("Nieprawidłowy e-mail lub hasło");
     }
     const valid = await bcrypt.compare(input.password, customer.passwordHash);
-    if (!valid) throw new Error("Nieprawidłowy e-mail lub hasło");
+    if (!valid) throw new ActionError("Nieprawidłowy e-mail lub hasło");
 
     // Merge guest cart/wishlist before signIn redirect
     const cookieStore = await cookies();
@@ -38,7 +39,7 @@ export const loginCustomer = actionClient
         redirectTo: input.callbackUrl ?? "/konto",
       });
     } catch (err) {
-      if (err instanceof AuthError) throw new Error("Nieprawidłowy e-mail lub hasło");
+      if (err instanceof AuthError) throw new ActionError("Nieprawidłowy e-mail lub hasło");
       throw err; // NEXT_REDIRECT — must rethrow
     }
   });
@@ -50,7 +51,7 @@ export const registerCustomer = actionClient
       where: { email: input.email },
       select: { id: true },
     });
-    if (existing) throw new Error("Konto z tym adresem e-mail już istnieje");
+    if (existing) throw new ActionError("Konto z tym adresem e-mail już istnieje");
 
     const passwordHash = await bcrypt.hash(input.password, 12);
     await prisma.customer.create({
@@ -70,7 +71,7 @@ export const registerCustomer = actionClient
         redirectTo: "/konto",
       });
     } catch (err) {
-      if (err instanceof AuthError) throw new Error("Błąd logowania po rejestracji");
+      if (err instanceof AuthError) throw new ActionError("Błąd logowania po rejestracji");
       throw err; // NEXT_REDIRECT — must rethrow
     }
   });

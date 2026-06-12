@@ -4,6 +4,7 @@ import { cookies, headers } from "next/headers";
 import { z } from "zod";
 import { CART_COOKIE_NAME } from "@/features/cart/lib/session";
 import { paymentUrl, registerTransaction } from "@/features/przelewy24/lib/client";
+import { ActionError } from "@/lib/action-error";
 import { formatPrice } from "@/lib/format";
 import { prisma } from "@/lib/prisma";
 import { actionClient } from "@/lib/safe-action";
@@ -60,7 +61,7 @@ export const placeOrder = actionClient
   .action(async ({ parsedInput: input }) => {
     const cart = await getCartForCheckout(input.cartId);
     if (!cart || cart.items.length === 0) {
-      throw new Error("Koszyk jest pusty");
+      throw new ActionError("Koszyk jest pusty");
     }
 
     const shippingPln = SHIPPING_COSTS[input.shippingMethod as keyof typeof SHIPPING_COSTS] ?? 1999;
@@ -113,7 +114,7 @@ export const placeOrder = actionClient
 
         if (coupon) {
           if (coupon.minOrderPln !== null && subtotalPln < coupon.minOrderPln) {
-            throw new Error(
+            throw new ActionError(
               `Minimalna wartość zamówienia dla tego kodu: ${formatPrice(coupon.minOrderPln)}`,
             );
           }
@@ -128,7 +129,7 @@ export const placeOrder = actionClient
           });
 
           if (used.count === 0) {
-            throw new Error("Kod rabatowy jest już wyczerpany");
+            throw new ActionError("Kod rabatowy jest już wyczerpany");
           }
 
           couponId = coupon.id;
@@ -149,7 +150,9 @@ export const placeOrder = actionClient
           data: { stock: { decrement: item.quantity } },
         });
         if (result.count === 0) {
-          throw new Error(`Produkt niedostępny w wybranej ilości: ${item.variant.product.namePl}`);
+          throw new ActionError(
+            `Produkt niedostępny w wybranej ilości: ${item.variant.product.namePl}`,
+          );
         }
       }
 

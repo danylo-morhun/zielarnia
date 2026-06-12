@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { ActionError } from "@/lib/action-error";
 import { syncProductToBaselinker, syncStockToBaselinker } from "@/lib/baselinker/inventory";
 import { prisma } from "@/lib/prisma";
 import { adminActionClient } from "@/lib/safe-action";
@@ -154,7 +155,7 @@ export const deleteProduct = adminActionClient
       where: { variant: { productId: id } },
     });
     if (hasOrders) {
-      throw new Error("Nie można usunąć produktu z przypisanymi zamówieniami");
+      throw new ActionError("Nie można usunąć produktu z przypisanymi zamówieniami");
     }
     await prisma.product.delete({ where: { id } });
     revalidatePath("/admin/produkty");
@@ -202,7 +203,7 @@ export const deleteVariant = adminActionClient
   .action(async ({ parsedInput: { id } }) => {
     const hasOrders = await prisma.orderItem.findFirst({ where: { variantId: id } });
     if (hasOrders) {
-      throw new Error("Nie można usunąć wariantu z przypisanymi zamówieniami");
+      throw new ActionError("Nie można usunąć wariantu z przypisanymi zamówieniami");
     }
     await prisma.productVariant.delete({ where: { id } });
     revalidatePath("/admin/produkty");
