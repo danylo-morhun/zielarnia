@@ -32,7 +32,7 @@ export function WishlistIconClient({ itemCount, items }: Props) {
       >
         <Heart className="size-5" />
         {itemCount > 0 && (
-          <span className="absolute right-0.5 top-0.5 flex size-4 items-center justify-center rounded-full bg-destructive text-[10px] font-bold text-destructive-foreground">
+          <span className="absolute right-0.5 top-0.5 flex size-4 items-center justify-center rounded-full bg-destructive text-[10px] font-bold text-white">
             {itemCount > 99 ? "99+" : itemCount}
           </span>
         )}
