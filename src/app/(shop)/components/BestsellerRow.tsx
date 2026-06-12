@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { ProductCard } from "@/features/catalog/components/ProductCard";
 import type { ProductListItem } from "@/features/catalog/actions";
+import { ProductCard } from "@/features/catalog/components/ProductCard";
 
 type Props = {
   products: ProductListItem[];
@@ -15,12 +15,15 @@ export function BestsellerRow({ products, title, href, variant = "grid" }: Props
   return (
     <section className="space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-balance font-heading text-2xl font-semibold">{title}</h2>
+        <h2 className="text-balance text-2xl font-bold tracking-tight">{title}</h2>
         <Link
           href={href}
-          className="text-sm font-medium text-primary transition-colors duration-150 hover:text-primary/70"
+          className="group rounded-full bg-secondary px-4 py-2 text-sm font-semibold text-secondary-foreground transition-colors duration-200 hover:bg-primary hover:text-primary-foreground motion-reduce:transition-none"
         >
-          Zobacz wszystkie →
+          Zobacz wszystkie
+          <span className="ml-1 inline-block transition-transform duration-200 group-hover:translate-x-0.5 motion-reduce:group-hover:translate-x-0">
+            →
+          </span>
         </Link>
       </div>
 

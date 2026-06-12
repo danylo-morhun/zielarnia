@@ -9,18 +9,19 @@ const items = [
 
 export function TrustStrip() {
   return (
-    <section aria-label="Nasze gwarancje" className="rounded-2xl bg-secondary px-2 py-2">
-      <div className="grid grid-cols-2 md:grid-cols-4">
+    <section aria-label="Nasze gwarancje">
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         {items.map(({ icon: Icon, title, sub }) => (
-          <div key={title} className="flex items-center gap-3 px-4 py-3.5">
-            <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-card text-primary">
+          <div
+            key={title}
+            className="group flex items-center gap-3 rounded-2xl bg-card px-4 py-4 shadow-card transition-[box-shadow,transform] duration-200 ease-out hover:-translate-y-0.5 hover:shadow-card-hover motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+          >
+            <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-secondary text-primary transition-transform duration-200 group-hover:scale-110 motion-reduce:group-hover:scale-100">
               <Icon className="size-5" strokeWidth={1.75} />
             </span>
             <div>
-              <p className="text-sm font-semibold leading-snug text-secondary-foreground">
-                {title}
-              </p>
-              <p className="text-xs text-secondary-foreground/80">{sub}</p>
+              <p className="text-sm font-bold leading-snug text-foreground">{title}</p>
+              <p className="text-xs text-muted-foreground">{sub}</p>
             </div>
           </div>
         ))}
