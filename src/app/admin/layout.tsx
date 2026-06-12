@@ -1,8 +1,6 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { SideNav } from "@/components/layout/SideNav";
-import { LogoutButton } from "@/app/admin/components/LogoutButton";
-import { signOut } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -35,12 +33,6 @@ export default async function AdminLayout({ children }: { children: React.ReactN
               </Link>
               <div className="mx-1 my-1 border-t border-border" />
               <SideNav items={navItems} />
-              <LogoutButton
-                action={async () => {
-                  "use server";
-                  await signOut({ redirectTo: "/" });
-                }}
-              />
             </nav>
           </div>
         </aside>
