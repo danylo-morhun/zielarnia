@@ -1,4 +1,4 @@
-import { Truck, ShieldCheck, Leaf, Phone } from "lucide-react";
+import { Leaf, Phone, ShieldCheck, Truck } from "lucide-react";
 
 const items = [
   { icon: Truck, title: "Darmowa dostawa", sub: "od 200 zł" },
@@ -9,17 +9,18 @@ const items = [
 
 export function TrustStrip() {
   return (
-    <section aria-label="Nasze gwarancje">
-      <div className="grid grid-cols-2 divide-x divide-y divide-border md:grid-cols-4 md:divide-y-0">
-        {items.map(({ icon: Icon, title, sub }, i) => (
-          <div
-            key={title}
-            className={`flex items-center gap-3 px-5 py-4 ${i === 0 ? "md:pl-0" : ""} ${i === items.length - 1 ? "md:pr-0" : ""}`}
-          >
-            <Icon className="size-5 shrink-0 text-primary" strokeWidth={1.75} />
+    <section aria-label="Nasze gwarancje" className="rounded-2xl bg-secondary px-2 py-2">
+      <div className="grid grid-cols-2 md:grid-cols-4">
+        {items.map(({ icon: Icon, title, sub }) => (
+          <div key={title} className="flex items-center gap-3 px-4 py-3.5">
+            <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-card text-primary">
+              <Icon className="size-5" strokeWidth={1.75} />
+            </span>
             <div>
-              <p className="text-sm font-semibold leading-snug">{title}</p>
-              <p className="text-xs text-muted-foreground">{sub}</p>
+              <p className="text-sm font-semibold leading-snug text-secondary-foreground">
+                {title}
+              </p>
+              <p className="text-xs text-secondary-foreground/80">{sub}</p>
             </div>
           </div>
         ))}
