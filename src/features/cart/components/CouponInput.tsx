@@ -61,7 +61,9 @@ export function CouponInput({ subtotal, onDiscount }: Props) {
         </button>
       </div>
       {couponState && (
-        <p className={`text-xs font-medium ${couponState.valid ? "text-success" : "text-destructive"}`}>
+        <p
+          className={`text-xs font-medium ${couponState.valid ? "text-success" : "text-destructive"}`}
+        >
           {couponState.valid
             ? `✓ Rabat: -${formatPrice(couponState.discountPln)}`
             : couponState.message}

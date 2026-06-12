@@ -36,7 +36,9 @@ export function CartItemRow({ item, onRemove }: Props) {
   const image = item.variant.product.images[0];
 
   return (
-    <div className={`flex gap-4 px-6 py-5 transition-opacity duration-200 ${pending ? "opacity-60" : ""}`}>
+    <div
+      className={`flex gap-4 px-6 py-5 transition-opacity duration-200 ${pending ? "opacity-60" : ""}`}
+    >
       <div className="relative size-24 shrink-0 overflow-hidden rounded-lg bg-muted">
         {image ? (
           <Image

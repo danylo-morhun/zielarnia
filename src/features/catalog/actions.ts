@@ -50,75 +50,76 @@ export async function getProducts(filters: CatalogFilters) {
 export type ProductListItem = Awaited<ReturnType<typeof getProducts>>["items"][number];
 
 export const getProduct = unstable_cache(
-  async (slug: string) => prisma.product.findFirst({
-    where: { slug, status: "ACTIVE" },
-    select: {
-      id: true,
-      slug: true,
-      namePl: true,
-      nameEn: true,
-      shortDescPl: true,
-      descriptionPl: true,
-      isNewArrival: true,
-      isFeatured: true,
-      netWeight: true,
-      servingSize: true,
-      servingsPerContainer: true,
-      storageInfo: true,
-      countryOfOrigin: true,
-      ingredients: true,
-      nutritionFacts: true,
-      allergenInfo: true,
-      healthWarnings: true,
-      ageRestriction: true,
-      metaTitlePl: true,
-      metaDescPl: true,
-      brand: {
-        select: { id: true, name: true, slug: true, description: true, logo: true },
-      },
-      category: {
-        select: {
-          id: true,
-          namePl: true,
-          slug: true,
-          parent: { select: { namePl: true, slug: true } },
+  async (slug: string) =>
+    prisma.product.findFirst({
+      where: { slug, status: "ACTIVE" },
+      select: {
+        id: true,
+        slug: true,
+        namePl: true,
+        nameEn: true,
+        shortDescPl: true,
+        descriptionPl: true,
+        isNewArrival: true,
+        isFeatured: true,
+        netWeight: true,
+        servingSize: true,
+        servingsPerContainer: true,
+        storageInfo: true,
+        countryOfOrigin: true,
+        ingredients: true,
+        nutritionFacts: true,
+        allergenInfo: true,
+        healthWarnings: true,
+        ageRestriction: true,
+        metaTitlePl: true,
+        metaDescPl: true,
+        brand: {
+          select: { id: true, name: true, slug: true, description: true, logo: true },
         },
-      },
-      images: {
-        select: {
-          id: true,
-          url: true,
-          altPl: true,
-          sortOrder: true,
-          isMain: true,
-          variantId: true,
+        category: {
+          select: {
+            id: true,
+            namePl: true,
+            slug: true,
+            parent: { select: { namePl: true, slug: true } },
+          },
         },
-        orderBy: { sortOrder: "asc" },
-      },
-      variants: {
-        where: { isActive: true },
-        select: {
-          id: true,
-          sku: true,
-          optionLabel: true,
-          optionValue: true,
-          pricePln: true,
-          comparePricePln: true,
-          stock: true,
-          isDefault: true,
-          weightGrams: true,
+        images: {
+          select: {
+            id: true,
+            url: true,
+            altPl: true,
+            sortOrder: true,
+            isMain: true,
+            variantId: true,
+          },
+          orderBy: { sortOrder: "asc" },
         },
-        orderBy: { isDefault: "desc" },
-      },
-      tags: {
-        select: {
-          tag: {
-            select: { id: true, namePl: true, slug: true, iconUrl: true, type: true },
+        variants: {
+          where: { isActive: true },
+          select: {
+            id: true,
+            sku: true,
+            optionLabel: true,
+            optionValue: true,
+            pricePln: true,
+            comparePricePln: true,
+            stock: true,
+            isDefault: true,
+            weightGrams: true,
+          },
+          orderBy: { isDefault: "desc" },
+        },
+        tags: {
+          select: {
+            tag: {
+              select: { id: true, namePl: true, slug: true, iconUrl: true, type: true },
+            },
           },
         },
       },
-    },
-  }),
+    }),
   ["product-by-slug"],
   { tags: ["products"] },
 );
