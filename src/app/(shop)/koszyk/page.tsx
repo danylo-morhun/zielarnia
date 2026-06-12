@@ -31,7 +31,7 @@ export default async function KoszykPage() {
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center gap-4 text-center">
           <ShoppingBag className="size-12 text-muted-foreground" />
-          <h1 className="text-balance font-heading text-2xl font-semibold">Twój koszyk jest pusty</h1>
+          <h1 className="text-balance text-2xl">Twój koszyk jest pusty</h1>
           <p className="text-muted-foreground">Przejrzyj katalog i dodaj produkty do koszyka.</p>
           <Link
             href="/katalog"
@@ -49,7 +49,7 @@ export default async function KoszykPage() {
   return (
     <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
       <div className="mb-8 flex items-center justify-between">
-        <h1 className="text-balance font-heading text-2xl font-semibold">Koszyk</h1>
+        <h1 className="text-balance text-2xl">Koszyk</h1>
         <Link
           href="/katalog"
           className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary"

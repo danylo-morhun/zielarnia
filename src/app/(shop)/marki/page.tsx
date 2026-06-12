@@ -22,7 +22,7 @@ export default async function MarkiPage() {
 
   return (
     <main className="container mx-auto max-w-5xl px-4 py-12">
-      <h1 className="mb-8 font-heading text-3xl font-semibold">Marki</h1>
+      <h1 className="mb-8 text-3xl">Marki</h1>
 
       {brands.length === 0 ? (
         <p className="text-muted-foreground">Brak marek do wyświetlenia.</p>
@@ -32,7 +32,7 @@ export default async function MarkiPage() {
             <Link
               key={brand.id}
               href={`/marki/${brand.slug}`}
-              className="group flex flex-col items-center gap-3 rounded-xl border bg-card p-4 text-center transition-colors hover:border-primary hover:bg-primary/5"
+              className="group flex flex-col items-center gap-3 rounded-2xl bg-card p-4 text-center shadow-card transition-[box-shadow,transform] duration-200 ease-out hover:-translate-y-0.5 hover:shadow-card-hover motion-reduce:transition-none motion-reduce:hover:translate-y-0"
             >
               {brand.logo ? (
                 <div className="relative h-14 w-full">

@@ -93,7 +93,7 @@ export default async function OrderDetailPage({
       </div>
 
       {order.trackingNumber && (
-        <div className="rounded-lg border border-border p-4 text-sm">
+        <div className="rounded-2xl bg-card p-5 text-sm shadow-card">
           <p className="font-medium">Śledzenie przesyłki</p>
           <p className="text-muted-foreground">
             {order.trackingNumber}
@@ -117,7 +117,7 @@ export default async function OrderDetailPage({
       {/* Items */}
       <div>
         <h2 className="mb-3 font-medium">Produkty</h2>
-        <div className="divide-y divide-border rounded-lg border border-border">
+        <div className="divide-y divide-border rounded-2xl bg-card shadow-card">
           {order.items.map((item) => (
             <div key={item.id} className="flex items-center justify-between px-4 py-3 text-sm">
               <div>

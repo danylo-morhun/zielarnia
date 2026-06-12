@@ -190,7 +190,7 @@ export function StepShipping({ data, onChange, onBack, onNext }: Props) {
         </button>
         <button
           type="submit"
-          className="flex-1 rounded-lg bg-primary px-4 py-3 text-sm font-medium text-primary-foreground hover:bg-primary/80"
+          className="flex-1 rounded-lg bg-primary px-4 py-3 text-sm font-medium text-primary-foreground transition-colors duration-200 hover:bg-primary-deep motion-reduce:transition-none"
         >
           Dalej: Płatność
         </button>

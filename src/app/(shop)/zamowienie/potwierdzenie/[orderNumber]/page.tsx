@@ -69,7 +69,7 @@ export default async function PotwierdzeniePage({ params }: Props) {
         ) : (
           <Clock className="size-12 text-amber-500" />
         )}
-        <h1 className="text-balance font-heading text-2xl font-semibold">
+        <h1 className="text-balance text-2xl">
           {order.paymentStatus === "CAPTURED" ? "Zamówienie opłacone!" : "Zamówienie złożone!"}
         </h1>
         <p className="text-muted-foreground">
@@ -83,14 +83,14 @@ export default async function PotwierdzeniePage({ params }: Props) {
       </div>
 
       {order.paymentStatus !== "CAPTURED" && (
-        <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+        <div className="mb-6 rounded-xl bg-warning/15 px-4 py-3 text-sm text-warning-foreground">
           Czekamy na potwierdzenie płatności (
           {paymentLabel[order.paymentMethod] ?? order.paymentMethod}). Po zaksięgowaniu rozpoczniemy
           realizację zamówienia.
         </div>
       )}
 
-      <div className="space-y-4 rounded-lg border border-border p-6">
+      <div className="space-y-4 rounded-2xl bg-card p-6 shadow-card">
         <h2 className="font-semibold">Szczegóły zamówienia</h2>
 
         <ul className="divide-y divide-border">

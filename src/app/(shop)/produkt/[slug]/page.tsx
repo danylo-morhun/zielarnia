@@ -145,7 +145,7 @@ export default async function ProduktPage({ params }: Props) {
               </a>
             )}
 
-            <h1 className="text-balance font-heading text-2xl font-semibold text-foreground leading-tight">{product.namePl}</h1>
+            <h1 className="text-balance text-2xl text-foreground leading-tight">{product.namePl}</h1>
 
             {product.shortDescPl && <p className="text-muted-foreground">{product.shortDescPl}</p>}
 
@@ -218,7 +218,7 @@ export default async function ProduktPage({ params }: Props) {
           )}
 
           {healthWarnings && healthWarnings.length > 0 && (
-            <section className="rounded-lg border border-border bg-muted/30 p-4">
+            <section className="rounded-2xl bg-secondary/60 p-5">
               <h2 className="text-sm font-semibold text-foreground">Informacje regulacyjne</h2>
               <ul className="mt-2 space-y-1">
                 {healthWarnings.map((warning) => (
@@ -233,7 +233,7 @@ export default async function ProduktPage({ params }: Props) {
 
         {related.length > 0 && (
           <section className="mt-16">
-            <h2 className="mb-6 font-heading text-2xl font-semibold">Podobne produkty</h2>
+            <h2 className="mb-6 text-2xl">Podobne produkty</h2>
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
               {related.map((p) => (
                 <ProductCard key={p.id} product={p} />

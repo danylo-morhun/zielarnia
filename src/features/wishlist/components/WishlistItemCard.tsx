@@ -40,7 +40,7 @@ export function WishlistItemCard({ item }: Props) {
   const lowStock = inStock && variant.stock <= 5;
 
   return (
-    <div className="flex gap-4 rounded-xl border bg-card p-4">
+    <div className="flex gap-4 rounded-2xl bg-card p-4 shadow-card">
       <Link
         href={`/produkt/${item.product.slug}`}
         className="relative size-20 shrink-0 overflow-hidden rounded-lg bg-muted"
@@ -96,7 +96,7 @@ export function WishlistItemCard({ item }: Props) {
             type="button"
             onClick={() => doAddToCart({ variantId: variant.id, quantity: 1 })}
             disabled={adding}
-            className="flex items-center gap-1 rounded-md bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
+            className="flex items-center gap-1 rounded-md bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground transition-colors duration-200 hover:bg-primary-deep motion-reduce:transition-none disabled:opacity-50"
           >
             <ShoppingCart className="size-3" />
             {adding ? "…" : "Do koszyka"}

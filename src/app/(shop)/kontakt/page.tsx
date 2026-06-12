@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function KontaktPage() {
   return (
     <main className="container mx-auto max-w-3xl px-4 py-12">
-      <h1 className="mb-8 font-heading text-3xl font-semibold">Kontakt</h1>
+      <h1 className="mb-8 text-3xl">Kontakt</h1>
 
       <div className="space-y-8">
         <p className="text-sm text-muted-foreground">
@@ -17,7 +17,7 @@ export default function KontaktPage() {
         </p>
 
         <div className="grid gap-4 sm:grid-cols-2">
-          <div className="flex items-start gap-4 rounded-xl border bg-card p-5">
+          <div className="flex items-start gap-4 rounded-2xl bg-card p-5 shadow-card">
             <Mail className="mt-0.5 size-5 shrink-0 text-primary" />
             <div>
               <p className="text-sm font-semibold">E-mail</p>
@@ -31,7 +31,7 @@ export default function KontaktPage() {
             </div>
           </div>
 
-          <div className="flex items-start gap-4 rounded-xl border bg-card p-5">
+          <div className="flex items-start gap-4 rounded-2xl bg-card p-5 shadow-card">
             <Phone className="mt-0.5 size-5 shrink-0 text-primary" />
             <div>
               <p className="text-sm font-semibold">Telefon</p>
@@ -45,7 +45,7 @@ export default function KontaktPage() {
             </div>
           </div>
 
-          <div className="flex items-start gap-4 rounded-xl border bg-card p-5">
+          <div className="flex items-start gap-4 rounded-2xl bg-card p-5 shadow-card">
             <Clock className="mt-0.5 size-5 shrink-0 text-primary" />
             <div>
               <p className="text-sm font-semibold">Godziny obsługi</p>
@@ -54,7 +54,7 @@ export default function KontaktPage() {
             </div>
           </div>
 
-          <div className="flex items-start gap-4 rounded-xl border bg-card p-5">
+          <div className="flex items-start gap-4 rounded-2xl bg-card p-5 shadow-card">
             <MapPin className="mt-0.5 size-5 shrink-0 text-primary" />
             <div>
               <p className="text-sm font-semibold">Adres</p>
@@ -69,8 +69,8 @@ export default function KontaktPage() {
           </div>
         </div>
 
-        <section className="rounded-xl border bg-muted/30 p-6">
-          <h2 className="mb-4 font-heading text-lg font-semibold">Formularz kontaktowy</h2>
+        <section className="rounded-2xl bg-secondary p-6">
+          <h2 className="mb-4 text-lg">Formularz kontaktowy</h2>
           <form className="space-y-4">
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
@@ -120,7 +120,7 @@ export default function KontaktPage() {
             </div>
             <button
               type="submit"
-              className="rounded-md bg-primary px-6 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90"
+              className="rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground transition-colors duration-200 hover:bg-primary-deep motion-reduce:transition-none"
             >
               Wyślij wiadomość
             </button>

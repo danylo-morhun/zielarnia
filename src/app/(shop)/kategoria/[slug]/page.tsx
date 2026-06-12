@@ -62,7 +62,7 @@ export default async function KategoriaSlugPage({ params, searchParams }: Props)
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <Breadcrumbs items={breadcrumbs} />
 
-      <h1 className="mt-4 text-balance font-heading text-2xl font-semibold text-foreground">{category.namePl}</h1>
+      <h1 className="mt-4 text-balance text-2xl text-foreground">{category.namePl}</h1>
       {category.descriptionPl && (
         <p className="mt-2 text-muted-foreground">{category.descriptionPl}</p>
       )}

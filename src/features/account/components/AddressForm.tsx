@@ -189,7 +189,7 @@ export function AddressForm({ initial, onDone }: Props) {
         <button
           type="submit"
           disabled={isPending}
-          className="rounded-lg bg-primary px-5 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/80 disabled:opacity-50"
+          className="rounded-lg bg-primary px-5 py-2 text-sm font-medium text-primary-foreground transition-colors duration-200 hover:bg-primary-deep motion-reduce:transition-none disabled:opacity-50"
         >
           {isPending ? "Zapisywanie..." : "Zapisz"}
         </button>

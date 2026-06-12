@@ -8,11 +8,11 @@ export const metadata: Metadata = {
 export default function ZwrotyPage() {
   return (
     <main className="container mx-auto max-w-3xl px-4 py-12">
-      <h1 className="mb-8 font-heading text-3xl font-semibold">Zwroty i reklamacje</h1>
+      <h1 className="mb-8 text-3xl">Zwroty i reklamacje</h1>
 
       <div className="space-y-10 text-sm leading-relaxed text-foreground">
         <section>
-          <h2 className="mb-3 font-heading text-xl font-semibold">Prawo do odstąpienia od umowy</h2>
+          <h2 className="mb-3 text-xl">Prawo do odstąpienia od umowy</h2>
           <p className="text-muted-foreground">
             Zgodnie z ustawą z dnia 30 maja 2014 r. o prawach konsumenta (Dz.U. 2014 poz. 827)
             masz prawo odstąpić od umowy zawartej na odległość bez podania przyczyny w terminie
@@ -29,7 +29,7 @@ export default function ZwrotyPage() {
         </section>
 
         <section>
-          <h2 className="mb-3 font-heading text-xl font-semibold">Jak złożyć zwrot — krok po kroku</h2>
+          <h2 className="mb-3 text-xl">Jak złożyć zwrot — krok po kroku</h2>
           <ol className="list-inside list-decimal space-y-2 text-muted-foreground">
             <li>
               Wyślij e-mail na{" "}
@@ -46,7 +46,7 @@ export default function ZwrotyPage() {
         </section>
 
         <section>
-          <h2 className="mb-3 font-heading text-xl font-semibold">Jak złożyć reklamację</h2>
+          <h2 className="mb-3 text-xl">Jak złożyć reklamację</h2>
           <p className="text-muted-foreground">
             Jeśli otrzymany produkt jest uszkodzony, niezgodny z opisem lub wadliwy, masz prawo
             złożyć reklamację z tytułu rękojmi. Reklamację przyjmujemy:
@@ -66,7 +66,7 @@ export default function ZwrotyPage() {
         </section>
 
         <section>
-          <h2 className="mb-3 font-heading text-xl font-semibold">Zwrot pieniędzy</h2>
+          <h2 className="mb-3 text-xl">Zwrot pieniędzy</h2>
           <p className="text-muted-foreground">
             Po otrzymaniu i sprawdzeniu zwróconego towaru dokonamy zwrotu należności w terminie
             <strong className="text-foreground"> do 14 dni</strong> od daty otrzymania przesyłki zwrotnej.
@@ -75,7 +75,7 @@ export default function ZwrotyPage() {
         </section>
 
         <section>
-          <h2 className="mb-3 font-heading text-xl font-semibold">Produkty bez prawa zwrotu</h2>
+          <h2 className="mb-3 text-xl">Produkty bez prawa zwrotu</h2>
           <p className="text-muted-foreground">
             Zgodnie z art. 38 pkt 5 ustawy o prawach konsumenta, prawo odstąpienia nie przysługuje
             w przypadku produktów dostarczonych w zapieczętowanym opakowaniu, których po otwarciu nie
@@ -85,12 +85,12 @@ export default function ZwrotyPage() {
         </section>
 
         <section>
-          <h2 className="mb-3 font-heading text-xl font-semibold">Formularz zwrotu</h2>
+          <h2 className="mb-3 text-xl">Formularz zwrotu</h2>
           <p className="text-muted-foreground">
             Formularz odstąpienia od umowy możesz pobrać w formacie PDF (wkrótce) lub skorzystać
             z poniższego wzoru:
           </p>
-          <div className="mt-4 rounded-lg border bg-muted/30 p-4 text-xs text-muted-foreground">
+          <div className="mt-4 rounded-xl bg-muted p-4 text-xs text-muted-foreground">
             <p className="font-semibold text-foreground">WZÓR FORMULARZA ODSTĄPIENIA OD UMOWY</p>
             <p className="mt-2">
               Adresat: Twoje Zdrowie, kontakt@twojezdrowie.pl

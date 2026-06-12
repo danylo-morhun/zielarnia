@@ -14,7 +14,7 @@ export default async function LoginPage({
 
   return (
     <div className="mx-auto max-w-md px-4 py-16">
-      <h1 className="mb-8 text-balance font-heading text-2xl font-semibold">Zaloguj się</h1>
+      <h1 className="mb-8 text-balance text-2xl">Zaloguj się</h1>
       <LoginForm callbackUrl={callbackUrl} />
       <p className="mt-6 text-center text-sm text-muted-foreground">
         Nie masz konta?{" "}

@@ -31,7 +31,7 @@ export default async function KategoriePage() {
 
   return (
     <main className="container mx-auto max-w-5xl px-4 py-12">
-      <h1 className="mb-8 font-heading text-3xl font-semibold">Kategorie</h1>
+      <h1 className="mb-8 text-3xl">Kategorie</h1>
 
       {categories.length === 0 ? (
         <p className="text-muted-foreground">Brak kategorii do wyświetlenia.</p>
@@ -48,7 +48,7 @@ export default async function KategoriePage() {
                     <Image src={cat.image} alt={cat.namePl} fill className="object-contain" />
                   </div>
                 ) : null}
-                <h2 className="font-heading text-xl font-semibold">{cat.namePl}</h2>
+                <h2 className="text-xl">{cat.namePl}</h2>
                 <span className="text-sm text-muted-foreground">({cat._count.products})</span>
               </Link>
 
@@ -58,7 +58,7 @@ export default async function KategoriePage() {
                     <Link
                       key={sub.id}
                       href={`/kategoria/${sub.slug}`}
-                      className="rounded-lg border bg-card px-3 py-2 text-sm transition-colors hover:border-primary hover:bg-primary/5"
+                      className="rounded-full bg-secondary px-3.5 py-2 text-sm text-secondary-foreground transition-colors duration-200 hover:bg-primary hover:text-primary-foreground motion-reduce:transition-none"
                     >
                       <span className="font-medium">{sub.namePl}</span>
                       <span className="ml-1 text-xs text-muted-foreground">

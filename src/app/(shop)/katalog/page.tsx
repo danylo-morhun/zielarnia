@@ -39,7 +39,7 @@ export default async function KatalogPage({ searchParams }: Props) {
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <Breadcrumbs items={breadcrumbs} />
 
-      <h1 className="mt-4 text-balance font-heading text-2xl font-semibold text-foreground">Katalog produktów</h1>
+      <h1 className="mt-4 text-balance text-2xl text-foreground">Katalog produktów</h1>
 
       <div className="mt-6 flex gap-8">
         <div className="hidden w-56 shrink-0 lg:block">

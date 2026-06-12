@@ -20,7 +20,7 @@ export default async function UlubinonePage() {
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center gap-4 text-center">
           <Heart className="size-12 text-muted-foreground" />
-          <h1 className="text-balance font-heading text-2xl font-semibold">Brak ulubionych produktów</h1>
+          <h1 className="text-balance text-2xl">Brak ulubionych produktów</h1>
           <p className="text-muted-foreground">
             Dodaj produkty do ulubionych, klikając ikonę serca na stronie produktu.
           </p>
@@ -37,7 +37,7 @@ export default async function UlubinonePage() {
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6 lg:px-8">
-      <h1 className="mb-8 text-balance font-heading text-2xl font-semibold">Ulubione ({items.length})</h1>
+      <h1 className="mb-8 text-balance text-2xl">Ulubione ({items.length})</h1>
       <div className="space-y-3">
         {items.map((item) => (
           <WishlistItemCard key={item.id} item={item} />

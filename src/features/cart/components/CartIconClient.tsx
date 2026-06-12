@@ -87,7 +87,7 @@ export function CartIconClient({ itemCount, items }: Props) {
                 <Link
                   href="/koszyk"
                   onClick={() => setOpen(false)}
-                  className="block w-full rounded-lg bg-primary px-4 py-3 text-center text-sm font-medium text-primary-foreground hover:bg-primary/80"
+                  className="block w-full rounded-lg bg-primary px-4 py-3 text-center text-sm font-medium text-primary-foreground transition-colors duration-200 hover:bg-primary-deep motion-reduce:transition-none"
                 >
                   Przejdź do koszyka
                 </Link>

@@ -8,12 +8,12 @@ export const metadata: Metadata = {
 export default function DostawaPage() {
   return (
     <main className="container mx-auto max-w-3xl px-4 py-12">
-      <h1 className="mb-8 font-heading text-3xl font-semibold">Dostawa i płatność</h1>
+      <h1 className="mb-8 text-3xl">Dostawa i płatność</h1>
 
       <div className="space-y-10 text-sm leading-relaxed text-foreground">
         <section>
-          <h2 className="mb-4 font-heading text-xl font-semibold">Metody dostawy</h2>
-          <div className="overflow-x-auto rounded-lg border">
+          <h2 className="mb-4 text-xl">Metody dostawy</h2>
+          <div className="overflow-x-auto rounded-2xl bg-card shadow-card">
             <table className="w-full text-sm">
               <thead className="bg-muted/50">
                 <tr>
@@ -49,7 +49,7 @@ export default function DostawaPage() {
         </section>
 
         <section>
-          <h2 className="mb-3 font-heading text-xl font-semibold">Darmowa dostawa od 200 zł</h2>
+          <h2 className="mb-3 text-xl">Darmowa dostawa od 200 zł</h2>
           <p className="text-muted-foreground">
             Przy zamówieniu o wartości 200 zł lub więcej dostawa jest bezpłatna dla wszystkich
             dostępnych metod. Próg liczony jest od wartości produktów po zastosowaniu rabatów,
@@ -58,7 +58,7 @@ export default function DostawaPage() {
         </section>
 
         <section>
-          <h2 className="mb-3 font-heading text-xl font-semibold">Paczkomaty InPost</h2>
+          <h2 className="mb-3 text-xl">Paczkomaty InPost</h2>
           <p className="text-muted-foreground">
             Podczas składania zamówienia możesz wybrać dowolny Paczkomat InPost w Polsce.
             Po opłaceniu zamówienia otrzymasz e-mail z kodem odbioru oraz numerem przesyłki.
@@ -79,7 +79,7 @@ export default function DostawaPage() {
         </section>
 
         <section>
-          <h2 className="mb-3 font-heading text-xl font-semibold">Śledzenie przesyłki</h2>
+          <h2 className="mb-3 text-xl">Śledzenie przesyłki</h2>
           <p className="text-muted-foreground">
             Po nadaniu paczki wyślemy Ci e-mail z numerem śledzenia oraz linkiem do śledzenia
             przesyłki na stronie przewoźnika. Powiadomienie wysyłamy automatycznie w momencie
@@ -88,7 +88,7 @@ export default function DostawaPage() {
         </section>
 
         <section>
-          <h2 className="mb-3 font-heading text-xl font-semibold">Dostawa za granicę</h2>
+          <h2 className="mb-3 text-xl">Dostawa za granicę</h2>
           <p className="text-muted-foreground">
             Aktualnie realizujemy dostawy wyłącznie na terenie Polski. Dostawę
             zagraniczną planujemy uruchomić w przyszłości — śledź nasze nowości.
@@ -96,7 +96,7 @@ export default function DostawaPage() {
         </section>
 
         <section>
-          <h2 className="mb-3 font-heading text-xl font-semibold">Formy płatności</h2>
+          <h2 className="mb-3 text-xl">Formy płatności</h2>
           <p className="text-muted-foreground">
             Płatności obsługuje operator Przelewy24. Akceptujemy:
           </p>

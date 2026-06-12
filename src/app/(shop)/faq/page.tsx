@@ -39,13 +39,13 @@ const faqs = [
 export default function FaqPage() {
   return (
     <main className="container mx-auto max-w-3xl px-4 py-12">
-      <h1 className="mb-8 font-heading text-3xl font-semibold">Najczęściej zadawane pytania</h1>
+      <h1 className="mb-8 text-3xl">Najczęściej zadawane pytania</h1>
 
       <div className="space-y-4">
         {faqs.map((faq, i) => (
           <details
             key={i}
-            className="group rounded-xl border bg-card open:bg-primary/5"
+            className="group rounded-2xl bg-card shadow-card open:shadow-card-hover"
           >
             <summary className="flex cursor-pointer items-center justify-between gap-4 px-5 py-4 text-sm font-semibold marker:content-none">
               {faq.q}
@@ -58,14 +58,14 @@ export default function FaqPage() {
         ))}
       </div>
 
-      <div className="mt-12 rounded-xl border bg-muted/30 p-6 text-center">
+      <div className="mt-12 rounded-2xl bg-secondary p-6 text-center">
         <p className="text-sm font-semibold">Nie znalazłeś odpowiedzi?</p>
         <p className="mt-1 text-sm text-muted-foreground">
           Napisz do nas — odpowiemy w ciągu jednego dnia roboczego.
         </p>
         <a
           href="/kontakt"
-          className="mt-4 inline-block rounded-md bg-primary px-6 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90"
+          className="mt-4 inline-block rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground transition-colors duration-200 hover:bg-primary-deep motion-reduce:transition-none"
         >
           Napisz do nas
         </a>
