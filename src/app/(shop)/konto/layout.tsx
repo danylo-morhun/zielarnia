@@ -1,4 +1,5 @@
 import { SideNav } from "@/components/layout/SideNav";
+import { LogoutButton } from "@/features/auth/components/LogoutButton";
 import { signOut } from "@/lib/auth";
 
 const NAV_ITEMS = [
@@ -16,19 +17,12 @@ export default function KontoLayout({ children }: { children: React.ReactNode })
             <p className="mb-2 px-3.5 pt-1 text-sm font-bold text-foreground">Moje konto</p>
             <nav className="flex flex-col gap-0.5">
               <SideNav items={NAV_ITEMS} />
-              <form
+              <LogoutButton
                 action={async () => {
                   "use server";
                   await signOut({ redirectTo: "/" });
                 }}
-              >
-                <button
-                  type="submit"
-                  className="w-full rounded-xl px-3.5 py-2.5 text-left text-sm font-medium text-muted-foreground transition-colors duration-150 hover:bg-muted hover:text-foreground motion-reduce:transition-none"
-                >
-                  Wyloguj się
-                </button>
-              </form>
+              />
             </nav>
           </div>
         </aside>
