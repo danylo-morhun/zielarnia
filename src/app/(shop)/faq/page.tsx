@@ -42,9 +42,9 @@ export default function FaqPage() {
       <h1 className="mb-8 text-3xl">Najczęściej zadawane pytania</h1>
 
       <div className="space-y-4">
-        {faqs.map((faq, i) => (
+        {faqs.map((faq) => (
           <details
-            key={i}
+            key={faq.q}
             className="group rounded-2xl bg-card shadow-card open:shadow-card-hover"
           >
             <summary className="flex cursor-pointer items-center justify-between gap-4 px-5 py-4 text-sm font-semibold marker:content-none">
