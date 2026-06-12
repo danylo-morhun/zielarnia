@@ -1,17 +1,28 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { CART_COOKIE_NAME, getCart } from "@/features/cart/lib/session";
+import { CART_COOKIE_NAME, getCart, getCartByCustomerId } from "@/features/cart/lib/session";
 import { CheckoutForm } from "@/features/checkout/components/CheckoutForm";
+import { auth } from "@/lib/auth";
 
 export const metadata: Metadata = {
   title: "Zamówienie — Twoje Zdrowie",
 };
 
 export default async function ZamowieniePage() {
-  const cookieStore = await cookies();
-  const cartId = cookieStore.get(CART_COOKIE_NAME)?.value;
-  const cart = cartId ? await getCart(cartId) : null;
+  const session = await auth();
+  let cart = null;
+  let cartId: string | undefined;
+
+  if (session?.user?.id) {
+    cart = await getCartByCustomerId(session.user.id);
+    cartId = cart?.id;
+  } else {
+    const cookieStore = await cookies();
+    cartId = cookieStore.get(CART_COOKIE_NAME)?.value;
+    cart = cartId ? await getCart(cartId) : null;
+  }
+
   const items = cart?.items ?? [];
 
   if (!cartId || items.length === 0) {
