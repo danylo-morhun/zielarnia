@@ -11,14 +11,16 @@ export function SearchInput() {
   const [value, setValue] = useState(initialValue);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Auto-focus when szukaj param is present (nav search icon click)
+  // Focus once on mount when arriving via a search intent (?szukaj=...).
+  // Never on later param changes — that stole focus from filter controls
+  // and raced blur-commits against filter navigations.
   useEffect(() => {
-    if (searchParams.has("szukaj")) {
-      inputRef.current?.focus();
+    if (inputRef.current && new URLSearchParams(window.location.search).has("szukaj")) {
+      inputRef.current.focus();
     }
-  }, [searchParams]);
+  }, []);
 
-  // Sync if URL changes externally
+  // Sync if URL changes externally (chips cleared, filters navigated)
   useEffect(() => {
     setValue(searchParams.get("szukaj") ?? "");
   }, [searchParams]);
@@ -36,7 +38,7 @@ export function SearchInput() {
 
   return (
     <div className="relative">
-      <Search className="absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+      <Search className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
       <input
         ref={inputRef}
         type="search"
@@ -45,11 +47,8 @@ export function SearchInput() {
         onKeyDown={(e) => {
           if (e.key === "Enter") commit(value);
         }}
-        onBlur={() => {
-          if (value !== initialValue) commit(value);
-        }}
         placeholder="Szukaj produktów…"
-        className="w-full rounded-md border border-border bg-background py-2 pl-8 pr-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+        className="w-full rounded-lg border border-border bg-card py-2 pl-8 pr-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-transparent focus:outline-none focus:ring-2 focus:ring-ring/50"
       />
     </div>
   );
