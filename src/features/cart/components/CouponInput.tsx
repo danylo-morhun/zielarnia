@@ -48,20 +48,20 @@ export function CouponInput({ subtotal, onDiscount }: Props) {
           value={code}
           onChange={handleChange}
           onKeyDown={(e) => e.key === "Enter" && handleVerify()}
-          placeholder="KOD RABATOWY"
-          className="flex-1 rounded-md border border-input bg-background px-3 py-2 text-sm uppercase tracking-wider"
+          placeholder="Kod rabatowy"
+          className="min-w-0 flex-1 rounded-lg border border-input bg-background px-3 py-2 text-sm uppercase tracking-wider placeholder:normal-case placeholder:tracking-normal focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-[border-color,box-shadow] duration-150"
         />
         <button
           type="button"
           onClick={handleVerify}
           disabled={isExecuting || !code.trim()}
-          className="rounded-md border bg-secondary px-4 py-2 text-sm font-medium hover:bg-accent disabled:opacity-50"
+          className="shrink-0 rounded-lg border border-border bg-secondary px-3 py-2 text-sm font-medium whitespace-nowrap transition-[background-color,opacity] duration-150 hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40"
         >
           {isExecuting ? "…" : "Zastosuj"}
         </button>
       </div>
       {couponState && (
-        <p className={`text-sm ${couponState.valid ? "text-success" : "text-destructive"}`}>
+        <p className={`text-xs font-medium ${couponState.valid ? "text-success" : "text-destructive"}`}>
           {couponState.valid
             ? `✓ Rabat: -${formatPrice(couponState.discountPln)}`
             : couponState.message}

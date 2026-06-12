@@ -38,7 +38,7 @@ export function CartList({ items: initialItems }: Props) {
   }
 
   return (
-    <div className="divide-y divide-border">
+    <div className="divide-y divide-border/60">
       {items.map((item) => (
         <CartItemRow key={item.id} item={item} onRemove={() => handleRemove(item)} />
       ))}

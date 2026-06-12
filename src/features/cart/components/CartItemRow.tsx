@@ -36,14 +36,14 @@ export function CartItemRow({ item, onRemove }: Props) {
   const image = item.variant.product.images[0];
 
   return (
-    <div className="flex gap-4 py-4">
-      <div className="relative size-20 shrink-0 overflow-hidden rounded-md border border-border bg-muted">
+    <div className={`flex gap-4 px-6 py-5 transition-opacity duration-200 ${pending ? "opacity-60" : ""}`}>
+      <div className="relative size-24 shrink-0 overflow-hidden rounded-lg bg-muted">
         {image ? (
           <Image
             src={image.url}
             alt={image.altPl ?? item.variant.product.namePl}
             fill
-            sizes="80px"
+            sizes="96px"
             className="object-cover"
           />
         ) : (
@@ -52,34 +52,50 @@ export function CartItemRow({ item, onRemove }: Props) {
           </span>
         )}
       </div>
+
       <div className="flex flex-1 flex-col gap-1">
-        <p className="text-sm font-medium text-foreground">{item.variant.product.namePl}</p>
-        {item.variant.optionValue && (
-          <p className="text-xs text-muted-foreground">{item.variant.optionValue}</p>
-        )}
-        <p className="text-sm font-semibold">
-          {formatPrice(item.variant.pricePln * item.quantity)}
-        </p>
-        <div className="mt-auto flex items-center gap-2">
-          <button
-            type="button"
-            disabled={pending || item.quantity <= 1}
-            onClick={() => doUpdate({ cartItemId: item.id, quantity: item.quantity - 1 })}
-            className="flex size-10 items-center justify-center rounded border border-border transition-[transform,background-color,border-color] duration-[160ms] ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-muted active:scale-[0.97] disabled:opacity-40 motion-reduce:active:scale-100"
-            aria-label="Zmniejsz ilość"
-          >
-            <Minus className="size-4" />
-          </button>
-          <span className="w-6 text-center text-sm">{item.quantity}</span>
-          <button
-            type="button"
-            disabled={pending || item.quantity >= item.variant.stock}
-            onClick={() => doUpdate({ cartItemId: item.id, quantity: item.quantity + 1 })}
-            className="flex size-10 items-center justify-center rounded border border-border transition-[transform,background-color,border-color] duration-[160ms] ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-muted active:scale-[0.97] disabled:opacity-40 motion-reduce:active:scale-100"
-            aria-label="Zwiększ ilość"
-          >
-            <Plus className="size-4" />
-          </button>
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <p className="truncate text-sm font-semibold leading-snug text-foreground">
+              {item.variant.product.namePl}
+            </p>
+            {item.variant.optionValue && (
+              <p className="mt-0.5 text-xs text-muted-foreground">{item.variant.optionValue}</p>
+            )}
+            <p className="mt-1 text-xs text-muted-foreground">
+              {formatPrice(item.variant.pricePln)} / szt.
+            </p>
+          </div>
+          <p className="shrink-0 text-sm font-bold text-foreground">
+            {formatPrice(item.variant.pricePln * item.quantity)}
+          </p>
+        </div>
+
+        <div className="mt-auto flex items-center gap-2 pt-3">
+          <div className="flex items-center overflow-hidden rounded-lg border border-border">
+            <button
+              type="button"
+              disabled={pending || item.quantity <= 1}
+              onClick={() => doUpdate({ cartItemId: item.id, quantity: item.quantity - 1 })}
+              className="flex size-8 items-center justify-center text-muted-foreground transition-[background-color,color] duration-[120ms] hover:bg-muted hover:text-foreground disabled:opacity-40"
+              aria-label="Zmniejsz ilość"
+            >
+              <Minus className="size-3.5" />
+            </button>
+            <span className="w-9 border-x border-border text-center text-sm font-semibold">
+              {item.quantity}
+            </span>
+            <button
+              type="button"
+              disabled={pending || item.quantity >= item.variant.stock}
+              onClick={() => doUpdate({ cartItemId: item.id, quantity: item.quantity + 1 })}
+              className="flex size-8 items-center justify-center text-muted-foreground transition-[background-color,color] duration-[120ms] hover:bg-muted hover:text-foreground disabled:opacity-40"
+              aria-label="Zwiększ ilość"
+            >
+              <Plus className="size-3.5" />
+            </button>
+          </div>
+
           <button
             type="button"
             disabled={pending}
@@ -91,10 +107,10 @@ export function CartItemRow({ item, onRemove }: Props) {
                 doRemove({ cartItemId: item.id });
               }
             }}
-            className="ml-auto flex size-10 items-center justify-center rounded transition-[transform,color] duration-[160ms] ease-[cubic-bezier(0.23,1,0.32,1)] text-muted-foreground hover:text-destructive active:scale-[0.97] disabled:opacity-40 motion-reduce:active:scale-100"
+            className="ml-auto flex size-8 items-center justify-center rounded-lg text-muted-foreground transition-[background-color,color] duration-[120ms] hover:bg-destructive/10 hover:text-destructive disabled:opacity-40"
             aria-label="Usuń z koszyka"
           >
-            <Trash2 className="size-4" />
+            <Trash2 className="size-3.5" />
           </button>
         </div>
       </div>
