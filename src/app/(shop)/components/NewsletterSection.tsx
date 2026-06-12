@@ -1,4 +1,5 @@
 import { Bell } from "lucide-react";
+import { NewsletterForm } from "@/features/newsletter/components/NewsletterForm";
 
 export function NewsletterSection() {
   return (
@@ -20,7 +21,7 @@ export function NewsletterSection() {
         <p className="mx-auto max-w-md text-primary-foreground/75">
           Zapisz się do newslettera i otrzymuj informacje o nowościach i promocjach.
         </p>
-        <p className="mt-3 text-sm text-primary-foreground/60">Zapisy wkrótce dostępne.</p>
+        <NewsletterForm />
       </div>
     </section>
   );
