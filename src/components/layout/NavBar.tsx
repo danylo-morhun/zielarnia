@@ -1,4 +1,4 @@
-import { Plus, Search, ShoppingBag, Truck, User } from "lucide-react";
+import { PillBottle, Search, ShoppingBag, Truck, User } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 import { MobileMenu } from "@/components/layout/MobileMenu";
@@ -51,7 +51,7 @@ export async function NavBar() {
           <MobileMenu navLinks={navLinks} utilityLinks={utilityLinks} />
           <Link href="/" className="flex shrink-0 items-center gap-2">
             <span className="flex size-8 items-center justify-center rounded-full bg-primary text-primary-foreground">
-              <Plus className="size-4 stroke-[3]" />
+              <PillBottle className="size-4" />
             </span>
             <span className="text-lg font-extrabold tracking-tight text-foreground">
               Twoje Zdrowie

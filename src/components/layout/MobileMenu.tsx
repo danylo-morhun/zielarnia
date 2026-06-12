@@ -1,6 +1,6 @@
 "use client";
 
-import { Menu, Plus, Search } from "lucide-react";
+import { Menu, PillBottle, Search } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -34,7 +34,7 @@ export function MobileMenu({ navLinks, utilityLinks }: Props) {
         <SheetHeader className="border-b border-border px-5 py-4">
           <SheetTitle className="flex items-center gap-2 text-base">
             <span className="flex size-7 items-center justify-center rounded-full bg-primary text-primary-foreground">
-              <Plus className="size-3.5 stroke-[3]" />
+              <PillBottle className="size-3.5" />
             </span>
             Twoje Zdrowie
           </SheetTitle>
