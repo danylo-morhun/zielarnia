@@ -1,5 +1,6 @@
+import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import type { Metadata } from "next";
-import { Mail, Phone, Clock, MapPin } from "lucide-react";
+import { ContactForm } from "@/features/contact/components/ContactForm";
 
 export const metadata: Metadata = {
   title: "Kontakt — Twoje Zdrowie",
@@ -27,7 +28,9 @@ export default function KontaktPage() {
               >
                 kontakt@twojezdrowie.pl
               </a>
-              <p className="mt-1 text-xs text-muted-foreground">Odpowiedź w ciągu 24 h (dni robocze)</p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Odpowiedź w ciągu 24 h (dni robocze)
+              </p>
             </div>
           </div>
 
@@ -63,7 +66,7 @@ export default function KontaktPage() {
                 <br />
                 ul. Przykładowa 1
                 <br />
-                00-000 Warszawa
+                62-800 Kalisz
               </p>
             </div>
           </div>
@@ -71,60 +74,7 @@ export default function KontaktPage() {
 
         <section className="rounded-2xl bg-secondary p-6">
           <h2 className="mb-4 text-lg">Formularz kontaktowy</h2>
-          <form className="space-y-4">
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div>
-                <label htmlFor="name" className="mb-1 block text-sm font-medium">
-                  Imię i nazwisko
-                </label>
-                <input
-                  id="name"
-                  type="text"
-                  className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-                  placeholder="Jan Kowalski"
-                />
-              </div>
-              <div>
-                <label htmlFor="email" className="mb-1 block text-sm font-medium">
-                  Adres e-mail
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-                  placeholder="jan@example.com"
-                />
-              </div>
-            </div>
-            <div>
-              <label htmlFor="subject" className="mb-1 block text-sm font-medium">
-                Temat
-              </label>
-              <input
-                id="subject"
-                type="text"
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-                placeholder="Zapytanie o zamówienie"
-              />
-            </div>
-            <div>
-              <label htmlFor="message" className="mb-1 block text-sm font-medium">
-                Wiadomość
-              </label>
-              <textarea
-                id="message"
-                rows={5}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-                placeholder="Opisz swoje pytanie…"
-              />
-            </div>
-            <button
-              type="submit"
-              className="rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground transition-colors duration-200 hover:bg-primary-deep motion-reduce:transition-none"
-            >
-              Wyślij wiadomość
-            </button>
-          </form>
+          <ContactForm />
         </section>
       </div>
     </main>
