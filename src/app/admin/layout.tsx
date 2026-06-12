@@ -1,4 +1,5 @@
 import { SideNav } from "@/components/layout/SideNav";
+import { LogoutButton } from "@/app/admin/components/LogoutButton";
 import { signOut } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
@@ -17,30 +18,25 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   ];
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+    <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
       <div className="flex flex-col gap-8 md:flex-row">
         <aside className="w-full shrink-0 md:w-56">
           <div className="rounded-2xl bg-card p-3 shadow-card">
             <p className="mb-2 px-3.5 pt-1 text-sm font-bold text-foreground">Panel admina</p>
             <nav className="flex flex-col gap-0.5">
               <SideNav items={navItems} />
-              <form
+              <LogoutButton
                 action={async () => {
                   "use server";
                   await signOut({ redirectTo: "/" });
                 }}
-              >
-                <button
-                  type="submit"
-                  className="w-full rounded-xl px-3.5 py-2.5 text-left text-sm font-medium text-muted-foreground transition-colors duration-150 hover:bg-muted hover:text-foreground motion-reduce:transition-none"
-                >
-                  Wyloguj się
-                </button>
-              </form>
+              />
             </nav>
           </div>
         </aside>
-        <main className="min-w-0 flex-1">{children}</main>
+        <main className="min-w-0 flex-1">
+          <div className="max-w-4xl">{children}</div>
+        </main>
       </div>
     </div>
   );

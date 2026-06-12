@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { AdminPagination } from "@/app/admin/components/AdminPagination";
 import { AdminSearch } from "@/app/admin/components/AdminSearch";
+import { OrderStatusFilter } from "@/app/admin/components/OrderStatusFilter";
 import { prisma } from "@/lib/prisma";
 
 const STATUS_LABELS: Record<OrderStatus, string> = {
@@ -16,14 +17,6 @@ const STATUS_LABELS: Record<OrderStatus, string> = {
   REFUNDED: "Zwrócone",
 };
 
-const STATUS_FILTER_TABS: { label: string; value: string | null }[] = [
-  { label: "Wszystkie", value: null },
-  { label: "Oczekujące", value: "PENDING" },
-  { label: "Opłacone", value: "PAID" },
-  { label: "W realizacji", value: "PROCESSING" },
-  { label: "Wysłane", value: "SHIPPED" },
-  { label: "Anulowane", value: "CANCELLED" },
-];
 
 const PAGE_SIZE = 25;
 
@@ -82,25 +75,9 @@ export default async function AdminOrdersPage({
         </Suspense>
       </div>
 
-      <div className="mb-4 flex flex-wrap gap-2">
-        {STATUS_FILTER_TABS.map((tab) => {
-          const isActive = (tab.value ?? "") === (statusFilter ?? "");
-          const href = tab.value ? `/admin/zamowienia?status=${tab.value}` : "/admin/zamowienia";
-          return (
-            <Link
-              key={tab.label}
-              href={href}
-              className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
-                isActive
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-muted text-muted-foreground hover:bg-secondary hover:text-secondary-foreground"
-              }`}
-            >
-              {tab.label}
-            </Link>
-          );
-        })}
-      </div>
+      <Suspense>
+        <OrderStatusFilter />
+      </Suspense>
 
       <div className="overflow-x-auto rounded-2xl bg-card shadow-card">
         <table className="w-full text-sm">

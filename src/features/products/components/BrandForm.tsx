@@ -35,7 +35,7 @@ export function BrandForm({ brands }: Props) {
   }
 
   const form = (item?: Brand) => (
-    <form onSubmit={handleSubmit} className="mt-2 grid gap-2 rounded-2xl bg-card p-4 shadow-card">
+    <form onSubmit={handleSubmit} className="mt-2 mb-4 grid gap-2 rounded-2xl bg-card p-4 shadow-card">
       {item && <input type="hidden" name="id" value={item.id} />}
       <div className="grid grid-cols-2 gap-2">
         <input
