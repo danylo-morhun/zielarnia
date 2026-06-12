@@ -2,6 +2,7 @@ import { Search, ShoppingBag, Truck, User } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 import { MobileMenu } from "@/components/layout/MobileMenu";
+import { ThemeToggle } from "@/components/layout/ThemeToggle";
 import { CartIcon } from "@/features/cart/components/CartIcon";
 import { WishlistIcon, WishlistIconFallback } from "@/features/wishlist/components/WishlistIcon";
 import { auth } from "@/lib/auth";
@@ -24,7 +25,7 @@ export async function NavBar() {
   return (
     <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm">
       {/* Utility bar */}
-      <div className="bg-primary-deep text-primary-foreground">
+      <div className="bg-band text-band-foreground">
         <div className="mx-auto flex h-9 max-w-7xl items-center justify-between px-4 text-xs font-medium sm:px-6 lg:px-8">
           <p className="flex items-center gap-1.5">
             <Truck className="size-3.5" strokeWidth={2} />
@@ -35,7 +36,7 @@ export async function NavBar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-primary-foreground/80 transition-colors hover:text-primary-foreground"
+                className="text-band-foreground/80 transition-colors hover:text-band-foreground"
               >
                 {link.label}
               </Link>
@@ -71,6 +72,7 @@ export async function NavBar() {
           </search>
 
           <div className="ml-auto flex items-center gap-0.5 md:ml-0">
+            <ThemeToggle />
             <Suspense fallback={<WishlistIconFallback />}>
               <WishlistIcon />
             </Suspense>
