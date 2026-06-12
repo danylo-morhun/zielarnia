@@ -1,18 +1,12 @@
 import type { Metadata } from "next";
-import { Inter, Lora, Geist_Mono } from "next/font/google";
+import { Geist_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
-const inter = Inter({
+const jakarta = Plus_Jakarta_Sans({
   variable: "--font-sans",
   subsets: ["latin", "latin-ext"],
-  weight: ["400", "500", "600"],
-});
-
-const lora = Lora({
-  variable: "--font-heading",
-  subsets: ["latin", "latin-ext"],
-  weight: ["500", "600"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 const geistMono = Geist_Mono({
@@ -36,7 +30,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pl" className={`${inter.variable} ${lora.variable} ${geistMono.variable} h-full antialiased`}>
+    <html lang="pl" className={`${jakarta.variable} ${geistMono.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         {children}
         <Toaster />

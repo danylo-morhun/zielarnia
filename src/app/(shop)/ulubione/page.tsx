@@ -26,7 +26,7 @@ export default async function UlubinonePage() {
           </p>
           <Link
             href="/katalog"
-            className="rounded-lg bg-primary px-6 py-2 text-sm font-medium text-primary-foreground transition-colors duration-150 hover:bg-[oklch(0.40_0.14_145)] motion-reduce:transition-none"
+            className="rounded-lg bg-primary px-6 py-2 text-sm font-medium text-primary-foreground transition-colors duration-150 hover:bg-primary-deep motion-reduce:transition-none"
           >
             Przejdź do katalogu
           </Link>

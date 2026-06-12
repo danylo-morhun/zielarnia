@@ -22,7 +22,7 @@ export function ProductCard({ product, priority = false }: Props) {
       : 0;
 
   return (
-    <article className="group relative flex flex-col overflow-hidden rounded-xl border border-border bg-card transition-shadow duration-200 hover:shadow-[0_4px_16px_oklch(0.15_0.02_145/0.08)] motion-reduce:transition-none">
+    <article className="group relative flex flex-col overflow-hidden rounded-xl border border-border bg-card transition-shadow duration-200 hover:shadow-card-hover motion-reduce:transition-none">
       <Link href={`/produkt/${product.slug}`} className="block">
         <div className="relative aspect-square overflow-hidden bg-card">
           {mainImage ? (
@@ -55,7 +55,7 @@ export function ProductCard({ product, priority = false }: Props) {
 
           {isOutOfStock && (
             <div className="absolute inset-0 flex items-center justify-center bg-background/60">
-              <span className="rounded-md bg-background px-3 py-1 text-sm font-medium text-muted-foreground shadow-[0_4px_16px_oklch(0.15_0.02_145/0.08)]">
+              <span className="rounded-md bg-background px-3 py-1 text-sm font-medium text-muted-foreground shadow-card-hover">
                 Niedostępny
               </span>
             </div>

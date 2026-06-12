@@ -46,7 +46,7 @@ export function HeroSection({ product = null }: Props) {
             >
               <Link
                 href="/katalog"
-                className="rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors duration-150 hover:bg-[oklch(0.40_0.14_145)] motion-reduce:transition-none"
+                className="rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors duration-150 hover:bg-primary-deep motion-reduce:transition-none"
               >
                 Przeglądaj produkty
               </Link>
@@ -62,7 +62,7 @@ export function HeroSection({ product = null }: Props) {
           {product && image && variant && (
             <Link
               href={`/produkt/${product.slug}`}
-              className="group relative hidden w-64 animate-fade-up rounded-xl bg-card p-4 shadow-[0_4px_16px_oklch(0.15_0.02_145/0.08)] transition-shadow duration-200 hover:shadow-[0_8px_32px_oklch(0.15_0.02_145/0.12)] md:block motion-reduce:animate-none"
+              className="group relative hidden w-64 animate-fade-up rounded-xl bg-card p-4 shadow-card-hover transition-shadow duration-200 hover:shadow-float md:block motion-reduce:animate-none"
               style={{ animationDelay: "240ms" }}
             >
               <div className="relative aspect-square">
@@ -93,7 +93,7 @@ export function HeroSection({ product = null }: Props) {
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-1 lg:grid-rows-2">
         <Link
           href="/katalog?promocje=1"
-          className="group flex flex-col justify-between overflow-hidden rounded-2xl bg-accent p-6 transition-shadow duration-200 hover:shadow-[0_4px_16px_oklch(0.15_0.02_145/0.08)] motion-reduce:transition-none"
+          className="group flex flex-col justify-between overflow-hidden rounded-2xl bg-accent p-6 transition-shadow duration-200 hover:shadow-card-hover motion-reduce:transition-none"
         >
           <BadgePercent className="size-7 text-accent-foreground" strokeWidth={1.75} />
           <div className="mt-6">
@@ -107,7 +107,7 @@ export function HeroSection({ product = null }: Props) {
 
         <Link
           href="/katalog?nowosci=1"
-          className="group flex flex-col justify-between overflow-hidden rounded-2xl bg-secondary p-6 transition-shadow duration-200 hover:shadow-[0_4px_16px_oklch(0.15_0.02_145/0.08)] motion-reduce:transition-none"
+          className="group flex flex-col justify-between overflow-hidden rounded-2xl bg-secondary p-6 transition-shadow duration-200 hover:shadow-card-hover motion-reduce:transition-none"
         >
           <Sparkles className="size-7 text-secondary-foreground" strokeWidth={1.75} />
           <div className="mt-6">

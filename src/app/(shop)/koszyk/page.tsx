@@ -35,7 +35,7 @@ export default async function KoszykPage() {
           <p className="text-muted-foreground">Przejrzyj katalog i dodaj produkty do koszyka.</p>
           <Link
             href="/katalog"
-            className="rounded-lg bg-primary px-6 py-2 text-sm font-medium text-primary-foreground transition-colors duration-150 hover:bg-[oklch(0.40_0.14_145)] motion-reduce:transition-none"
+            className="rounded-lg bg-primary px-6 py-2 text-sm font-medium text-primary-foreground transition-colors duration-150 hover:bg-primary-deep motion-reduce:transition-none"
           >
             Przejdź do katalogu
           </Link>

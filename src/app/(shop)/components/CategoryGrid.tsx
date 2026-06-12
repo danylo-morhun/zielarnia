@@ -23,7 +23,7 @@ export function CategoryGrid({ categories }: Props) {
           <Link
             key={cat.id}
             href={`/katalog?kategoria=${cat.slug}`}
-            className="group flex flex-col items-center gap-3 rounded-xl border border-border bg-card p-5 text-center transition-shadow duration-200 hover:shadow-[0_4px_16px_oklch(0.15_0.02_145/0.08)] motion-reduce:transition-none"
+            className="group flex flex-col items-center gap-3 rounded-xl border border-border bg-card p-5 text-center transition-shadow duration-200 hover:shadow-card-hover motion-reduce:transition-none"
           >
             {cat.image ? (
               <div className="relative size-16">
