@@ -13,6 +13,8 @@ export function Toaster() {
           toast: "bg-card text-card-foreground border border-border shadow-float",
           success: "[&_[data-icon]]:text-success",
           error: "[&_[data-icon]]:text-destructive",
+          actionButton:
+            "!bg-primary !text-primary-foreground !text-xs !font-medium !rounded-md !px-3 !py-1.5 hover:!bg-primary-deep !transition-colors",
         },
       }}
     />

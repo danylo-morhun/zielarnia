@@ -2,7 +2,8 @@
 
 import { ShoppingBag, X } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import {
   Sheet,
   SheetClose,
@@ -22,6 +23,15 @@ type Props = {
 
 export function CartIconClient({ itemCount, items }: Props) {
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const handleOpen = () => {
+      toast.dismiss();
+      setOpen(true);
+    };
+    window.addEventListener("cart:open", handleOpen);
+    return () => window.removeEventListener("cart:open", handleOpen);
+  }, []);
 
   const subtotal = items.reduce((sum, item) => sum + item.variant.pricePln * item.quantity, 0);
 

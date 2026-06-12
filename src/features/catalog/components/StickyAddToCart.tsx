@@ -31,7 +31,13 @@ export function StickyAddToCart({
       if (successTimer.current) clearTimeout(successTimer.current);
       setSucceeded(true);
       successTimer.current = setTimeout(() => setSucceeded(false), 1500);
-      toast.success("Dodano do koszyka");
+      toast.success("Dodano do koszyka", {
+        duration: 4000,
+        action: {
+          label: "Otwórz koszyk →",
+          onClick: () => window.dispatchEvent(new Event("cart:open")),
+        },
+      });
     },
     onError: () => toast.error("Błąd dodawania"),
   });

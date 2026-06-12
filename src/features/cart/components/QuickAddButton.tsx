@@ -21,7 +21,13 @@ export function QuickAddButton({ variantId, disabled = false }: Props) {
       router.refresh();
       setSucceeded(true);
       setTimeout(() => setSucceeded(false), 1500);
-      toast.success("Dodano do koszyka", { duration: 3000 });
+      toast.success("Dodano do koszyka", {
+        duration: 4000,
+        action: {
+          label: "Otwórz koszyk →",
+          onClick: () => window.dispatchEvent(new Event("cart:open")),
+        },
+      });
     },
     onError: () => {
       toast.error("Błąd", { description: "Nie udało się dodać do koszyka" });

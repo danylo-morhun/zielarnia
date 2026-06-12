@@ -36,7 +36,11 @@ export function AddToCartSection({ variants }: Props) {
       setTimeout(() => setSucceeded(false), 1500);
       toast.success("Dodano do koszyka", {
         description: selected?.optionValue ?? undefined,
-        duration: 3000,
+        duration: 4000,
+        action: {
+          label: "Otwórz koszyk →",
+          onClick: () => window.dispatchEvent(new Event("cart:open")),
+        },
       });
     },
     onError: () => {
